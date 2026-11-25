@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<meta name="description" content="SlimeGochi — rawat slime dari telur, beri nama, main SlimeGo!, Slime Rain! & Slime Tactic, evolusikan jadi 10 slime elemen."/>
+<meta name="description" content="SlimeGochi — rawat slime dari telur, beri nama, main SlimeGo!, Slime Rain! & Slime Tactic, evolusikan jadi 10 slime elemen. Satu file, siap di-zip & di-hosting."/>
 <meta name="theme-color" content="#33d8ff"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-title" content="SlimeGochi"/>
@@ -14,10 +14,10 @@
 <title>SlimeGochi</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-tailwind.config={theme:{extend:{
+if(window.tailwind)tailwind.config={theme:{extend:{
   colors:{ink:'#14324f',navy:'#0e1a4a',cream:'#fff9ef',cream2:'#ffefd6',aqua:'#33d8ff',aqua2:'#9fe0fb',deep:'#1a86f0',gold:'#ffb703',coral:'#ff5d5d',blush:'#ff8fa2',leaf:'#58c453',violet:'#8b5cf6',magenta:'#ff4fa3',
     gb0:'#0f380f',gb1:'#306230',gb2:'#8bac0f',gb3:'#9bbc0f'},
-  fontFamily:{disp:['"Luckiest Guy"','cursive'],body:['Nunito','system-ui','sans-serif'],pixel:['"Press Start 2P"','monospace']},
+  fontFamily:{disp:['"Luckiest Guy"','"Arial Black"','Impact','cursive'],body:['Nunito','system-ui','sans-serif'],pixel:['"Press Start 2P"','ui-monospace','monospace']},
   boxShadow:{pop:'0.28rem 0.28rem 0 rgba(20,50,79,.9)',pops:'0.16rem 0.16rem 0 rgba(20,50,79,.9)',big:'0.5rem 0.5rem 0 rgba(20,50,79,.85)'}
 }}};
 </script>
@@ -44,6 +44,7 @@ tailwind.config={theme:{extend:{
   .hostcard{@apply rounded-2xl border-[3px] border-ink p-3 shadow-pops bg-white/85;}
   .stepli{@apply flex gap-2 text-[12px] font-bold leading-snug;}
   .codeblk{@apply font-mono text-[10.5px] leading-relaxed bg-ink text-cream/90 rounded-xl p-2.5 overflow-x-auto scroll-slim whitespace-pre;}
+  .zipbtn{@apply font-disp text-[10px] leading-none px-2.5 py-[4px] rounded-full border-2 border-ink bg-gold text-ink shadow-pops inline-flex items-center gap-1;}
 </style>
 <style data-app="1">
   #shell{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
@@ -51,7 +52,7 @@ tailwind.config={theme:{extend:{
   #shell main{flex:1;position:relative;overflow:hidden;min-height:0}
   .tabscreen{position:absolute;inset:0}
   .hide{display:none!important}
-  html,body{overscroll-behavior:none}
+  html,body{overscroll-behavior:none;margin:0}
   .scroll-slim{scrollbar-width:thin;scrollbar-color:#ffb703 #fff3da}
   .scroll-slim::-webkit-scrollbar{width:12px;height:12px}
   .scroll-slim::-webkit-scrollbar-track{background:#fff3da;border-radius:99px;border:2px solid #ffe6b8}
@@ -80,14 +81,14 @@ tailwind.config={theme:{extend:{
   .gb::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(15,56,15,.10) 0 2px,transparent 2px 4px);pointer-events:none;z-index:6}
   .gb-info{position:absolute;background:#9bbc0f;border:calc(2.5px*var(--s)) solid #0f380f;border-radius:calc(6px*var(--s));padding:calc(4px*var(--s)) calc(6px*var(--s));box-shadow:calc(2px*var(--s)) calc(2px*var(--s)) 0 #306230;z-index:3}
   .gb-row{display:flex;align-items:baseline;justify-content:space-between;gap:calc(4px*var(--s))}
-  .gb-name{font-family:'Press Start 2P',monospace;font-size:calc(12px*var(--s));line-height:1.3;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .gb-name{font-family:'Press Start 2P',ui-monospace,monospace;font-size:calc(12px*var(--s));line-height:1.3;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .gb-lv{font-weight:900;font-size:calc(12px*var(--s));flex-shrink:0;line-height:1.2}
   .gb-hpbar{height:calc(7px*var(--s));background:#8bac0f;border:calc(2px*var(--s)) solid #0f380f;border-radius:99px;overflow:hidden;margin-top:calc(3px*var(--s))}
   .gb-hpfill{height:100%;background:#306230;transition:width .45s cubic-bezier(.2,1,.3,1)}
   .gb-hpnum{font-weight:900;font-size:calc(11px*var(--s));text-align:right;line-height:1.2;margin-top:calc(1px*var(--s))}
   .gb-sprite{position:absolute;z-index:2;filter:grayscale(1) sepia(1) saturate(3.2) hue-rotate(32deg) brightness(.98) contrast(1.12)}
   .gb-sprite svg{width:100%;height:auto;display:block}
-  .gb-msg{position:absolute;left:0;right:0;bottom:0;height:26%;background:#9bbc0f;border-top:calc(3px*var(--s)) solid #0f380f;padding:calc(6px*var(--s)) calc(9px*var(--s));font-family:'Press Start 2P',monospace;font-size:calc(12px*var(--s));line-height:1.7;z-index:4;display:flex;align-items:flex-start;gap:6px;overflow:hidden}
+  .gb-msg{position:absolute;left:0;right:0;bottom:0;height:26%;background:#9bbc0f;border-top:calc(3px*var(--s)) solid #0f380f;padding:calc(6px*var(--s)) calc(9px*var(--s));font-family:'Press Start 2P',ui-monospace,monospace;font-size:calc(12px*var(--s));line-height:1.7;z-index:4;display:flex;align-items:flex-start;gap:6px;overflow:hidden}
   .gb-cursor{animation:blinkC .7s steps(1) infinite;font-size:calc(10px*var(--s));flex-shrink:0}
   @keyframes blinkC{0%,49%{opacity:1}50%,100%{opacity:0}}
   .gb-hit{animation:gbShake .32s linear}
@@ -95,7 +96,7 @@ tailwind.config={theme:{extend:{
   .gb-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:7}
   .gb-flash.go{animation:gbFlash .3s ease-out}
   @keyframes gbFlash{0%{opacity:.85}100%{opacity:0}}
-  .dmg-float{position:absolute;font-family:'Luckiest Guy',cursive;font-size:calc(24px*var(--s));color:#0f380f;text-shadow:2px 2px 0 #9bbc0f;animation:dmgUp .9s ease-out forwards;pointer-events:none;z-index:8}
+  .dmg-float{position:absolute;font-family:'Luckiest Guy','Arial Black',cursive;font-size:calc(24px*var(--s));color:#0f380f;text-shadow:2px 2px 0 #9bbc0f;animation:dmgUp .9s ease-out forwards;pointer-events:none;z-index:8}
   @keyframes dmgUp{0%{opacity:0;transform:translate(-50%,0) scale(.6)}25%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}100%{opacity:0;transform:translate(-50%,-46px) scale(1)}}
   .die-box{width:clamp(52px,13vh,88px);aspect-ratio:1;flex-shrink:0}
   .die-sm{width:clamp(34px,7vh,46px);aspect-ratio:1}
@@ -122,7 +123,9 @@ tailwind.config={theme:{extend:{
   @keyframes saveFlash{0%{transform:scale(1)}45%{transform:scale(2.1);background:#58c453;box-shadow:0 0 8px #58c453}100%{transform:scale(1)}}
   @keyframes timePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
   @keyframes mascotBob{0%,100%{transform:translateY(0) scale(1,1)}45%{transform:translateY(-5px) scale(.98,1.03)}70%{transform:translateY(0) scale(1.04,.96)}}
+  @keyframes zipPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,183,3,.9),0.16rem 0.16rem 0 rgba(20,50,79,.9)}55%{box-shadow:0 0 0 8px rgba(255,183,3,0),0.16rem 0.16rem 0 rgba(20,50,79,.9)}}
   .mascot-bob{animation:mascotBob 2.6s ease-in-out infinite;transform-origin:bottom center;display:inline-block}
+  .zip-pulse{animation:zipPulse 2.2s ease-out infinite}
   .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.9;animation:drift linear infinite}
   .cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:999px}
   .cloud::before{width:55%;height:150%;left:12%;top:-70%}
@@ -143,6 +146,7 @@ tailwind.config={theme:{extend:{
   .game-canvas{touch-action:none;user-select:none;-webkit-user-select:none;display:block;width:100%;height:100%}
   .evo-flash{position:absolute;inset:0;background:#fff;border-radius:24px;animation:evoFlash .8s ease-out forwards;pointer-events:none}
   .time-low{animation:timePulse .5s infinite;color:#ff5d5d!important}
+  .filetree{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.9}
 </style>
 </head>
 <body class="font-body text-ink bg-gradient-to-b from-[#8fd9f7] via-[#c9ecfb] to-[#d8f3d0]">
@@ -262,8 +266,9 @@ tailwind.config={theme:{extend:{
   <nav id="bottomNav" class="bg-cream/95 border-t-[3px] border-ink"></nav>
   <footer class="flex items-center justify-center gap-2 text-[9px] font-bold text-ink/55 py-[3px] bg-cream/85 border-t border-ink/10 select-none">
     <span id="saveDot" title="Progres tersimpan otomatis — klik untuk simpan sekarang"></span>
-    <span>SlimeGochi · v1.0.1 Beta</span>
-    <button id="btnDeploy" class="font-disp text-[9px] leading-none px-2 py-[3px] rounded-full border-2 border-ink bg-gold text-ink shadow-pops active:translate-y-[1px]" title="Deploy & hosting cloud">☁️ DEPLOY</button>
+    <span class="hidden min-[360px]:inline">SlimeGochi · v1.0.1</span>
+    <button id="btnZip" class="zipbtn zip-pulse active:translate-y-[1px]" title="Unduh seluruh proyek sebagai satu file .zip">⬇️ ZIP</button>
+    <button id="btnDeploy" class="zipbtn !bg-white active:translate-y-[1px]" title="Panduan hosting & isi paket">☁️</button>
   </footer>
 </div>
 
@@ -273,12 +278,12 @@ tailwind.config={theme:{extend:{
 <div id="toasts" class="fixed bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none px-3 w-full max-w-sm" style="z-index:100"></div>
 
 <script>
-/* ====== sumber asli file ini (untuk ekspor/deploy) ====== */
+/* ====== sumber asli file ini (untuk ekspor) ====== */
 const SOURCE_HTML=(()=>{const c=document.documentElement.cloneNode(true);
   c.querySelectorAll('style:not([data-app])').forEach(n=>n.remove());
   return '<!DOCTYPE html>\n'+c.outerHTML;})();
 
-/* ============================ MASKOT / IKON ============================ */
+/* ============================ MASKOT ============================ */
 const MASCOT_PATH='M250 56 C268 60 286 76 300 98 C330 126 372 176 404 232 C436 288 452 336 448 372 C442 424 372 458 256 458 C140 458 70 424 64 372 C60 336 76 288 108 232 C140 176 182 126 212 98 C226 76 236 58 250 56 Z';
 const MASCOT_DEFS=`<linearGradient id='mgB' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#7df3ff'/><stop offset='.34' stop-color='#33d8ff'/><stop offset='.72' stop-color='#1a86f0'/><stop offset='1' stop-color='#0a45c8'/></linearGradient><linearGradient id='mgR' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#bff8ff'/><stop offset='1' stop-color='#5fe6ff'/></linearGradient><clipPath id='mgC'><path d='${MASCOT_PATH}'/></clipPath>`;
 const MASCOT_INNER=`<path d='${MASCOT_PATH}' fill='#0e1a4a' stroke='#0e1a4a' stroke-width='30' stroke-linejoin='round'/><path d='${MASCOT_PATH}' fill='#ffffff' stroke='#ffffff' stroke-width='13' stroke-linejoin='round'/><path d='${MASCOT_PATH}' fill='url(#mgB)'/><g clip-path='url(#mgC)'><ellipse cx='256' cy='452' rx='190' ry='46' fill='#0a3fc0' opacity='.5'/><path d='M286 78 C324 112 362 164 392 216 C372 206 340 176 310 142 C296 124 288 100 286 78 Z' fill='#0fb4e6' opacity='.7'/><path d='${MASCOT_PATH}' fill='none' stroke='url(#mgR)' stroke-width='14'/><ellipse cx='188' cy='188' rx='80' ry='48' fill='#ffffff' opacity='.95' transform='rotate(-32 188 188)'/><ellipse cx='300' cy='150' rx='20' ry='15' fill='#ffffff' opacity='.9'/><ellipse cx='392' cy='210' rx='46' ry='28' fill='#cdf3ff' opacity='.7' transform='rotate(28 392 210)'/><ellipse cx='136' cy='268' rx='28' ry='19' fill='#eafcff' opacity='.85' transform='rotate(-22 136 268)'/><ellipse cx='106' cy='352' rx='14' ry='46' fill='#cdf3ff' opacity='.55'/><circle cx='120' cy='418' r='13' fill='#bfefff' opacity='.6'/><ellipse cx='420' cy='410' rx='22' ry='15' fill='#eafcff' opacity='.8' transform='rotate(-30 420 410)'/><circle cx='402' cy='450' r='11' fill='#bfefff' opacity='.7'/><circle cx='430' cy='370' r='10' fill='#ffffff' opacity='.85'/></g><ellipse cx='137' cy='344' rx='41' ry='24' fill='#ff8fa2' opacity='.3'/><ellipse cx='375' cy='344' rx='41' ry='24' fill='#ff8fa2' opacity='.3'/><ellipse cx='137' cy='344' rx='34' ry='19' fill='#ff8fa2'/><ellipse cx='375' cy='344' rx='34' ry='19' fill='#ff8fa2'/><ellipse cx='194' cy='278' rx='42' ry='46' fill='#0e1a4a'/><ellipse cx='318' cy='278' rx='42' ry='46' fill='#0e1a4a'/><circle cx='179' cy='258' r='15' fill='#ffffff'/><circle cx='303' cy='258' r='15' fill='#ffffff'/><circle cx='197' cy='300' r='17' fill='#2f7fe0'/><circle cx='321' cy='300' r='17' fill='#2f7fe0'/><path d='M234 322 Q256 354 278 322' fill='none' stroke='#0e1a4a' stroke-width='13' stroke-linecap='round'/>`;
@@ -367,7 +372,7 @@ const powAtk=lv=>Math.floor(lv/2), powDef=lv=>Math.floor(lv/6);
 const KEY='slimegotchi-v1',CKEY='slimegotchi_backup';
 const defaultState=()=>({v:1,coins:60,sound:true,hatchCount:0,incubator:null,pets:[],activeId:null,
   inv:{foods:{apel:2,roti:1},hatch:1,toys:[],pillow:false},
-  wardrobe:{skins:[],wear:[]},bestRun:0,runs:0,rainPlays:0,rainBest:0,tacWins:0,tacPlays:0,dex:[],lastSeen:Date.now()});
+  wardrobe:{skins:[],wear:[]},bestRun:0,runs:0,rainPlays:0,rainBest:0,tacWins:0,tacPlays:0,dex:[],zipHint:0,lastSeen:Date.now()});
 function setCookie(n,v,d){try{document.cookie=n+'='+encodeURIComponent(v)+';max-age='+(d*86400)+';path=/;SameSite=Lax';}catch(e){}}
 function getCookie(n){try{const m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?decodeURIComponent(m[1]):null;}catch(e){return null;}}
 function normalize(d){const b=defaultState();const s={...b,...d,inv:{...b.inv,...(d.inv||{})},wardrobe:{...b.wardrobe,...(d.wardrobe||{})}};
@@ -416,7 +421,7 @@ function closeResult(){RESULT.on=false;$('#result-root').innerHTML='';syncPopups
 let AC=null;
 function tone(f,t=0,d=.09,type='square',v=.06){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),now=AC.currentTime+t;o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,now);g.gain.exponentialRampToValueAtTime(.001,now+d);o.connect(g).connect(AC.destination);o.start(now);o.stop(now+d+.02);}catch(e){}}
 function noise(d=.2,v=.12){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const n=Math.floor(AC.sampleRate*d),buf=AC.createBuffer(1,n,AC.sampleRate),ch=buf.getChannelData(0);for(let i=0;i<n;i++)ch[i]=(Math.random()*2-1)*(1-i/n);const src=AC.createBufferSource(),g=AC.createGain();src.buffer=buf;g.gain.value=v;src.connect(g).connect(AC.destination);src.start();}catch(e){}}
-function sfx(n,opt=0){if(!S.sound)return;const P={click:[660],eat:[420,520,640],coin:[988,1319],error:[170],pop:[880],level:[523,659,784,1047],win:[523,659,784,1047],lose:[330,262,196],hatch:[392,494,587,784],jump:[520,760],star:[1047,1319,1568],revive:[392,523,659,784,1047],clock:[784,988,1175],tick:[1200],hit:[300,180],crit:[784,988,1319,1568],miss:[220,160],guard:[392,523],heal:[659,880,1047],select:[880,1175]};
+function sfx(n,opt=0){if(!S.sound)return;const P={click:[660],eat:[420,520,640],coin:[988,1319],error:[170],pop:[880],level:[523,659,784,1047],win:[523,659,784,1047],lose:[330,262,196],hatch:[392,494,587,784],jump:[520,760],star:[1047,1319,1568],revive:[392,523,659,784,1047],clock:[784,988,1175],tick:[1200],hit:[300,180],crit:[784,988,1319,1568],miss:[220,160],guard:[392,523],heal:[659,880,1047],select:[880,1175],zip:[659,880,1175,1568]};
   if(n==='crash'){noise(.25,.16);tone(140,0,.2,'sawtooth',.08);return;}
   if(n==='coinrun'){tone(988*Math.pow(1.059,Math.min(opt,12)),0,.07,'square',.05);tone(1319*Math.pow(1.059,Math.min(opt,12)),.06,.09,'square',.05);return;}
   (P[n]||[520]).forEach((f,i)=>tone(f,i*.07,.09,n==='error'||n==='miss'?'sawtooth':'square',n==='tick'?.02:.06));}
@@ -466,8 +471,8 @@ function slimeSVG(p,size=200,mood=null){
 function eggSVG(size=140,crack=false){const u='e'+(++UID);
   return `<svg viewBox="0 0 200 200" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f4fdff"/><stop offset="55%" stop-color="#9fe0fb"/><stop offset="100%" stop-color="#57b6ee"/></linearGradient><clipPath id="c${u}"><path d="M100 18 C138 18 162 70 162 116 C162 158 134 184 100 184 C66 184 38 158 38 116 C38 70 62 18 100 18Z"/></clipPath></defs><path d="M100 18 C138 18 162 70 162 116 C162 158 134 184 100 184 C66 184 38 158 38 116 C38 70 62 18 100 18Z" fill="url(#g${u})" stroke="#1a6fb5" stroke-width="7"/><g clip-path="url(#c${u})"><ellipse cx="100" cy="176" rx="52" ry="16" fill="#d9f4ff" opacity=".6"/><ellipse cx="78" cy="64" rx="16" ry="26" fill="#fff" opacity=".8" transform="rotate(-18 78 64)"/><circle cx="128" cy="84" r="8" fill="#fff" opacity=".5"/><circle cx="86" cy="158" r="5" fill="#fff" opacity=".45"/><circle cx="112" cy="164" r="4" fill="#fff" opacity=".4"/></g>${crack?'<path d="M66 104 l18 10 -10 12 20 8 -8 14" stroke="#14324f" stroke-width="4.5" fill="none" stroke-linejoin="round"/>':''}</svg>`;}
 const iconSVG=(id,size=40)=>`<svg viewBox="0 0 64 64" width="${size}" height="${size}">${FOOD_ICON[id]||''}</svg>`;
-const d20SVG=n=>`<svg viewBox="0 0 100 100" width="100%" height="100%"><polygon points="50,3 92,27 92,73 50,97 8,73 8,27" fill="#fff9ef" stroke="#14324f" stroke-width="5" stroke-linejoin="round"/><polygon points="50,22 79,68 21,68" fill="none" stroke="#14324f" stroke-width="3" opacity=".3"/><text x="50" y="60" text-anchor="middle" font-family="Luckiest Guy, cursive" font-size="34" fill="#14324f">${n}</text></svg>`;
-const d4SVG=n=>`<svg viewBox="0 0 100 100" width="100%" height="100%"><polygon points="50,6 94,90 6,90" fill="#ffd166" stroke="#14324f" stroke-width="5" stroke-linejoin="round"/><text x="50" y="82" text-anchor="middle" font-family="Luckiest Guy, cursive" font-size="30" fill="#14324f">${n}</text></svg>`;
+const d20SVG=n=>`<svg viewBox="0 0 100 100" width="100%" height="100%"><polygon points="50,3 92,27 92,73 50,97 8,73 8,27" fill="#fff9ef" stroke="#14324f" stroke-width="5" stroke-linejoin="round"/><polygon points="50,22 79,68 21,68" fill="none" stroke="#14324f" stroke-width="3" opacity=".3"/><text x="50" y="60" text-anchor="middle" font-family="Luckiest Guy, Arial Black, cursive" font-size="34" fill="#14324f">${n}</text></svg>`;
+const d4SVG=n=>`<svg viewBox="0 0 100 100" width="100%" height="100%"><polygon points="50,6 94,90 6,90" fill="#ffd166" stroke="#14324f" stroke-width="5" stroke-linejoin="round"/><text x="50" y="82" text-anchor="middle" font-family="Luckiest Guy, Arial Black, cursive" font-size="30" fill="#14324f">${n}</text></svg>`;
 const COIN_SVG=`<svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="32" r="26" fill="#ffb703" stroke="#b45309" stroke-width="5"/><circle cx="32" cy="32" r="18" fill="#ffd166" stroke="#e09b00" stroke-width="3"/><path d="M32 20 L36 28 L44 32 L36 36 L32 44 L28 36 L20 32 L28 28Z" fill="#fffbe0"/><ellipse cx="22" cy="20" rx="5" ry="8" fill="#fff" opacity=".5" transform="rotate(-30 22 20)"/></svg>`;
 const STAR_SVG=`<svg viewBox="0 0 64 64" width="64" height="64"><path d="M32 6 L39 24 L58 24 L43 36 L49 55 L32 43 L15 55 L21 36 L6 24 L25 24Z" fill="#ffd166" stroke="#d97706" stroke-width="4" stroke-linejoin="round"/><circle cx="26" cy="26" r="3" fill="#fff" opacity=".8"/></svg>`;
 const CLOCK_SVG=`<svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="36" r="22" fill="#fff9ef" stroke="#14324f" stroke-width="4"/><circle cx="32" cy="36" r="16" fill="#dff6ff" stroke="#3fb0f0" stroke-width="3"/><path d="M32 36 L32 26 M32 36 L40 40" stroke="#14324f" stroke-width="4" stroke-linecap="round"/><path d="M14 18 L22 12 M50 18 L42 12" stroke="#b45309" stroke-width="5" stroke-linecap="round"/><circle cx="13" cy="15" r="6" fill="#ffb703" stroke="#b45309" stroke-width="3"/><circle cx="51" cy="15" r="6" fill="#ffb703" stroke="#b45309" stroke-width="3"/><path d="M26 58 L22 62 M38 58 L42 62" stroke="#14324f" stroke-width="4" stroke-linecap="round"/></svg>`;
@@ -479,7 +484,7 @@ let SPR={key:'',img:null};
 function spriteFor(p){const key=[p.id,p.element,p.evolved,p.skin,p.head,p.face,p.neck].join('|');if(SPR.key!==key)SPR={key,img:svgImg(slimeSVG(p,200,'happy'))};return SPR.img;}
 
 /* ============================ UI HELPERS ============================ */
-function toast(emoji,msg){const t=document.createElement('div');t.className='toast-in bg-ink text-cream font-bold px-4 py-2 rounded-full border-[3px] border-cream/40 shadow-lg flex items-center gap-2 text-sm';t.innerHTML=`<span class="text-lg">${emoji}</span>${esc(msg)}`;$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='all .4s';t.style.opacity=0;t.style.transform='translateY(10px)';setTimeout(()=>t.remove(),400);},2400);}
+function toast(emoji,msg){const t=document.createElement('div');t.className='toast-in bg-ink text-cream font-bold px-4 py-2 rounded-full border-[3px] border-cream/40 shadow-lg flex items-center gap-2 text-sm';t.innerHTML=`<span class="text-lg">${emoji}</span>${esc(msg)}`;$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='all .4s';t.style.opacity=0;t.style.transform='translateY(10px)';setTimeout(()=>t.remove(),400);},2600);}
 function burst(el,emojis,n=8){if(!el)return;const r=el.getBoundingClientRect();for(let i=0;i<n;i++){const s=document.createElement('span');s.className='particle';s.textContent=emojis[i%emojis.length];s.style.left=(r.width*.5+(Math.random()-.5)*r.width*.5)+'px';s.style.top=(r.height*.5+(Math.random()-.5)*r.height*.3)+'px';s.style.animationDelay=(Math.random()*.25)+'s';el.appendChild(s);setTimeout(()=>s.remove(),1500);}}
 function showModal(html){const m=$('#modal-root');m.innerHTML=`<div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal()"></div><div class="absolute inset-0 flex items-center justify-center p-3 pointer-events-none"><div class="pointer-events-auto pop-in max-w-lg w-full max-h-[90dvh] overflow-y-auto scroll-slim rounded-3xl">${html}</div></div>`;m.classList.remove('hide');}
 function closeModal(){$('#modal-root').classList.add('hide');$('#modal-root').innerHTML='';}
@@ -549,8 +554,8 @@ function hash(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(
 function layoutStage(arenaSel,stageSel,padMin){
   const a=$(arenaSel),s=$(stageSel);if(!a||!s)return;
   const cs=getComputedStyle(a);
-  const aw=a.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
-  const ah=a.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-8;
+  const aw=a.clientWidth-parseFloat(cs.paddingLeft||0)-parseFloat(cs.paddingRight||0);
+  const ah=a.clientHeight-parseFloat(cs.paddingTop||0)-parseFloat(cs.paddingBottom||0)-8;
   if(aw<60||ah<60)return;
   let w=aw,h=w*9/16;const maxH=Math.max(100,ah-padMin);
   if(h>maxH){h=maxH;w=h*16/9;}
@@ -1042,7 +1047,7 @@ function renderHub(){const p=activePet(),wrap=$('#arena-hub');const prev=p?slime
     <div class="grid grid-cols-3 gap-2 mt-3">${Object.entries(DIFFS).map(([k,d])=>`<button onclick="T.start('${k}')" class="btn !px-1 !py-2 flex-col !gap-0 text-xs" style="background:${d.color}" ${!p?'disabled':''}><span class="text-lg">${d.emoji}</span>${d.label}<span class="text-[9px] font-body font-bold opacity-75">LV ${d.off[0]>=0?'+':''}${d.off[0]}~+${d.off[1]}</span><span class="text-[9px] font-body font-extrabold">hadiah ×${d.mult}</span></button>`).join('')}</div>
     <p class="text-[10px] font-bold opacity-60 mt-2 text-center">Level musuh mengikuti levelmu (${lv}) · 🏆 Menang ${S.tacWins}/${S.tacPlays} · biaya ${ACT_COST}⚡</p></div>
   <div class="panel p-4 mt-3 ${!p||p.level<5?'opacity-80':''}"><div class="flex items-center gap-3"><span class="text-4xl">✌️</span><div class="flex-1"><h4 class="font-disp text-xl">Duel Gunting-Batu-Kertas ${!p||p.level<5?'🔒':''}</h4><p class="text-xs font-bold opacity-70">${!p||p.level<5?`Terbuka di LV.5 (sekarang LV.${lv}).`:'Menang +EXP & koin · Seri setengah · Kalah hiburan.'}</p></div>${p&&p.level>=5?`<button onclick="renderDuelPick()" class="btn bg-cream2 text-sm">Pilih Lawan</button>`:''}</div></div>
-  <button onclick="openDeploy()" class="panel w-full mt-3 p-3 !bg-gradient-to-r !from-[#dff6ff] !to-[#e6fbdc] flex items-center gap-3 text-left"><span class="shrink-0 mascot-bob">${mascotSVG(44)}</span><span class="flex-1 min-w-0"><b class="font-disp text-lg block leading-tight">MAU ONLINE-KAN GAME INI?</b><span class="text-[11px] font-bold opacity-70">Deploy Studio: hosting gratis + paket siap-upload.</span></span><span class="btn bg-gold !px-3 !py-1 text-xs shrink-0">Buka</span></button></div>`;}
+  <button onclick="dlPack()" class="panel w-full mt-3 p-3 !bg-gradient-to-r !from-[#fff2c9] !to-[#ffe0a8] flex items-center gap-3 text-left"><span class="text-3xl shrink-0">📦</span><span class="flex-1 min-w-0"><b class="font-disp text-lg block leading-tight">UNDUH 1 FILE ZIP</b><span class="text-[11px] font-bold opacity-70">Seluruh proyek jadi satu berkas siap-upload.</span></span><span class="btn bg-gold !px-3 !py-1 text-xs shrink-0">⬇️ ZIP</span></button></div>`;}
 function renderDuelPick(){showEl('arena-hub');$('#arena-hub').innerHTML=`<div class="p-3 max-w-3xl mx-auto"><div class="flex items-center gap-2 mb-3"><button onclick="showArenaHub()" class="btn bg-white !px-3 !py-1 text-sm">←</button><h3 class="font-disp text-2xl">✌️ PILIH LAWAN (−${ACT_COST}⚡)</h3></div><div class="grid md:grid-cols-3 gap-3">${BOTS.map(b=>`<div class="panel p-4 text-center bg-white/70 flex flex-col items-center gap-1.5"><div class="w-16 h-16 rounded-full grid place-items-center text-4xl border-4 border-ink" style="background:${b.aura}">${b.emoji}</div><h4 class="font-disp text-lg">${b.name}</h4><p class="text-[11px] font-bold opacity-60 min-h-7">${b.taunt}</p><span class="chip !text-xs">🏆 +${b.coins} 🪙</span><button onclick="startDuel('${b.id}')" class="btn bg-gold w-full text-sm">Tantang!</button></div>`).join('')}</div></div>`;}
 let shopTab='makanan';
 function attrPips(n){return Array.from({length:ATTR_MAX},(_,i)=>`<span class="inline-block w-2.5 h-2.5 rounded-full border-2 border-ink ${i<n?'bg-gold':'bg-ink/10'}"></span>`).join('');}
@@ -1084,7 +1089,7 @@ function renderCollect(){const wrap=$('#tab-collect');
   wrap.innerHTML=`<div class="p-3 pb-6"><div class="flex flex-wrap items-center gap-2 mb-2"><h3 class="font-disp text-2xl">🫧 KOLEKSI SLIME</h3>${!S.incubator?`<button onclick="setTab('egg')" class="btn bg-gold text-xs ml-auto">+ Telur Baru (${fmtCd(nextHatchMs())})</button>`:''}</div><div class="panel p-2.5 mb-3"><p class="font-disp text-xs mb-1.5">🧬 DEX EVOLUSI — ${S.dex.length}/10</p><div class="flex flex-wrap gap-1.5">${EVO_KEYS.map(k=>{const got=S.dex.includes(k),E=EVOS[k];return `<span class="chip !text-[10px] !py-0.5 !px-2 ${got?'':'opacity-40 grayscale'}">${E.emoji} ${got?E.label:'???'}</span>`;}).join('')}</div></div><div class="grid grid-cols-2 md:grid-cols-3 gap-3">${S.pets.map(p=>{const act=p.id===S.activeId,E=p.evolved?EVOS[p.element]:null,ta=totAttr(p),gt=ATTR_KEYS.reduce((a,k)=>a+p.gift[k],0);return `<div class="panel p-3 text-center ${act?'!bg-cream2 ring-4 ring-gold':''}"><div class="mx-auto w-fit ${p.evolved&&p.element==='angin'?'slime-float':'slime-idle'}">${slimeSVG(p,96)}</div><h4 class="font-disp text-lg">${esc(p.nick)}</h4><div class="flex justify-center gap-1 flex-wrap my-1"><span class="chip !text-[10px] !py-0.5 !px-2">LV.${p.level}${p.level>=MAX_LV?' MAX':''}</span><span class="chip !text-[10px] !py-0.5 !px-2">${E?E.emoji+' '+E.label:'🫧 Murni'}</span></div><p class="text-[10px] font-bold opacity-60">⚡${p.energy} · 🍎${Math.round(p.full)} · 🎈${Math.round(p.fun)} · 🫧${Math.round(p.clean)}</p><p class="text-[10px] font-bold opacity-60 mt-0.5">❤️${maxHP(p)} · 🗡️${powAtk(p.level)+ta.dmg} · 🛡️${powDef(p.level)+ta.def} · 🎲+${ta.dp}${gt?` · ⭐${gt}`:''}</p>${act?'<span class="btn bg-lime-200 w-full mt-1.5 text-xs cursor-default">✔️ Aktif</span>':`<button onclick="switchPet('${p.id}')" class="btn bg-cream2 w-full mt-1.5 text-xs">Jadikan Aktif</button>`}</div>`;}).join('')||'<p class="font-bold opacity-60 col-span-full">Belum ada slime.</p>'}</div></div>`;}
 function switchPet(id){if(gameBusy())return toast('🎮','Selesaikan permainan dulu!');S.activeId=id;SPR.key='';save();renderCollect();renderNav();toast('🫧',`${activePet().nick} jadi slime aktif!`);}
 
-/* ============================ DEPLOY STUDIO ============================ */
+/* ============================ PAKET ZIP ============================ */
 const MANIFEST_OBJ={name:'SlimeGochi — Ternak · Latih · Evolusi',short_name:'SlimeGochi',
   description:'Rawat slime dari telur, main SlimeGo!, Slime Rain! & Slime Tactic, evolusikan jadi 10 elemen.',
   start_url:'./index.html',scope:'./',display:'standalone',orientation:'portrait',
@@ -1161,6 +1166,47 @@ const NOTFOUND_TXT=`<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"/>
 a{display:inline-block;margin-top:12px;padding:10px 18px;border:3px solid #14324f;border-radius:16px;background:#ffb703;color:#14324f;font-weight:900;text-decoration:none}</style>
 </head><body><div><h1>🫧 Halaman tidak ada</h1><p>Mengembalikanmu ke kandang slime…</p><a href="./index.html">Main sekarang</a></div></body></html>
 `;
+const QUICK_TXT=[
+'SLIMEGOCHI — CARA PAKAI PAKET INI (BACA DULU, 30 DETIK)',
+'=========================================================',
+'',
+'ISI ZIP',
+'  index.html  <- SELURUH GAME. Buka file ini untuk main.',
+'  icon.svg, manifest.webmanifest, sw.js  <- ikon + install aplikasi + offline',
+'  netlify.toml, vercel.json, _headers    <- konfigurasi hosting (opsional)',
+'  404.html, robots.txt, .nojekyll        <- pelengkap hosting statis',
+'  README.md                              <- panduan lengkap',
+'',
+'MAIN SEKARANG (tanpa internet, tanpa install)',
+'  Klik dua kali index.html.',
+'',
+'JADIKAN ONLINE — PILIH SATU',
+'  A. Netlify Drop (paling cepat, tanpa akun Git)',
+'     1) Ekstrak ZIP ini jadi satu folder.',
+'     2) Buka https://app.netlify.com/drop',
+'     3) Seret FOLDER itu ke halaman. Selesai, dapat link.',
+'',
+'  B. itch.io (portal game — pakai ZIP ini langsung)',
+'     1) https://itch.io/game/new',
+'     2) Kind of project: HTML',
+'     3) Upload ZIP ini APA ADANYA (jangan diekstrak).',
+'     4) Centang "This file will be played in the browser".',
+'     5) Viewport 360 x 740, Mobile friendly: Yes.',
+'',
+'  C. GitHub Pages',
+'     Upload semua file ke repo publik > Settings > Pages >',
+'     Deploy from a branch > main / (root) > Save.',
+'',
+'  D. Vercel / Cloudflare Pages',
+'     Import repo atau drag folder. Build command kosong, output root.',
+'',
+'CATATAN',
+'  - index.html sudah mandiri: favicon & semua gambar tertanam di dalamnya.',
+'  - Koneksi internet dipakai pertama kali untuk font & CSS CDN;',
+'    setelah itu sw.js menyimpannya supaya bisa offline.',
+'  - Progres pemain tersimpan di browser masing-masing, bukan di server.',
+''
+].join('\n');
 const README_TXT=[
 '# SlimeGochi 🫧 — v1.0.1 Beta',
 '',
@@ -1169,26 +1215,21 @@ const README_TXT=[
 '## Isi paket',
 '| File | Fungsi |',
 '|---|---|',
-'| `index.html` | Seluruh game (wajib) |',
-'| `icon.svg` | Favicon & ikon aplikasi (maskot slime) |',
+'| `index.html` | Seluruh game (wajib) — favicon & semua aset tertanam |',
+'| `icon.svg` | Ikon aplikasi / maskot slime |',
 '| `manifest.webmanifest` | Install ke home screen (PWA) |',
-'| `sw.js` | Offline cache — main tanpa internet setelah kunjungan pertama |',
+'| `sw.js` | Offline cache |',
 '| `netlify.toml` / `vercel.json` / `_headers` | Konfigurasi hosting (opsional) |',
 '| `404.html`, `robots.txt`, `.nojekyll` | Pelengkap hosting statis |',
+'| `CARA-PAKAI.txt` | Panduan singkat Bahasa Indonesia |',
 '',
-'## Pilihan hosting gratis',
+'## Hosting gratis',
 '',
-'### 1. Netlify Drop — paling cepat, tanpa Git',
-'1. Ekstrak ZIP ini.',
-'2. Buka <https://app.netlify.com/drop>.',
-'3. Tarik **folder** hasil ekstrak ke area drop.',
-'4. Langsung dapat URL `https://nama-acak.netlify.app`.',
+'### Netlify Drop — tercepat, tanpa Git',
+'Ekstrak ZIP → buka <https://app.netlify.com/drop> → seret folder → dapat URL.',
 '',
-'### 2. GitHub Pages — gratis & permanen',
-'1. Buat repo publik, upload semua file ke root.',
-'2. **Settings → Pages → Build and deployment → Deploy from a branch**.',
-'3. Branch `main`, folder `/ (root)` → Save.',
-'4. URL: `https://USER.github.io/NAMA-REPO/`.',
+'### GitHub Pages',
+'Upload semua file ke root repo publik → **Settings → Pages → Deploy from a branch** → `main` / `/ (root)`.',
 '',
 '```bash',
 'git init',
@@ -1199,64 +1240,63 @@ const README_TXT=[
 'git push -u origin main',
 '```',
 '',
-'### 3. Vercel',
-'Import repo di <https://vercel.com/new> → Framework Preset **Other**, Build Command kosong, Output `.`',
+'### Vercel',
+'<https://vercel.com/new> → Framework Preset **Other**, Build Command kosong, Output `.`',
 '',
 '```bash',
 'npm i -g vercel && vercel login && vercel --prod',
 '```',
 '',
-'### 4. Cloudflare Pages',
-'Dashboard → Workers & Pages → Create → Pages → Upload assets (drag folder).',
+'### Cloudflare Pages',
+'Workers & Pages → Create → Pages → Upload assets.',
 '',
 '```bash',
 'npm i -g wrangler && wrangler login',
 'wrangler pages deploy . --project-name slimegochi',
 '```',
 '',
-'### 5. itch.io (portal game)',
-'Upload **ZIP tanpa diekstrak** → Kind of project **HTML** → centang *This file will be played in the browser* → viewport `360 × 740`, Mobile friendly **Yes**.',
-'',
-'## Catatan',
-'- Butuh internet pada kunjungan pertama (Tailwind CDN + Google Fonts). Setelah itu `sw.js` menyimpannya untuk offline.',
-'- Favicon sudah tertanam sebagai data-URI di `index.html`, jadi tetap muncul walau hanya file itu yang di-upload.',
-'- Progres pemain disimpan di `localStorage` + cookie **per perangkat/browser**, bukan di server.',
-'- HTTPS wajib untuk service worker & install PWA (semua host di atas sudah HTTPS).',
+'### itch.io',
+'Upload **ZIP tanpa diekstrak** → Kind **HTML** → centang *This file will be played in the browser* → viewport `360 × 740`.',
 '',
 '## Kontrol',
 '- **SlimeGo!** — swipe ↑ / SPASI / ↑ untuk lompat, ⏸ jeda, ✕ keluar.',
 '- **Slime Rain!** — swipe ← → / tombol panah, 3 item = 1 koin, ⏰ +3 detik.',
 '- **Slime Tactic** — tombol aksi atau keyboard 1–4, ⏩ mode cepat, P jeda.',
 '- Level maks 100 · evolusi LV.10 memberi elemen acak + 5 poin atribut permanen.',
+'',
+'## Catatan',
+'- Progres tersimpan di `localStorage` + cookie per perangkat, bukan di server.',
+'- HTTPS diperlukan untuk service worker & install PWA.',
+'- Tombol **⬇️ ZIP** di footer game membuat ulang paket ini kapan saja.',
 ''
 ].join('\n');
 const HOSTS=[
   {id:'netlify',name:'Netlify Drop',emoji:'🪂',tag:'TERCEPAT · TANPA GIT',color:'#c8f0c0',url:'https://app.netlify.com/drop',
-   steps:['Unduh **Paket ZIP** di tab Paket, lalu ekstrak.','Buka app.netlify.com/drop.','Tarik folder hasil ekstrak ke area drop.','URL langsung live: nama-acak.netlify.app'],
-   cmd:null,note:'Gratis + HTTPS otomatis. Paling cocok untuk uji cepat & berbagi link ke teman.'},
+   steps:['Unduh **SlimeGochi.zip**, lalu ekstrak.','Buka app.netlify.com/drop.','Tarik folder hasil ekstrak ke area drop.','URL langsung live: nama-acak.netlify.app'],
+   cmd:null,note:'Gratis + HTTPS otomatis. Paling cocok untuk uji cepat & berbagi link.'},
+  {id:'itch',name:'itch.io',emoji:'🎮',tag:'PAKAI ZIP LANGSUNG',color:'#ffd0d0',url:'https://itch.io/game/new',
+   steps:['Unduh **SlimeGochi.zip** — jangan diekstrak.','Create new project → Kind of project: HTML.','Upload ZIP → centang "This file will be played in the browser".','Viewport 360 × 740 · Mobile friendly: Yes → Save & view.'],
+   cmd:null,note:'Satu-satunya host di sini yang menerima ZIP apa adanya.'},
   {id:'github',name:'GitHub Pages',emoji:'🐙',tag:'GRATIS · PERMANEN',color:'#dbe6f0',url:'https://github.com/new',
-   steps:['Buat repo baru (Public), misal slimegochi.','Upload semua file paket ke root repo.','Settings → Pages → Deploy from a branch.','Branch main / (root) → Save. Tunggu ±1 menit.'],
+   steps:['Ekstrak ZIP, buat repo publik.','Upload semua file ke root repo.','Settings → Pages → Deploy from a branch.','Branch main / (root) → Save. Tunggu ±1 menit.'],
    cmd:'git init\ngit add .\ngit commit -m "SlimeGochi v1.0.1"\ngit branch -M main\ngit remote add origin https://github.com/USER/slimegochi.git\ngit push -u origin main',
-   note:'Hasil: https://USER.github.io/slimegochi/ — file .nojekyll sudah termasuk.'},
+   note:'Hasil: https://USER.github.io/slimegochi/ — .nojekyll sudah termasuk.'},
   {id:'vercel',name:'Vercel',emoji:'▲',tag:'CI OTOMATIS',color:'#e6e6e6',url:'https://vercel.com/new',
    steps:['Import repo GitHub di vercel.com/new.','Framework Preset: Other · Build Command: kosong.','Output Directory: . (root) → Deploy.'],
    cmd:'npm i -g vercel\nvercel login\nvercel --prod',
    note:'vercel.json sudah termasuk agar cache & header service worker benar.'},
   {id:'cf',name:'Cloudflare Pages',emoji:'🌩️',tag:'BANDWIDTH BESAR',color:'#ffe0b8',url:'https://dash.cloudflare.com/',
-   steps:['Dashboard → Workers & Pages → Create → Pages.','Upload assets (drag folder) atau sambungkan repo.','Build command kosong · output directory /'],
+   steps:['Dashboard → Workers & Pages → Create → Pages.','Upload assets (drag folder hasil ekstrak).','Build command kosong · output directory /'],
    cmd:'npm i -g wrangler\nwrangler login\nwrangler pages deploy . --project-name slimegochi',
-   note:'Gratis, CDN global — tahan kalau link kamu tiba-tiba ramai.'},
-  {id:'itch',name:'itch.io',emoji:'🎮',tag:'PORTAL GAME',color:'#ffd0d0',url:'https://itch.io/game/new',
-   steps:['Unduh Paket ZIP (jangan diekstrak).','Create new project → Kind of project: HTML.','Upload ZIP → centang "This file will be played in the browser".','Viewport 360 × 740 · Mobile friendly: Yes → Save & view.'],
-   cmd:null,note:'Game-mu tampil di portal game sungguhan dan bisa dikoleksi orang.'}
+   note:'Gratis, CDN global — tahan kalau link kamu ramai.'}
 ];
-const COPYMAP={};let copyN=0,deployTab='host',INSTALL_EVT=null,SW_OK=false;
+const COPYMAP={};let copyN=0,deployTab='pack',INSTALL_EVT=null,SW_OK=false;
 function copyKey(txt){const k='c'+(++copyN);COPYMAP[k]=txt;return k;}
 async function doCopy(k){const txt=COPYMAP[k]||'';let ok=false;
   try{await navigator.clipboard.writeText(txt);ok=true;}catch(e){
     try{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove();}catch(_){ok=false;}}
   sfx(ok?'pop':'error');toast(ok?'📋':'⚠️',ok?'Disalin ke clipboard.':'Clipboard diblokir — pilih teks manual.');}
-function dlBlob(name,blob){try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);sfx('coin');toast('⬇️',`${name} diunduh.`);}catch(e){sfx('error');toast('⚠️','Unduhan diblokir preview. Buka di tab baru.');}}
+function dlBlob(name,blob){try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),6000);return true;}catch(e){return false;}}
 const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
 function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC_T[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
 function makeZip(files){
@@ -1288,32 +1328,78 @@ function makeZip(files){
   return new Blob([buf],{type:'application/zip'});}
 function exportHTML(){return SOURCE_HTML.replace('<head>','<head>\n<link rel="manifest" href="manifest.webmanifest"/>\n<meta name="apple-mobile-web-app-capable" content="yes"/>');}
 function packFiles(){return[
-  {name:'index.html',text:exportHTML()},
-  {name:'icon.svg',text:ICON_TXT},
-  {name:'manifest.webmanifest',text:MANIFEST_TXT},
-  {name:'sw.js',text:SW_TXT},
-  {name:'netlify.toml',text:NETLIFY_TXT},
-  {name:'vercel.json',text:VERCEL_TXT},
-  {name:'_headers',text:HEADERS_TXT},
-  {name:'404.html',text:NOTFOUND_TXT},
-  {name:'robots.txt',text:'User-agent: *\nAllow: /\n'},
-  {name:'.nojekyll',text:''},
-  {name:'README.md',text:README_TXT}];}
-function dlPack(){dlBlob('slimegochi-deploy.zip',makeZip(packFiles()));}
+  {name:'index.html',text:exportHTML(),note:'seluruh game'},
+  {name:'CARA-PAKAI.txt',text:QUICK_TXT,note:'baca dulu'},
+  {name:'README.md',text:README_TXT,note:'panduan hosting'},
+  {name:'icon.svg',text:ICON_TXT,note:'ikon maskot'},
+  {name:'manifest.webmanifest',text:MANIFEST_TXT,note:'install PWA'},
+  {name:'sw.js',text:SW_TXT,note:'offline'},
+  {name:'netlify.toml',text:NETLIFY_TXT,note:'opsional'},
+  {name:'vercel.json',text:VERCEL_TXT,note:'opsional'},
+  {name:'_headers',text:HEADERS_TXT,note:'opsional'},
+  {name:'404.html',text:NOTFOUND_TXT,note:'opsional'},
+  {name:'robots.txt',text:'User-agent: *\nAllow: /\n',note:'opsional'},
+  {name:'.nojekyll',text:'',note:'GitHub Pages'}];}
+function dlPack(){
+  const files=packFiles(),blob=makeZip(files),kb=(blob.size/1024).toFixed(0);
+  const ok=dlBlob('SlimeGochi.zip',blob);
+  if(ok){sfx('zip');toast('📦',`SlimeGochi.zip · ${files.length} file · ${kb} KB terunduh.`);
+    const b=$('#btnZip');if(b){b.classList.remove('zip-pulse');b.textContent='✔️ ZIP';setTimeout(()=>{b.textContent='⬇️ ZIP';b.classList.add('zip-pulse');},2200);}
+    S.zipHint=1;save();}
+  else{sfx('error');toast('⚠️','Unduhan diblokir panel ini. Buka di tab browser baru.');openDeploy('pack');}
+}
 function dlOne(name){const f=packFiles().find(x=>x.name===name);if(!f)return;
-  dlBlob(name,new Blob([f.text],{type:name.endsWith('.html')?'text/html':name.endsWith('.svg')?'image/svg+xml':'text/plain'}));}
+  const ok=dlBlob(name,new Blob([f.text],{type:name.endsWith('.html')?'text/html':name.endsWith('.svg')?'image/svg+xml':'text/plain'}));
+  sfx(ok?'coin':'error');toast(ok?'⬇️':'⚠️',ok?`${name} diunduh.`:'Unduhan diblokir preview.');}
 function pwaState(){return{
   sw:SW_OK||!!(navigator.serviceWorker&&navigator.serviceWorker.controller),
   standalone:matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,
   https:location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1',
   online:navigator.onLine};}
-function openDeploy(){deployTab='host';renderDeploy();sfx('click');}
+function openDeploy(tab){deployTab=tab||'pack';renderDeploy();sfx('click');}
 function renderDeploy(){
-  const st=pwaState(),size=Math.round(new Blob([SOURCE_HTML]).size/1024);
-  const tabs=[['host','🌐 Hosting'],['pack','📦 Paket'],['pwa','📱 Install']];
+  const st=pwaState(),files=packFiles(),zb=makeZip(files),zkb=(zb.size/1024).toFixed(0);
+  const tabs=[['pack','📦 ZIP'],['host','🌐 Hosting'],['pwa','📱 Install']];
   let body='';
+  if(deployTab==='pack'){
+    const tree=files.map((f,i)=>{const last=i===files.length-1;
+      return `<button onclick="dlOne('${f.name}')" class="w-full flex items-center gap-2 text-left hover:bg-cream2 rounded-lg px-1.5 py-[3px] transition-colors">
+        <span class="opacity-40 shrink-0">${last?'└─':'├─'}</span>
+        <span class="shrink-0">${f.name.endsWith('.html')?'📄':f.name.endsWith('.svg')?'🖼️':f.name.endsWith('.md')||f.name.endsWith('.txt')?'📘':f.name==='sw.js'?'📡':'⚙️'}</span>
+        <b class="flex-1 min-w-0 truncate">${f.name}</b>
+        <span class="text-[9.5px] opacity-55 shrink-0">${f.note}</span>
+        <span class="text-[9.5px] font-extrabold text-deep shrink-0">${(new Blob([f.text]).size/1024).toFixed(1)}K</span></button>`;}).join('');
+    body=`<div class="hostcard !bg-gradient-to-br !from-[#fff2c9] !to-[#ffe0a8]">
+        <div class="flex items-center gap-3">
+          <span class="shrink-0 mascot-bob">${mascotSVG(50)}</span>
+          <div class="flex-1 min-w-0"><b class="font-disp text-2xl block leading-none">SlimeGochi.zip</b>
+            <p class="text-[11px] font-bold opacity-70 mt-1">${files.length} file · ${zkb} KB · siap upload</p></div>
+        </div>
+        <button onclick="dlPack()" class="btn bg-gold w-full mt-3 text-xl glow-pulse">⬇️ UNDUH 1 FILE ZIP</button>
+        <div class="flex gap-2 mt-2">
+          <button onclick="dlOne('index.html')" class="btn bg-white flex-1 !text-[11px]">⬇️ index.html saja</button>
+          <button onclick="doCopy('${copyKey(exportHTML())}')" class="btn bg-white flex-1 !text-[11px]">📋 Salin HTML</button>
+        </div>
+        <p class="text-[10.5px] font-bold opacity-65 mt-2">Unduhan diblokir panel preview? Buka halaman ini di tab browser baru, atau pakai <b>Salin HTML</b> lalu tempel ke file <code>index.html</code>.</p>
+      </div>
+      <div class="hostcard mt-3 !bg-white/85">
+        <b class="font-disp text-base">📂 ISI ZIP</b>
+        <p class="text-[10.5px] font-bold opacity-60 mb-1.5">Klik satu baris untuk mengunduh file itu saja.</p>
+        <div class="filetree">${tree}</div>
+      </div>
+      <div class="hostcard mt-3 !bg-cream2">
+        <b class="font-disp text-base">⚡ CARA TERCEPAT JADI ONLINE</b>
+        <ol class="mt-2 space-y-1.5">
+          <li class="stepli"><span class="chip !text-[9px] !py-0 !px-1.5 shrink-0 !bg-white/80">1</span><span>Unduh ZIP di atas, lalu <b>ekstrak</b>.</span></li>
+          <li class="stepli"><span class="chip !text-[9px] !py-0 !px-1.5 shrink-0 !bg-white/80">2</span><span>Buka <b>app.netlify.com/drop</b>.</span></li>
+          <li class="stepli"><span class="chip !text-[9px] !py-0 !px-1.5 shrink-0 !bg-white/80">3</span><span>Seret <b>folder</b> hasil ekstrak → langsung dapat link.</span></li>
+        </ol>
+        <p class="text-[10.5px] font-bold opacity-65 mt-2">Mau ke <b>itch.io</b>? Upload ZIP-nya <b>tanpa diekstrak</b>. Panduan host lain ada di tab 🌐.</p>
+        <button onclick="deployTab='host';renderDeploy()" class="btn bg-white w-full mt-2 !text-[11px]">🌐 Lihat 5 pilihan hosting</button>
+      </div>`;
+  }
   if(deployTab==='host'){
-    body=`<p class="text-[12px] font-bold opacity-75 mb-3">Game ini <b>satu file statis</b> — tidak butuh server, database, atau build. Semua host di bawah <b>gratis</b> dan langsung jalan. Kalau kamu memakai builder yang punya tombol <b>Deploy</b>, itu jalan tercepat; paket di tab 📦 untuk hosting lain atau cadangan.</p>
+    body=`<p class="text-[12px] font-bold opacity-75 mb-3">Game ini <b>satu file statis</b> — tanpa server, database, atau build. Semua host di bawah <b>gratis</b>.</p>
     <div class="space-y-2.5">${HOSTS.map(h=>{
       const ck=h.cmd?copyKey(h.cmd):null,sk=copyKey(h.steps.map((s,i)=>(i+1)+'. '+s.replace(/\*\*/g,'')).join('\n'));
       return `<div class="hostcard" style="background:${h.color}">
@@ -1331,35 +1417,12 @@ function renderDeploy(){
         </div>
         <p class="text-[10.5px] font-bold opacity-65 mt-2">${h.note}</p></div>`;}).join('')}</div>`;
   }
-  if(deployTab==='pack'){
-    const files=packFiles();
-    body=`<div class="hostcard !bg-cream2">
-        <b class="font-disp text-xl">📦 PAKET SIAP-UPLOAD</b>
-        <p class="text-[12px] font-bold opacity-75 mt-1">${files.length} file · HTML game ${size} KB · tanpa build, tanpa dependensi lokal.</p>
-        <button onclick="dlPack()" class="btn bg-gold w-full mt-3 text-lg glow-pulse">⬇️ UNDUH PAKET .ZIP</button>
-        <div class="flex gap-2 mt-2">
-          <button onclick="dlOne('index.html')" class="btn bg-white flex-1 !text-[11px]">⬇️ index.html saja</button>
-          <button onclick="doCopy('${copyKey(exportHTML())}')" class="btn bg-white flex-1 !text-[11px]">📋 Salin seluruh HTML</button>
-        </div>
-        <p class="text-[10.5px] font-bold opacity-60 mt-2">Kalau unduhan diblokir panel preview, buka halaman ini di tab browser baru lalu ulangi.</p>
-      </div>
-      <p class="font-disp text-sm mt-3 mb-1.5 opacity-70">ISI PAKET · KLIK UNTUK UNDUH SATUAN</p>
-      <div class="grid grid-cols-2 gap-2">${files.map(f=>`<button onclick="dlOne('${f.name}')" class="itemcard !flex-row items-center !p-2 gap-2 text-left hover:bg-cream2">
-        <span class="text-lg shrink-0">${f.name.endsWith('.html')?'📄':f.name.endsWith('.svg')?'🖼️':f.name.endsWith('.md')?'📘':f.name.endsWith('.json')||f.name.endsWith('.webmanifest')?'⚙️':f.name==='sw.js'?'📡':'🔧'}</span>
-        <span class="min-w-0"><b class="text-[11.5px] block truncate">${f.name}</b><span class="text-[9.5px] font-bold opacity-55">${(new Blob([f.text]).size/1024).toFixed(1)} KB</span></span></button>`).join('')}</div>
-      <div class="hostcard mt-3 !bg-white/85"><b class="font-disp text-base">✅ CEK KESIAPAN</b>
-        <div class="mt-1.5 space-y-1 text-[12px] font-bold">
-          ${[['Satu file, tanpa build',true],['Favicon maskot tertanam di HTML',true],['Progres tersimpan lokal (localStorage + cookie)',true],['HTTPS untuk PWA & service worker',st.https],['Service worker offline aktif',st.sw]].map(([l,ok])=>`<div class="flex items-center gap-2"><span class="chip !text-[10px] !py-0 !px-1.5 ${ok?'!bg-leaf/25':'!bg-gold/25'}">${ok?'✔':'!'}</span><span class="${ok?'':'opacity-70'}">${l}</span></div>`).join('')}
-        </div>
-        <p class="text-[10.5px] font-bold opacity-60 mt-2">${st.sw?'Offline siap: game bisa dibuka tanpa internet.':'Service worker aktif setelah paket di-upload ke hosting HTTPS (file sw.js sudah termasuk).'}</p>
-      </div>`;
-  }
   if(deployTab==='pwa'){
     const urlK=copyKey(location.href);
     body=`<div class="hostcard !bg-gradient-to-br !from-[#dff6ff] !to-[#e6fbdc]">
-        <div class="flex items-center gap-3"><span class="shrink-0 mascot-bob">${mascotSVG(52)}</span><div><b class="font-disp text-xl block leading-tight">PASANG SEPERTI APLIKASI</b><p class="text-[11px] font-bold opacity-70">Ikon maskot slime muncul di home screen.</p></div></div>
+        <div class="flex items-center gap-3"><span class="shrink-0 mascot-bob">${mascotSVG(52)}</span><div><b class="font-disp text-xl block leading-tight">PASANG SEPERTI APLIKASI</b><p class="text-[11px] font-bold opacity-70">Ikon maskot slime di home screen.</p></div></div>
         <button onclick="doInstall()" class="btn bg-gold w-full mt-3 text-lg" ${INSTALL_EVT?'':'disabled'}>⬇️ PASANG SEKARANG</button>
-        <p class="text-[10.5px] font-bold opacity-65 mt-2">${INSTALL_EVT?'Browser kamu mendukung instalasi satu klik.':'Belum tersedia di sini. Di Android/Chrome: menu ⋮ → <b>Install app</b>. Di iPhone/Safari: Share → <b>Add to Home Screen</b>. Butuh HTTPS + manifest + sw.js dari paket.'}</p>
+        <p class="text-[10.5px] font-bold opacity-65 mt-2">${INSTALL_EVT?'Browser kamu mendukung instalasi satu klik.':'Belum tersedia di sini. Android/Chrome: menu ⋮ → <b>Install app</b>. iPhone/Safari: Share → <b>Add to Home Screen</b>. Butuh HTTPS + manifest + sw.js dari paket.'}</p>
       </div>
       <div class="grid grid-cols-2 gap-2 mt-3">
         ${[['📡','Service worker',st.sw?'AKTIF':'BELUM'],['🖥️','Mode aplikasi',st.standalone?'STANDALONE':'BROWSER'],['🔒','Koneksi aman',st.https?'HTTPS':'LOKAL'],['🌐','Jaringan',st.online?'ONLINE':'OFFLINE']].map(([e,l,v])=>`<div class="itemcard !p-2.5 items-center text-center"><span class="text-2xl">${e}</span><span class="text-[10px] font-bold opacity-60">${l}</span><b class="font-disp text-sm">${v}</b></div>`).join('')}
@@ -1371,14 +1434,14 @@ function renderDeploy(){
           <button onclick="dlOne('icon.svg')" class="btn bg-white flex-1 !text-[11px]">⬇️ icon.svg</button>
           <button onclick="dlOne('sw.js')" class="btn bg-white flex-1 !text-[11px]">⬇️ sw.js</button>
         </div></div>
-      <p class="text-[11px] font-bold opacity-60 mt-3">Progres pemain tersimpan di perangkat masing-masing. Hosting statis = tidak ada data pemain yang dikirim ke server mana pun.</p>`;
+      <p class="text-[11px] font-bold opacity-60 mt-3">Progres pemain tersimpan di perangkat masing-masing. Hosting statis = tidak ada data pemain dikirim ke server mana pun.</p>`;
   }
   showModal(`<div class="panel overflow-hidden">
-    <div class="p-4 pb-3 bg-gradient-to-r from-[#dff6ff] via-[#eafcff] to-[#e6fbdc] border-b-[3px] border-ink/10">
+    <div class="p-4 pb-3 bg-gradient-to-r from-[#fff2c9] via-[#ffe9dc] to-[#dff6ff] border-b-[3px] border-ink/10">
       <div class="flex items-center gap-2.5">
         <span class="shrink-0 mascot-bob">${mascotSVG(42)}</span>
-        <div class="flex-1 min-w-0"><h3 class="font-disp text-2xl leading-none">DEPLOY STUDIO</h3>
-          <p class="text-[10.5px] font-bold opacity-65 mt-0.5">Bawa SlimeGochi online · v1.0.1 Beta · ${size} KB</p></div>
+        <div class="flex-1 min-w-0"><h3 class="font-disp text-2xl leading-none">KEMAS &amp; DEPLOY</h3>
+          <p class="text-[10.5px] font-bold opacity-65 mt-0.5">Satu proyek → satu ZIP · ${zkb} KB</p></div>
         <button onclick="closeModal()" class="btn bg-white !px-2.5 !py-1 !text-sm shrink-0">✕</button>
       </div>
       <div class="flex gap-1.5 mt-3">${tabs.map(([id,l])=>`<button onclick="deployTab='${id}';renderDeploy()" class="tabbtn flex-1 ${deployTab===id?'active':''}">${l}</button>`).join('')}</div>
@@ -1411,12 +1474,13 @@ function updateTickUI(force=false){const p=activePet(),now=Date.now();
 /* ============================ EVENTS & INIT ============================ */
 $('#btnSound').onclick=()=>{S.sound=!S.sound;if(!S.sound)musicStop();else if(Run.phase==='play'||Rain.phase==='play'||T.active())musicStart();save();renderHeader();if(S.sound)sfx('pop');};
 $('#saveDot').onclick=()=>{save();sfx('click');toast('💾','Progres disimpan ke cache & cookie browser.');};
-$('#btnDeploy').onclick=openDeploy;
+$('#btnZip').onclick=dlPack;
+$('#btnDeploy').onclick=()=>openDeploy('pack');
 $('#btnReset').onclick=()=>{showModal(`<div class="panel p-6 text-center"><p class="font-disp text-3xl text-coral">RESET TOTAL?</p><p class="text-sm font-bold opacity-75 mt-2">Semua slime, koin, atribut, dan rekor akan dihapus permanen dari perangkat ini.</p><div class="flex flex-col gap-2 mt-4"><button onclick="doReset()" class="btn bg-red-300 text-lg">🗑️ Ya, Hapus Semua</button><button onclick="closeModal()" class="btn bg-white">Batal</button></div></div>`);};
 function doReset(){musicStop();Run.teardown();Rain.teardown();T.teardown();closeModal();
   try{localStorage.removeItem(KEY);}catch(e){}setCookie(CKEY,'',0);
   S=defaultState();B=null;SPR.key='';save();renderHeader();renderNav();setTab('egg');toast('↺','Permainan direset. Telur baru menantimu!');}
-$('#btnHelp').onclick=()=>{showModal(`<div class="panel p-5 text-sm font-bold space-y-2"><div class="flex items-center gap-2.5"><span class="shrink-0 mascot-bob">${mascotSVG(46)}</span><h3 class="font-disp text-2xl leading-none">CARA MAIN<br><span class="text-[11px] font-body font-bold opacity-60">SlimeGochi · v1.0.1 Beta</span></h3></div><p>🥚 <b>LV.0 = Telur.</b> Eramkan (1 menit, ×5 tiap slime berikutnya, atau ⚡ Instant-Hatch). Saat menetas, <b>beri nama sendiri</b> atau pakai default 🎲.</p><p>🫧 Rawat: Makan / Main / Servis = EXP (−2⚡ per aksi, maks 10⚡). Isi energi lewat makan atau tidur. <b>Level maksimal 100.</b></p><p>🧬 <b>LV.10 → EVOLUSI</b>: elemen acak 1 dari 10 + <b>5 poin atribut permanen</b>. Setelah itu level terus naik sampai 100.</p><p>🏃 <b>SlimeGo!</b> swipe ↑ di area bawah untuk lompat (desktop: SPASI/↑). 3× lanjut, tiap lanjut −20% koin.</p><p>🍎 <b>Slime Rain!</b> swipe ← → di area bawah. 3 item = 1 🪙, ⏰ +3 detik, durasi 15 detik.</p><p>⚔️ <b>Slime Tactic</b>: aksi → <b>D20 + DP &gt; 10 = HIT</b>, damage <b>1D4</b>, kritikal <b>2D4</b>. Kesulitan: Mudah (−1~+2, ×1), Sulit (−1~+3, ×2), Neraka (+0~+5, ×5). Keyboard 1–4.</p><p>🧬 Toko → <b>Atribut</b>: +1 DMG / HP / DEF / DP, maks <b>+5</b> per jenis.</p><p>☁️ Tombol <b>DEPLOY</b> di footer membuka Deploy Studio: pilihan hosting gratis + paket siap-upload.</p><p>💾 Progres tersimpan otomatis di cache & cookie browser — titik hijau di footer untuk simpan manual.</p><div class="flex gap-2 pt-1"><button onclick="closeModal();openDeploy()" class="btn bg-deep text-white flex-1">☁️ Deploy</button><button onclick="closeModal()" class="btn bg-gold flex-1">Siap! 🚀</button></div></div>`);};
+$('#btnHelp').onclick=()=>{showModal(`<div class="panel p-5 text-sm font-bold space-y-2"><div class="flex items-center gap-2.5"><span class="shrink-0 mascot-bob">${mascotSVG(46)}</span><h3 class="font-disp text-2xl leading-none">CARA MAIN<br><span class="text-[11px] font-body font-bold opacity-60">SlimeGochi · v1.0.1 Beta</span></h3></div><p>🥚 <b>LV.0 = Telur.</b> Eramkan (1 menit, ×5 tiap slime berikutnya, atau ⚡ Instant-Hatch). Saat menetas, <b>beri nama sendiri</b> atau pakai default 🎲.</p><p>🫧 Rawat: Makan / Main / Servis = EXP (−2⚡ per aksi, maks 10⚡). Isi energi lewat makan atau tidur. <b>Level maksimal 100.</b></p><p>🧬 <b>LV.10 → EVOLUSI</b>: elemen acak 1 dari 10 + <b>5 poin atribut permanen</b>.</p><p>🏃 <b>SlimeGo!</b> swipe ↑ di area bawah untuk lompat (desktop: SPASI/↑). 3× lanjut, tiap lanjut −20% koin.</p><p>🍎 <b>Slime Rain!</b> swipe ← → di area bawah. 3 item = 1 🪙, ⏰ +3 detik, durasi 15 detik.</p><p>⚔️ <b>Slime Tactic</b>: aksi → <b>D20 + DP &gt; 10 = HIT</b>, damage <b>1D4</b>, kritikal <b>2D4</b>. Mudah ×1 · Sulit ×2 · Neraka ×5. Keyboard 1–4.</p><p>📦 <b>Tombol ZIP di footer</b> mengemas seluruh proyek jadi <b>satu file SlimeGochi.zip</b> — siap upload ke Netlify / itch.io / GitHub Pages.</p><p>💾 Progres tersimpan otomatis di cache & cookie browser.</p><div class="flex gap-2 pt-1"><button onclick="closeModal();openDeploy('pack')" class="btn bg-deep text-white flex-1">📦 Ambil ZIP</button><button onclick="closeModal()" class="btn bg-gold flex-1">Siap! 🚀</button></div></div>`);};
 window.addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;
   if(e.code==='Escape'&&!$('#modal-root').classList.contains('hide')){closeModal();return;}
   if(curTab!=='battle')return;
@@ -1424,7 +1488,7 @@ window.addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')re
   if(e.code==='ArrowLeft'&&Rain.phase==='play'){e.preventDefault();Rain.keys.left=true;}
   if(e.code==='ArrowRight'&&Rain.phase==='play'){e.preventDefault();Rain.keys.right=true;}
   if(T.phase==='player'){const m={Digit1:'atk',Digit2:'foc',Digit3:'grd',Digit4:'heal'};if(m[e.code]){e.preventDefault();T.act(m[e.code]);}}
-  if(e.code==='KeyP'||e.code==='Escape'){
+  if(e.code==='KeyP'){
     if(Run.phase==='play'||Run.phase==='countdown')Run.openMenu('pause');else if(Run.phase==='menu')Run.resume();
     else if(Rain.phase==='play'||Rain.phase==='countdown')Rain.openMenu('pause');else if(Rain.phase==='menu')Rain.resume();
     else if(T.phase==='player')T.openMenu('pause');else if(T.phase==='menu')T.resume();}});
@@ -1439,6 +1503,7 @@ Run.init();Rain.init();T.init();
   renderHeader();renderNav();setTab(S.pets.length===0&&!S.incubator?'egg':'home');save();
   if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
     navigator.serviceWorker.register('sw.js').then(()=>{SW_OK=true;}).catch(()=>{SW_OK=false;});}
+  if(!S.zipHint){setTimeout(()=>{toast('📦','Satu file ini = seluruh proyek. Tekan ⬇️ ZIP di bawah untuk mengemasnya.');},1400);}
 })();
 </script>
 </body>
