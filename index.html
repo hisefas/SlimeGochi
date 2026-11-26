@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<meta name="description" content="SLIMEGOTCHI v1.0.1 Beta — rawat slime dari telur, beri nama, main SlimeGo!, Slime Rain! & Slime Tactic, evolusikan jadi 10 slime elemen."/>
+<meta name="description" content="SlimeGochi v2.0 — rawat slime, main minigame, evolusi, dan gambar kostum sendiri di Studio Kreatif."/>
 <meta name="theme-color" content="#7fd4f5"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 18 C138 18 162 70 162 116 C162 158 134 184 100 184 C66 184 38 158 38 116 C38 70 62 18 100 18Z' fill='%239fe0fb' stroke='%231a6fb5' stroke-width='10'/%3E%3Cellipse cx='78' cy='64' rx='16' ry='26' fill='%23fff' opacity='.8' transform='rotate(-18 78 64)'/%3E%3C/svg%3E"/>
-<title>SLIMEGOTCHI 🫧 — v1.0.1 Beta</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 32 C146 32 170 76 176 124 C181 156 158 172 100 172 C42 172 19 156 24 124 C30 76 54 32 100 32 Z' fill='%239fe0fb' stroke='%231a6fb5' stroke-width='10'/%3E%3Cellipse cx='79' cy='116' rx='9' ry='16' fill='%23fffdf2' stroke='%234a3324' stroke-width='5'/%3E%3Cellipse cx='121' cy='116' rx='9' ry='16' fill='%23fffdf2' stroke='%234a3324' stroke-width='5'/%3E%3C/svg%3E"/>
+<title>SlimeGochi 🫧 v2.0 — Ternak · Latih · Evolusi · Kreasi</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config={theme:{extend:{
@@ -31,10 +31,16 @@ tailwind.config={theme:{extend:{
   .pip{@apply w-3 h-5 rounded-md border-2 border-ink/50 bg-ink/10 transition-all;}
   .pip.on{@apply bg-gold border-ink;box-shadow:inset 0 -4px 0 rgba(0,0,0,.15);}
   .itemcard{@apply bg-white/85 border-[3px] border-ink rounded-2xl p-3 flex flex-col gap-1.5 shadow-pops transition-transform hover:-translate-y-1;}
-  .name-input{@apply flex-1 min-w-0 border-[3px] border-ink rounded-2xl px-3 py-2 font-extrabold bg-white/95 text-ink placeholder:text-ink/35 focus:outline-none focus:ring-4 focus:ring-gold/60;}
+  .name-input{@apply w-full min-w-0 border-[3px] border-ink rounded-2xl px-3 py-2 font-extrabold bg-white/95 text-ink placeholder:text-ink/35 focus:outline-none focus:ring-4 focus:ring-gold/60;}
+  .iconbtn{@apply btn !px-2 !py-1 !text-sm shrink-0;}
   .hudbtn{@apply !px-2.5 !py-1 !text-base pointer-events-auto;}
   .actbtn{@apply btn w-full h-full flex-col !gap-0 !px-1 !py-0.5 text-center leading-tight overflow-hidden;}
   .logrow{@apply flex gap-2 items-start text-[12.5px] leading-relaxed font-bold;}
+  .toolbtn{@apply btn !px-2 !py-1.5 !text-[11px] flex-col !gap-0 leading-tight;}
+  .toolbtn.on{@apply bg-gold;}
+  .swatch{@apply w-full aspect-square rounded-lg border-[3px] border-ink cursor-pointer transition-transform;}
+  .swatch.on{@apply ring-4 ring-ink scale-110;}
+  .bigbtn{@apply btn w-full text-xl py-3;}
 </style>
 <style>
   #shell{height:100dvh;display:flex;flex-direction:column;overflow:hidden}
@@ -43,6 +49,7 @@ tailwind.config={theme:{extend:{
   .tabscreen{position:absolute;inset:0}
   .hide{display:none!important}
   html,body{overscroll-behavior:none}
+  body{transition:background .6s ease}
   .scroll-slim{scrollbar-width:thin;scrollbar-color:#ffb703 #fff3da}
   .scroll-slim::-webkit-scrollbar{width:12px;height:12px}
   .scroll-slim::-webkit-scrollbar-track{background:#fff3da;border-radius:99px;border:2px solid #ffe6b8}
@@ -57,7 +64,7 @@ tailwind.config={theme:{extend:{
   .popup-scrim{position:absolute;inset:0;background:rgba(12,28,48,.72);backdrop-filter:blur(3px)}
   .popup-card{position:relative;width:100%;max-width:34rem;max-height:calc(100dvh - 28px);display:flex;flex-direction:column}
   .stage{position:relative;flex:0 0 auto;margin-inline:auto;--s:1}
-  .swipe-pad{position:relative;touch-action:none;user-select:none;-webkit-user-select:none;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(159,224,251,.35));}
+  .swipe-pad{position:relative;touch-action:none;user-select:none;-webkit-user-select:none;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(159,224,251,.35))}
   .swipe-pad::after{content:'';position:absolute;inset:0;border-radius:22px;box-shadow:inset 0 0 0 0 rgba(255,183,3,0);transition:box-shadow .18s;pointer-events:none}
   .swipe-pad.ping::after{box-shadow:inset 0 0 0 6px rgba(255,183,3,.55)}
   .pad-arrow{position:absolute;pointer-events:none;font-size:26px;animation:padArrow .6s ease-out forwards;z-index:5}
@@ -70,14 +77,14 @@ tailwind.config={theme:{extend:{
   .gb::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(15,56,15,.10) 0 2px,transparent 2px 4px);pointer-events:none;z-index:6}
   .gb-info{position:absolute;background:#9bbc0f;border:calc(2.5px*var(--s)) solid #0f380f;border-radius:calc(6px*var(--s));padding:calc(4px*var(--s)) calc(6px*var(--s));box-shadow:calc(2px*var(--s)) calc(2px*var(--s)) 0 #306230;z-index:3}
   .gb-row{display:flex;align-items:baseline;justify-content:space-between;gap:calc(4px*var(--s))}
-  .gb-name{font-family:'Press Start 2P',monospace;font-size:calc(11px*var(--s));line-height:1.3;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .gb-lv{font-weight:900;font-size:calc(11px*var(--s));flex-shrink:0;line-height:1.2}
+  .gb-name{font-family:'Press Start 2P',monospace;font-size:calc(12px*var(--s));line-height:1.3;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .gb-lv{font-weight:900;font-size:calc(12px*var(--s));flex-shrink:0;line-height:1.2}
   .gb-hpbar{height:calc(7px*var(--s));background:#8bac0f;border:calc(2px*var(--s)) solid #0f380f;border-radius:99px;overflow:hidden;margin-top:calc(3px*var(--s))}
   .gb-hpfill{height:100%;background:#306230;transition:width .45s cubic-bezier(.2,1,.3,1)}
-  .gb-hpnum{font-weight:900;font-size:calc(10px*var(--s));text-align:right;line-height:1.2;margin-top:calc(1px*var(--s))}
+  .gb-hpnum{font-weight:900;font-size:calc(11px*var(--s));text-align:right;line-height:1.2;margin-top:calc(1px*var(--s))}
   .gb-sprite{position:absolute;z-index:2;filter:grayscale(1) sepia(1) saturate(3.2) hue-rotate(32deg) brightness(.98) contrast(1.12)}
   .gb-sprite svg{width:100%;height:auto;display:block}
-  .gb-msg{position:absolute;left:0;right:0;bottom:0;height:26%;background:#9bbc0f;border-top:calc(3px*var(--s)) solid #0f380f;padding:calc(6px*var(--s)) calc(9px*var(--s));font-family:'Press Start 2P',monospace;font-size:calc(11px*var(--s));line-height:1.7;z-index:4;display:flex;align-items:flex-start;gap:6px;overflow:hidden}
+  .gb-msg{position:absolute;left:0;right:0;bottom:0;height:26%;background:#9bbc0f;border-top:calc(3px*var(--s)) solid #0f380f;padding:calc(6px*var(--s)) calc(9px*var(--s));font-family:'Press Start 2P',monospace;font-size:calc(12px*var(--s));line-height:1.7;z-index:4;display:flex;align-items:flex-start;gap:6px;overflow:hidden}
   .gb-cursor{animation:blinkC .7s steps(1) infinite;font-size:calc(10px*var(--s));flex-shrink:0}
   @keyframes blinkC{0%,49%{opacity:1}50%,100%{opacity:0}}
   .gb-hit{animation:gbShake .32s linear}
@@ -85,7 +92,7 @@ tailwind.config={theme:{extend:{
   .gb-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:7}
   .gb-flash.go{animation:gbFlash .3s ease-out}
   @keyframes gbFlash{0%{opacity:.85}100%{opacity:0}}
-  .dmg-float{position:absolute;font-family:'Luckiest Guy',cursive;font-size:calc(22px*var(--s));color:#0f380f;text-shadow:2px 2px 0 #9bbc0f;animation:dmgUp .9s ease-out forwards;pointer-events:none;z-index:8}
+  .dmg-float{position:absolute;font-family:'Luckiest Guy',cursive;font-size:calc(24px*var(--s));color:#0f380f;text-shadow:2px 2px 0 #9bbc0f;animation:dmgUp .9s ease-out forwards;pointer-events:none;z-index:8}
   @keyframes dmgUp{0%{opacity:0;transform:translate(-50%,0) scale(.6)}25%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}100%{opacity:0;transform:translate(-50%,-46px) scale(1)}}
   .die-box{width:clamp(52px,13vh,88px);aspect-ratio:1;flex-shrink:0}
   .die-sm{width:clamp(34px,7vh,46px);aspect-ratio:1}
@@ -95,6 +102,7 @@ tailwind.config={theme:{extend:{
   @keyframes stampIn{0%{transform:scale(2.2) rotate(-14deg);opacity:0}60%{transform:scale(.92) rotate(-6deg);opacity:1}100%{transform:scale(1) rotate(-6deg);opacity:1}}
   @keyframes drift{from{transform:translateX(-22vw)}to{transform:translateX(115vw)}}
   @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:.9;transform:scale(1.2)}}
+  @keyframes ambFloat{0%{transform:translate(0,0) scale(.8);opacity:.25}50%{transform:translate(10px,-22px) scale(1.15);opacity:.95}100%{transform:translate(0,0) scale(.8);opacity:.25}}
   @keyframes slimeIdle{0%,100%{transform:scale(1,1)}30%{transform:scale(1.045,.955)}60%{transform:scale(.97,1.035)}}
   @keyframes floatK{0%,100%{transform:translateY(-6px) scale(1,1)}50%{transform:translateY(-18px) scale(.98,1.03)}}
   @keyframes wiggleK{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
@@ -109,12 +117,17 @@ tailwind.config={theme:{extend:{
   @keyframes dotPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.35);opacity:.6}}
   @keyframes hopPreview{0%,100%{transform:translateY(0) scale(1,1)}35%{transform:translateY(-26px) scale(.94,1.08)}60%{transform:translateY(0) scale(1.1,.9)}}
   @keyframes flashRed{0%{opacity:.55}100%{opacity:0}}
-  @keyframes saveFlash{0%{transform:scale(1)}40%{transform:scale(1.4);filter:drop-shadow(0 0 6px #58c453)}100%{transform:scale(1)}}
+  @keyframes saveFlash{0%{transform:scale(1)}45%{transform:scale(2.1);background:#58c453;box-shadow:0 0 8px #58c453}100%{transform:scale(1)}}
   @keyframes timePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  @keyframes titleBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-16px) rotate(2deg)}}
+  @keyframes letterPop{0%{transform:translateY(0)}50%{transform:translateY(-9px)}100%{transform:translateY(0)}}
+  @keyframes blobDrift{0%{transform:translate(0,0) scale(1)}33%{transform:translate(6vw,-4vh) scale(1.12)}66%{transform:translate(-5vw,5vh) scale(.94)}100%{transform:translate(0,0) scale(1)}}
+  @keyframes bootSpin{to{transform:rotate(360deg)}}
   .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.9;animation:drift linear infinite}
   .cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:999px}
   .cloud::before{width:55%;height:150%;left:12%;top:-70%}
   .cloud::after{width:40%;height:110%;right:10%;top:-45%}
+  .amb{position:absolute;pointer-events:none;animation:ambFloat ease-in-out infinite}
   .slime-idle{animation:slimeIdle 2.2s ease-in-out infinite;transform-origin:bottom center}
   .slime-float{animation:floatK 3s ease-in-out infinite;transform-origin:bottom center}
   .egg-idle{animation:wiggleK 3s ease-in-out infinite;transform-origin:bottom center}
@@ -126,16 +139,19 @@ tailwind.config={theme:{extend:{
   .toast-in{animation:popIn .35s cubic-bezier(.2,1.4,.4,1) both}
   .nav-dot{position:absolute;top:5px;right:20%;width:10px;height:10px;border-radius:99px;background:#ff5d5d;border:2px solid #fff9ef;animation:dotPulse 1s infinite}
   .nav-dot.gold{background:#ffb703}
-  .save-flash{animation:saveFlash .7s ease-out}
+  #saveDot{width:7px;height:7px;border-radius:99px;background:rgba(88,196,83,.55);display:inline-block;cursor:pointer}
+  .save-flash{animation:saveFlash .8s ease-out}
   .game-canvas{touch-action:none;user-select:none;-webkit-user-select:none;display:block;width:100%;height:100%}
   .evo-flash{position:absolute;inset:0;background:#fff;border-radius:24px;animation:evoFlash .8s ease-out forwards;pointer-events:none}
   .time-low{animation:timePulse .5s infinite;color:#ff5d5d!important}
+  #stu-canvas{touch-action:none;user-select:none;-webkit-user-select:none;image-rendering:pixelated;cursor:crosshair;background:#fff}
+  .title-blob{position:absolute;border-radius:50%;filter:blur(42px);opacity:.55;animation:blobDrift ease-in-out infinite}
 </style>
 </head>
-<body class="font-body text-ink bg-gradient-to-b from-[#8fd9f7] via-[#c9ecfb] to-[#d8f3d0]">
-<noscript><div style="padding:2rem;font-family:sans-serif;text-align:center">SLIMEGOTCHI butuh JavaScript 🫧</div></noscript>
+<body class="font-body text-ink" style="background:linear-gradient(180deg,#8fd9f7,#c9ecfb 55%,#d8f3d0)">
+<noscript><div style="padding:2rem;font-family:sans-serif;text-align:center">SlimeGochi butuh JavaScript 🫧</div></noscript>
 
-<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+<div id="bgLayer" class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
   <div class="cloud w-40 h-12" style="top:10%;animation-duration:75s"></div>
   <div class="cloud w-28 h-9" style="top:26%;animation-duration:100s;animation-delay:-40s"></div>
   <div class="cloud w-52 h-14" style="top:58%;animation-duration:130s;animation-delay:-70s;opacity:.55"></div>
@@ -143,15 +159,67 @@ tailwind.config={theme:{extend:{
   <span class="absolute text-white" style="left:80%;top:20%;animation:twinkle 4s infinite .8s">✦</span>
 </div>
 
-<div id="shell" class="relative z-10">
-  <header class="flex items-center gap-2 px-3 py-2 bg-cream/85 border-b-[3px] border-ink">
-    <h1 class="font-disp text-lg md:text-2xl leading-none hidden sm:block">SLIME<span class="text-aqua">GOTCHI</span></h1>
-    <div class="flex items-center gap-1.5 ml-auto">
-      <span class="chip !py-0.5 !px-2.5" title="Koin">🪙 <b id="coinTxt">0</b></span>
-      <span class="chip !py-0.5 !px-2.5" title="Instant-Hatch">⚡🥚 <b id="hatchTxt">0</b></span>
-      <button id="btnSound" class="btn bg-white !px-2.5 !py-1 text-base" title="Suara">🔊</button>
-      <button id="btnHelp" class="btn bg-white !px-2.5 !py-1 text-base" title="Panduan">❓</button>
-      <button id="btnReset" class="btn bg-red-200 !px-2.5 !py-1 text-base" title="Mulai ulang">↺</button>
+<!-- ================= BOOT / LOADING ================= -->
+<div id="boot" class="fixed inset-0 flex flex-col items-center justify-center gap-5 px-6" style="z-index:120;background:linear-gradient(180deg,#0e2a47,#1b4f7a 55%,#2f8fb8)">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="title-blob w-64 h-64" style="left:-8%;top:8%;background:#3fb0f0;animation-duration:16s"></div>
+    <div class="title-blob w-72 h-72" style="right:-10%;bottom:6%;background:#8b5cf6;animation-duration:21s"></div>
+  </div>
+  <div class="relative" style="animation:titleBob 2.2s ease-in-out infinite">
+    <svg viewBox="0 0 200 200" width="132" height="132"><defs><linearGradient id="bgg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f4fdff"/><stop offset="55%" stop-color="#9fe0fb"/><stop offset="100%" stop-color="#57b6ee"/></linearGradient></defs>
+      <path d="M100 18 C138 18 162 70 162 116 C162 158 134 184 100 184 C66 184 38 158 38 116 C38 70 62 18 100 18Z" fill="url(#bgg)" stroke="#14324f" stroke-width="7"/>
+      <ellipse cx="78" cy="64" rx="16" ry="26" fill="#fff" opacity=".8" transform="rotate(-18 78 64)"/><circle cx="128" cy="84" r="8" fill="#fff" opacity=".5"/>
+      <ellipse cx="79" cy="120" rx="9" ry="15" fill="#fffdf2" stroke="#14324f" stroke-width="5"/><ellipse cx="121" cy="120" rx="9" ry="15" fill="#fffdf2" stroke="#14324f" stroke-width="5"/></svg>
+  </div>
+  <h1 class="font-disp text-4xl text-white drop-shadow-[3px_3px_0_rgba(20,50,79,.9)] relative">Slime<span class="text-gold">Gochi</span></h1>
+  <div class="w-full max-w-xs relative">
+    <div class="bar !h-4 !bg-white/20 !border-white/40"><div id="bootBar" class="!bg-gradient-to-r from-gold to-leaf" style="width:4%"></div></div>
+    <div class="flex justify-between mt-1.5 text-[11px] font-bold text-white/85"><span id="bootTxt">Menyiapkan dunia slime…</span><span id="bootPct">4%</span></div>
+  </div>
+  <p class="text-[11px] font-bold text-white/60 relative text-center max-w-xs">Tips: beli <b>Kanvas Ajaib</b> di Toko untuk menggambar kostum slime-mu sendiri!</p>
+</div>
+
+<!-- ================= TITLE SCREEN ================= -->
+<div id="title" class="fixed inset-0 hide flex flex-col" style="z-index:110;background:linear-gradient(180deg,#7fd4f5,#bfe9ff 45%,#ffe9c2)">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="title-blob w-72 h-72" style="left:-10%;top:4%;background:#ffd166;animation-duration:18s"></div>
+    <div class="title-blob w-80 h-80" style="right:-12%;top:30%;background:#ff8fc8;animation-duration:24s"></div>
+    <div class="title-blob w-64 h-64" style="left:20%;bottom:-8%;background:#8fe8c0;animation-duration:20s"></div>
+    <div class="cloud w-40 h-12" style="top:12%;animation-duration:60s"></div>
+    <div class="cloud w-28 h-9" style="top:34%;animation-duration:88s;animation-delay:-30s"></div>
+  </div>
+  <div class="relative shrink-0 flex items-center gap-2 px-3 py-2">
+    <span class="chip !text-[11px] !py-0.5">🫧 v2.0</span>
+    <button id="btnSoundTitle" class="iconbtn bg-white ml-auto" title="Suara">🔊</button>
+  </div>
+  <div class="relative flex-1 min-h-0 flex flex-col items-center justify-center gap-3 px-5 overflow-y-auto scroll-slim">
+    <div id="titleMascot" class="shrink-0" style="animation:titleBob 2.6s ease-in-out infinite"></div>
+    <h1 class="font-disp text-5xl md:text-7xl leading-none text-center drop-shadow-[4px_4px_0_rgba(255,255,255,.85)]">
+      <span class="inline-block" style="animation:letterPop 2.4s ease-in-out infinite">S</span><span class="inline-block" style="animation:letterPop 2.4s ease-in-out .1s infinite">l</span><span class="inline-block" style="animation:letterPop 2.4s ease-in-out .2s infinite">i</span><span class="inline-block" style="animation:letterPop 2.4s ease-in-out .3s infinite">m</span><span class="inline-block" style="animation:letterPop 2.4s ease-in-out .4s infinite">e</span><span class="text-aqua inline-block" style="animation:letterPop 2.4s ease-in-out .5s infinite">G</span><span class="text-aqua inline-block" style="animation:letterPop 2.4s ease-in-out .6s infinite">o</span><span class="text-aqua inline-block" style="animation:letterPop 2.4s ease-in-out .7s infinite">c</span><span class="text-aqua inline-block" style="animation:letterPop 2.4s ease-in-out .8s infinite">h</span><span class="text-aqua inline-block" style="animation:letterPop 2.4s ease-in-out .9s infinite">i</span>
+    </h1>
+    <p class="font-disp text-sm md:text-base text-ink/70 text-center -mt-1">Ternak · Latih · Evolusi · Kreasi</p>
+    <div id="titleSave" class="w-full max-w-xs"></div>
+    <div class="w-full max-w-xs flex flex-col gap-2.5 pb-2">
+      <button onclick="enterGame()" class="bigbtn bg-gold glow-pulse text-2xl">▶ MULAI</button>
+      <div class="grid grid-cols-2 gap-2.5">
+        <button onclick="openShare()" class="btn bg-aqua2 text-base">📤 SHARE</button>
+        <button onclick="openCredit()" class="btn bg-cream text-base">⭐ CREDIT</button>
+      </div>
+    </div>
+  </div>
+  <div class="relative shrink-0 text-center text-[10px] font-bold text-ink/55 py-2">© 2026 Hisefas · dibuat bersama Qwen Studio (AI)</div>
+</div>
+
+<!-- ================= GAME SHELL ================= -->
+<div id="shell" class="relative z-10 hide">
+  <header class="flex items-center gap-1.5 px-2 py-1.5 bg-cream/85 border-b-[3px] border-ink">
+    <h1 onclick="goTitle()" title="Kembali ke layar judul" class="font-disp text-[13px] min-[380px]:text-[16px] leading-none truncate min-w-0 cursor-pointer hover:text-aqua">Slime<span class="text-aqua">Gochi</span></h1>
+    <div class="flex items-center gap-1.5 ml-auto shrink-0">
+      <span class="chip !py-0.5 !px-2 !text-xs" title="Koin">🪙 <b id="coinTxt">0</b></span>
+      <span class="chip !py-0.5 !px-2 !text-xs hidden min-[380px]:inline-flex" title="Instant-Hatch">⚡ <b id="hatchTxt">0</b></span>
+      <button id="btnSound" class="iconbtn bg-white" title="Suara">🔊</button>
+      <button id="btnHelp" class="iconbtn bg-white" title="Panduan">❓</button>
+      <button id="btnReset" class="iconbtn bg-red-200" title="Reset progres">↺</button>
     </div>
   </header>
 
@@ -244,15 +312,77 @@ tailwind.config={theme:{extend:{
   </main>
 
   <nav id="bottomNav" class="bg-cream/95 border-t-[3px] border-ink"></nav>
-  <footer class="flex items-center justify-center gap-1.5 text-[9px] font-bold text-ink/50 py-[2px] bg-cream/80 border-t border-ink/10 select-none">
-    <span>SLIMEGOTCHI · v1.0.1 Beta</span><span id="saveDot" class="opacity-40" title="Progres tersimpan otomatis">💾</span>
+  <footer class="flex items-center justify-center gap-1.5 text-[9px] font-bold text-ink/50 py-[3px] bg-cream/80 border-t border-ink/10 select-none">
+    <span id="saveDot" title="Progres tersimpan otomatis — klik untuk simpan sekarang"></span>
+    <span>SlimeGochi · v2.0</span>
   </footer>
+</div>
+
+<!-- ================= STUDIO KREATIF ================= -->
+<div id="studio" class="fixed inset-0 hide flex flex-col" style="z-index:80;background:linear-gradient(180deg,#fff9ef,#ffefd6)">
+  <header class="shrink-0 flex items-center gap-2 px-2 py-2 bg-cream border-b-[3px] border-ink">
+    <button onclick="closeStudio()" class="btn bg-white !px-3 !py-1 text-sm">←</button>
+    <h2 class="font-disp text-base md:text-xl truncate">🎨 Studio Kreatif</h2>
+    <span class="chip !text-[11px] !py-0.5 ml-auto shrink-0" id="stuBlank">Pola: 0</span>
+  </header>
+  <div class="shrink-0 flex items-center gap-1.5 px-2 py-1.5">
+    <button id="stu-slot-head" class="tabbtn flex-1" onclick="stuSetSlot('head')">👑 Kepala</button>
+    <button id="stu-slot-face" class="tabbtn flex-1" onclick="stuSetSlot('face')">🕶️ Wajah</button>
+    <button id="stu-slot-neck" class="tabbtn flex-1" onclick="stuSetSlot('neck')">🧣 Leher</button>
+  </div>
+  <div class="flex-1 min-h-0 flex flex-col md:flex-row gap-2 px-2 pb-2">
+    <div id="stu-area" class="flex-1 min-h-0 relative grid place-items-center rounded-3xl border-[3px] border-dashed border-ink/30 bg-white/50 overflow-hidden">
+      <canvas id="stu-canvas" class="rounded-xl shadow-pops border-[3px] border-ink"></canvas>
+      <div class="absolute top-1.5 left-1.5 chip !text-[10px] !py-0 !px-2 pointer-events-none" id="stuHint">Gambar di sini</div>
+      <div id="stuPreview" class="absolute top-1 right-1 w-[74px] md:w-[120px] pointer-events-none drop-shadow"></div>
+    </div>
+    <div class="shrink-0 md:w-[310px] flex flex-col gap-2 overflow-y-auto scroll-slim max-h-[47%] md:max-h-none pr-0.5">
+      <div class="panel p-2.5">
+        <p class="font-disp text-xs mb-1.5">🎨 BOX WARNA <span class="font-body opacity-60">(klik untuk pilih)</span></p>
+        <div id="stuPal" class="grid grid-cols-8 gap-1"></div>
+        <div class="flex items-center gap-2 mt-2">
+          <input id="stuCustom" type="color" class="w-9 h-9 rounded-lg border-[3px] border-ink cursor-pointer bg-white" title="Warna bebas"/>
+          <span class="text-[11px] font-bold opacity-70 flex-1">Warna bebas menimpa kotak terpilih</span>
+          <span id="stuCur" class="w-6 h-6 rounded-lg border-[3px] border-ink"></span>
+        </div>
+      </div>
+      <div class="panel p-2.5">
+        <p class="font-disp text-xs mb-1.5">🛠️ ALAT</p>
+        <div class="grid grid-cols-4 gap-1.5">
+          <button id="stu-t-brush" class="toolbtn bg-cream2" onclick="stuTool('brush')"><span class="text-base">✏️</span>Kuas</button>
+          <button id="stu-t-erase" class="toolbtn bg-cream2" onclick="stuTool('erase')"><span class="text-base">🧽</span>Hapus</button>
+          <button id="stu-t-fill" class="toolbtn bg-cream2" onclick="stuTool('fill')"><span class="text-base">🪣</span>Isi</button>
+          <button class="toolbtn bg-cream2" onclick="stuRandom()"><span class="text-base">🎲</span>Acak</button>
+        </div>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="text-[11px] font-bold w-14">Ukuran</span>
+          <input id="stuSize" type="range" min="1" max="4" value="1" class="flex-1 accent-[#ffb703]"/>
+          <b id="stuSizeTxt" class="font-disp text-sm w-4 text-right">1</b>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5 mt-2">
+          <button id="stuMirror" class="toolbtn bg-cream2" onclick="stuToggle('mirror')"><span class="text-base">🪞</span>Cermin</button>
+          <button id="stuGrid" class="toolbtn bg-cream2" onclick="stuToggle('grid')"><span class="text-base">#️⃣</span>Grid</button>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 mt-1.5">
+          <button class="toolbtn bg-white" onclick="stuUndo()"><span class="text-base">↺</span>Undo</button>
+          <button class="toolbtn bg-white" onclick="stuRedo()"><span class="text-base">↻</span>Redo</button>
+          <button class="toolbtn bg-red-200" onclick="stuClear()"><span class="text-base">🗑️</span>Bersih</button>
+        </div>
+      </div>
+      <div class="panel p-2.5">
+        <p class="font-disp text-xs mb-1.5">🎁 TUKAR JADI KOSTUM</p>
+        <input id="stuName" class="name-input !text-sm !py-1.5" maxlength="16" placeholder="Nama kostum…" autocomplete="off"/>
+        <button id="stuCraft" class="btn bg-gold w-full mt-2 text-sm" onclick="stuCraft()">🎁 Tukar Desain</button>
+        <p class="text-[10px] font-bold opacity-60 mt-1.5 text-center">Butuh 1 <b>Pola</b> sesuai slot. Pola dibeli di Toko → Kreativitas.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="menu-root" class="popup-layer hide" style="z-index:70"></div>
 <div id="result-root" class="popup-layer hide" style="z-index:72"></div>
 <div id="modal-root" class="hide fixed inset-0" style="z-index:90"></div>
-<div id="toasts" class="fixed bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none" style="z-index:100"></div>
+<div id="toasts" class="fixed bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none px-3 w-full max-w-sm" style="z-index:130"></div>
 
 <script>
 /* ============================ DATA ============================ */
@@ -282,13 +412,25 @@ const WEAR=[
   {id:'kacamata',slot:'face',name:'Kacamata Keren',emoji:'🕶️',price:35},
   {id:'syal',slot:'neck',name:'Syal Hangat',emoji:'🧣',price:40}
 ];
+const SLOTS={head:{label:'Kepala',emoji:'👑',price:45},face:{label:'Wajah',emoji:'🕶️',price:40},neck:{label:'Leher',emoji:'🧣',price:40}};
+const CANVAS_PRICE=120;
+const SCENES={
+  meadow:{name:'Padang Ceria',emoji:'🌼',price:0,desc:'Kandang klasik yang selalu cerah.',sky:['#8fd9f7','#dff6ff'],hill:['#9bd77f','#6cbb56'],sun:'#ffb703',glow:'#fde68a',cloud:.9,decor:[['🌼',8,18],['🌷',88,12],['🍄',24,7]],amb:{e:'✦',c:'#ffd166',n:8},body:['#8fd9f7','#c9ecfb','#d8f3d0']},
+  beach:{name:'Pantai Senja',emoji:'🌅',price:180,desc:'Ombak hangat dan langit jingga.',sky:['#ff9e6d','#ffe0b0'],hill:['#f2c078','#e0925c'],sun:'#ff6b35',glow:'#ffd0a0',cloud:.7,decor:[['🌴',7,17],['🐚',82,10],['⛱️',58,12]],amb:{e:'🕊️',c:'#fff',n:5},body:['#ff9e6d','#ffd9a0','#ffe9c2']},
+  forest:{name:'Hutan Peri',emoji:'🍄',price:240,desc:'Kunang-kunang menari di antara jamur.',sky:['#2f6b4f','#a8e6b0'],hill:['#3f8a5c','#25603c'],sun:'#e8ffd6',glow:'#b7f5c4',cloud:.35,decor:[['🍄',9,15],['🌿',84,12],['🪵',48,7]],amb:{e:'✨',c:'#c7f9cc',n:16},body:['#2f6b4f','#7fc79a','#dff3d0']},
+  night:{name:'Malam Bintang',emoji:'🌙',price:300,desc:'Langit galaksi yang tenang & syahdu.',sky:['#0b1d3a','#33507f'],hill:['#22345c','#141f38'],sun:'#f4f1de',glow:'#cbd5e1',cloud:.22,decor:[['🔭',10,14],['🌠',80,16],['🪐',52,9]],amb:{e:'⭐',c:'#ffffff',n:20},body:['#0b1d3a','#22345c','#4a5f8a']},
+  candy:{name:'Negeri Permen',emoji:'🍭',price:360,desc:'Semuanya manis, bahkan udaranya.',sky:['#ffb3d9','#ffe6f2'],hill:['#ff8fc8','#ff6fb0'],sun:'#fff3c4',glow:'#ffd9ec',cloud:.85,decor:[['🍭',8,16],['🧁',82,12],['🍬',44,7]],amb:{e:'🍬',c:'#fff',n:10},body:['#ffb3d9','#ffe0f0','#fff0f6']}
+};
 const ATTR=[
   {k:'dmg',name:'Taring Tajam',emoji:'🗡️',base:25,desc:'+1 DMG — tambahan damage tiap serangan kena'},
   {k:'hp',name:'Inti Kenyal',emoji:'❤️',base:20,desc:'+1 HP — HP maksimum bertambah'},
   {k:'def',name:'Kulit Keras',emoji:'🛡️',base:22,desc:'+1 DEF — mengurangi damage musuh'},
   {k:'dp',name:'Jimat Hoki',emoji:'🎲',base:30,desc:'+1 DP — bonus angka roll D20'}
 ];
-const ATTR_MAX=5;
+const ATTR_KEYS=['dmg','hp','def','dp'];
+const ATTR_MAX=5,EVO_GIFT=5,GRID=28;
+const DEF_PAL=['#14324f','#ffffff','#ff5d5d','#ff8c2e','#ffb703','#ffe066','#58c453','#2f9e6b','#3fb0f0','#2b6cb0','#8b5cf6','#ff4fa3','#a9743f','#7c5226','#9aa5b1'];
+const SLOT_RECT={head:{x:54,y:2,w:92},face:{x:60,y:92,w:80},neck:{x:56,y:110,w:88}};
 const FOOD_ICON={
   apel:`<path d="M32 22 C24 12 8 16 9 33 C10 48 22 57 32 53 C42 57 54 48 55 33 C56 16 40 12 32 22Z" fill="#ff5d5d" stroke="#a3123a" stroke-width="3.5"/><path d="M32 20 C31 14 33 10 37 7" stroke="#7a4a21" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M38 12 C46 6 52 10 50 16 C44 18 40 16 38 12Z" fill="#58c453" stroke="#2f7d32" stroke-width="3"/><ellipse cx="22" cy="30" rx="5" ry="8" fill="#fff" opacity=".5" transform="rotate(-18 22 30)"/>`,
   roti:`<path d="M10 26 C10 13 54 13 54 26 C54 32 49 35 46 35 L46 49 C46 54 18 54 18 49 L18 35 C15 35 10 32 10 26Z" fill="#ffd9a0" stroke="#b4691e" stroke-width="3.5"/><path d="M17 26 C17 19 47 19 47 26 C47 29 44 31 42 31 L42 46 L22 46 L22 31 C20 31 17 29 17 26Z" fill="#fff3da"/><circle cx="27" cy="36" r="2" fill="#e0a866"/><circle cx="36" cy="41" r="2" fill="#e0a866"/>`,
@@ -324,31 +466,41 @@ const RPS=[{id:'gunting',label:'Gunting',e:'✌️',beats:'kertas'},{id:'batu',l
 const DIFFS={
   mudah:{label:'Mudah',emoji:'🌱',off:[-1,2],mult:1,color:'#8ee08e',foes:[{n:'SLIME LUMUT',e:'daun'},{n:'SLIME EMBUN',e:'angin'},{n:'SLIME PASIR',e:'emas'}]},
   sulit:{label:'Sulit',emoji:'🔥',off:[-1,3],mult:2,color:'#ffb703',foes:[{n:'SLIME BARA',e:'api'},{n:'SLIME BEKU',e:'es'},{n:'SLIME VOLT',e:'petir'}]},
-  neraka:{label:'Neraka',emoji:'😈',off:[0,5],mult:5,color:'#ff5d5d',foes:[{n:'SLIME ABYSS',e:'bayangan'},{n:'SLIME PRISMA',e:'kristal'},{n:'SLIME SUCI',e:'suci'}]}
+  neraka:{label:'Neraka',emoji:'💀',off:[0,5],mult:5,color:'#ff9b9b',foes:[{n:'SLIME ABYSS',e:'bayangan'},{n:'SLIME PRISMA',e:'kristal'},{n:'SLIME RAJA',e:'suci'},{n:'SLIME BADAI',e:'petir'}]}
 };
+const MAX_LV=100,EVO_LV=10,ENERGY_MAX=10,ACT_COST=2,HATCH_BASE=60000,NAME_MAX=14,TAC_TURN_CAP=40;
 const EXP_NEED=l=>8+(l-1)*4;
-const MAX_LV=100,EVO_LV=10,ENERGY_MAX=10,ACT_COST=2,HATCH_BASE=60000,NAME_MAX=14;
-const zeroBonus=()=>({dmg:0,hp:0,def:0,dp:0});
-const totalBonus=p=>{const b=p.bonus||{},e=p.evoBonus||{};return{dmg:(b.dmg||0)+(e.dmg||0),hp:(b.hp||0)+(e.hp||0),def:(b.def||0)+(e.def||0),dp:(b.dp||0)+(e.dp||0)};};
-const maxHP=p=>10+(p.level-1)*2+totalBonus(p).hp;
-const clampLv=l=>Math.max(1,Math.min(MAX_LV,l));
+const zeroAttr=()=>({dmg:0,hp:0,def:0,dp:0});
+const totAttr=p=>{const b=p.bonus||zeroAttr(),g=p.gift||zeroAttr();return{dmg:b.dmg+g.dmg,hp:b.hp+g.hp,def:b.def+g.def,dp:b.dp+g.dp};};
+const maxHP=p=>10+(p.level-1)*2+totAttr(p).hp;
+const powAtk=lv=>Math.floor(lv/2),powDef=lv=>Math.floor(lv/6);
 
 /* ============================ STATE ============================ */
-const KEY='slimegotchi-v1',CKEY='slimegotchi_backup';
-const defaultState=()=>({v:1,coins:60,sound:true,hatchCount:0,incubator:null,pets:[],activeId:null,
-  inv:{foods:{apel:2,roti:1},hatch:1,toys:[],pillow:false},
-  wardrobe:{skins:[],wear:[]},bestRun:0,runs:0,rainPlays:0,rainBest:0,tacWins:0,tacPlays:0,dex:[],lastSeen:Date.now()});
+const KEY='slimegochi-v2',OLDKEY='slimegotchi-v1',CKEY='slimegochi_backup';
+const defaultState=()=>({v:2,coins:150,sound:true,hatchCount:0,incubator:null,pets:[],activeId:null,
+  inv:{foods:{apel:2,roti:1},hatch:1,toys:[],pillow:false,canvas:false,blanks:{head:0,face:0,neck:0}},
+  wardrobe:{skins:[],wear:[]},designs:[],scenes:['meadow'],scene:'meadow',
+  bestRun:0,runs:0,rainPlays:0,rainBest:0,tacWins:0,tacPlays:0,crafted:0,dex:[],lastSeen:Date.now()});
 function setCookie(n,v,d){try{document.cookie=n+'='+encodeURIComponent(v)+';max-age='+(d*86400)+';path=/;SameSite=Lax';}catch(e){}}
 function getCookie(n){try{const m=document.cookie.match(new RegExp('(?:^|; )'+n+'=([^;]*)'));return m?decodeURIComponent(m[1]):null;}catch(e){return null;}}
-function normalize(d){const b=defaultState();const s={...b,...d,inv:{...b.inv,...(d.inv||{})},wardrobe:{...b.wardrobe,...(d.wardrobe||{})}};
-  s.pets=(s.pets||[]).map(p=>({...p,level:clampLv(p.level||1),bonus:{...zeroBonus(),...(p.bonus||{})},evoBonus:{...zeroBonus(),...(p.evoBonus||{})}}));return s;}
-function load(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY));}catch(e){}
+function normalize(d){const b=defaultState();const iv=d.inv||{};
+  const s={...b,...d,v:2,inv:{...b.inv,...iv,blanks:{...b.inv.blanks,...(iv.blanks||{})}},wardrobe:{...b.wardrobe,...(d.wardrobe||{})}};
+  s.pets=(d.pets||[]).map(p=>({...p,level:Math.min(MAX_LV,Math.max(1,p.level||1)),bonus:{...zeroAttr(),...(p.bonus||{})},gift:{...zeroAttr(),...(p.gift||{})}}));
+  s.designs=Array.isArray(d.designs)?d.designs.filter(x=>x&&x.data&&SLOTS[x.slot]):[];
+  s.scenes=Array.isArray(d.scenes)&&d.scenes.length?d.scenes.filter(k=>SCENES[k]):['meadow'];
+  if(!s.scenes.includes('meadow'))s.scenes.unshift('meadow');
+  s.scene=SCENES[d.scene]&&s.scenes.includes(d.scene)?d.scene:'meadow';
+  return s;}
+function load(){let d=null;
+  try{d=JSON.parse(localStorage.getItem(KEY));}catch(e){}
   if(!d){try{const c=getCookie(CKEY);if(c)d=JSON.parse(c);}catch(e){}}
-  if(d&&d.v===1)return normalize(d);return defaultState();}
-let S=load(),lastCookie=0,saveFlashT=0;
+  if(!d){try{d=JSON.parse(localStorage.getItem(OLDKEY));}catch(e){}}
+  if(d&&(d.v===1||d.v===2))return normalize(d);
+  return defaultState();}
+let S=load(),lastCookie=0,saveFlashT=0,PREVIEW_DESIGN=null,gameStarted=false;
 function save(){S.lastSeen=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
   const now=Date.now();
-  if(now-lastCookie>1500){lastCookie=now;const j=JSON.stringify(S);if(j.length<3800)setCookie(CKEY,j,365);}
+  if(now-lastCookie>1500){lastCookie=now;try{const j=JSON.stringify(S);if(j.length<3800)setCookie(CKEY,j,365);}catch(e){}}
   if(now-saveFlashT>1200){saveFlashT=now;const el=$('#saveDot');if(el){el.classList.remove('save-flash');void el.offsetWidth;el.classList.add('save-flash');}}}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -361,17 +513,17 @@ const petPal=p=>{const base=p.evolved?EVOS[p.element].pal:BASE_PAL;const sk=p.sk
 const fmtCd=ms=>{ms=Math.max(0,ms);const s=Math.ceil(ms/1000),h=~~(s/3600),m=~~((s%3600)/60),x=s%60;return h>0?`${h}j ${m}m ${x}d`:`${String(m).padStart(2,'0')}:${String(x).padStart(2,'0')}`;};
 const evoReady=p=>p&&p.level>=EVO_LV&&!p.evolved;
 const rnd=n=>Math.floor(Math.random()*n);
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
 function pickNick(){const used=S.pets.map(p=>p.nick);const pool=NICKS.filter(n=>!used.includes(n));return pool.length?pool[rnd(pool.length)]:NICKS[rnd(NICKS.length)]+Math.floor(Math.random()*90+10);}
 function stackIds(ids){const m={};(ids||[]).forEach(i=>m[i]=(m[i]||0)+1);return Object.entries(m).map(([id,n])=>({id,n}));}
 function itemChips(ids){const st=stackIds(ids);if(!st.length)return '<span class="text-xs font-bold opacity-50">Tidak ada</span>';
   return st.map(({id,n})=>{const f=FOODS.find(x=>x.id===id);return `<span class="chip !text-xs">${iconSVG(id,20)} ${f?f.name:id} <b class="text-aqua">×${n}</b></span>`;}).join(' ');}
 
-/* ============================ POPUP LAYERS ============================ */
+/* ============================ POPUPS ============================ */
 let curTab='home';
 const MENU={on:false},RESULT={on:false};
-function syncPopups(){
-  $('#menu-root').classList.toggle('hide',!(curTab==='battle'&&MENU.on));
-  $('#result-root').classList.toggle('hide',!(curTab==='battle'&&RESULT.on));}
+function syncPopups(){$('#menu-root').classList.toggle('hide',!(curTab==='battle'&&MENU.on&&gameStarted));
+  $('#result-root').classList.toggle('hide',!(curTab==='battle'&&RESULT.on&&gameStarted));}
 function showMenu(html){MENU.on=true;$('#menu-root').innerHTML=`<div class="popup-scrim"></div><div class="popup-card items-center">${html}</div>`;syncPopups();}
 function closeMenu(){MENU.on=false;$('#menu-root').innerHTML='';syncPopups();}
 function showResult(o){RESULT.on=true;
@@ -381,21 +533,23 @@ function showResult(o){RESULT.on=true;
     <div class="p-4 shrink-0 border-t-[3px] border-ink/15 bg-cream2/80 flex flex-col gap-2">${o.buttons}</div></div></div>`;
   syncPopups();}
 function closeResult(){RESULT.on=false;$('#result-root').innerHTML='';syncPopups();}
+function showModal(html){const m=$('#modal-root');m.innerHTML=`<div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="pointer-events-auto pop-in max-w-md w-full max-h-[88dvh] overflow-y-auto scroll-slim rounded-3xl">${html}</div></div>`;m.classList.remove('hide');}
+function closeModal(){$('#modal-root').classList.add('hide');$('#modal-root').innerHTML='';}
 
 /* ============================ AUDIO ============================ */
 let AC=null;
 function tone(f,t=0,d=.09,type='square',v=.06){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),now=AC.currentTime+t;o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,now);g.gain.exponentialRampToValueAtTime(.001,now+d);o.connect(g).connect(AC.destination);o.start(now);o.stop(now+d+.02);}catch(e){}}
 function noise(d=.2,v=.12){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const n=Math.floor(AC.sampleRate*d),buf=AC.createBuffer(1,n,AC.sampleRate),ch=buf.getChannelData(0);for(let i=0;i<n;i++)ch[i]=(Math.random()*2-1)*(1-i/n);const src=AC.createBufferSource(),g=AC.createGain();src.buffer=buf;g.gain.value=v;src.connect(g).connect(AC.destination);src.start();}catch(e){}}
-function sfx(n,opt=0){if(!S.sound)return;const P={click:[660],eat:[420,520,640],coin:[988,1319],error:[170],pop:[880],level:[523,659,784,1047],win:[523,659,784,1047],lose:[330,262,196],hatch:[392,494,587,784],jump:[520,760],star:[1047,1319,1568],revive:[392,523,659,784,1047],clock:[784,988,1175],tick:[1200],hit:[300,180],crit:[784,988,1319,1568],miss:[220,160],guard:[392,523],heal:[659,880,1047],select:[880,1175]};
+function sfx(n,opt=0){if(!S.sound)return;const P={click:[660],eat:[420,520,640],coin:[988,1319],error:[170],pop:[880],level:[523,659,784,1047],win:[523,659,784,1047],lose:[330,262,196],hatch:[392,494,587,784],jump:[520,760],star:[1047,1319,1568],revive:[392,523,659,784,1047],clock:[784,988,1175],tick:[1200],hit:[300,180],crit:[784,988,1319,1568],miss:[220,160],guard:[392,523],heal:[659,880,1047],select:[880,1175],draw:[1400],craft:[523,784,1047,1319]};
   if(n==='crash'){noise(.25,.16);tone(140,0,.2,'sawtooth',.08);return;}
   if(n==='coinrun'){tone(988*Math.pow(1.059,Math.min(opt,12)),0,.07,'square',.05);tone(1319*Math.pow(1.059,Math.min(opt,12)),.06,.09,'square',.05);return;}
-  (P[n]||[520]).forEach((f,i)=>tone(f,i*.07,.09,n==='error'||n==='miss'?'sawtooth':'square',n==='tick'?.02:.06));}
+  (P[n]||[520]).forEach((f,i)=>tone(f,i*.07,.09,n==='error'||n==='miss'?'sawtooth':'square',n==='tick'||n==='draw'?.02:.06));}
 const MUS={on:false,timer:null,next:0,step:0};
 function musicStart(){if(!S.sound||MUS.on)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();MUS.on=true;MUS.next=AC.currentTime+.06;MUS.step=0;
   MUS.timer=setInterval(()=>{if(!MUS.on)return;while(MUS.next<AC.currentTime+.3){const s=MUS.step,bass=[131,131,98,98,110,110,87,98][Math.floor(s/2)%8];if(s%2===0)tone(bass,MUS.next-AC.currentTime,.19,'triangle',.045);if(s%4===2){const lead=[523,659,784,880,659,784,1047,880][Math.floor(s/2)%8];tone(lead,MUS.next-AC.currentTime,.1,'square',.02);}MUS.next+=.21;MUS.step=(MUS.step+1)%16;}},120);}catch(e){}}
 function musicStop(){MUS.on=false;if(MUS.timer){clearInterval(MUS.timer);MUS.timer=null;}}
 
-/* ============================ SVG ART ============================ */
+/* ============================ ART ============================ */
 let UID=0;
 const BODY_PATH='M100 32 C146 32 170 76 176 124 C181 156 158 172 100 172 C42 172 19 156 24 124 C30 76 54 32 100 32 Z';
 function eyesSVG(m,pal){const e=pal.eye;
@@ -418,13 +572,35 @@ function decoSVG(el){switch(el){
   case 'emas':return `<g><path d="M46 52 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3Z" fill="#fff" opacity=".9"/><path d="M156 44 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5Z" fill="#fff" opacity=".9"/></g>`;
   default:return '';}}
 function circuitSVG(){return `<g stroke="#ff4fd8" stroke-width="5" fill="none" opacity=".95" stroke-linecap="round"><path d="M60 92 L78 92 L86 102 L86 126"/><path d="M140 92 L122 92 L114 102 L114 126"/><path d="M86 102 L114 102"/><rect x="82" y="122" width="8" height="8" fill="#ff4fd8"/><rect x="110" y="122" width="8" height="8" fill="#ff4fd8"/></g>`;}
-function accSVG(p){let s='';
-  if(p.head==='topi')s+=`<g><path d="M62 44 Q100 6 138 44 Z" fill="#ff5d5d" stroke="#14324f" stroke-width="3.5"/><ellipse cx="100" cy="44" rx="46" ry="9" fill="#ff5d5d" stroke="#14324f" stroke-width="3.5"/><circle cx="100" cy="12" r="6" fill="#ffd166" stroke="#14324f" stroke-width="3"/></g>`;
-  if(p.head==='pita')s+=`<g transform="translate(100 26)"><path d="M0 0 L-27 -13 L-22 11 Z" fill="#ff4fa3" stroke="#14324f" stroke-width="3"/><path d="M0 0 L27 -13 L22 11 Z" fill="#ff4fa3" stroke="#14324f" stroke-width="3"/><circle r="7.5" fill="#ff8fc8" stroke="#14324f" stroke-width="3"/></g>`;
-  if(p.head==='mahkota')s+=`<g><path d="M70 40 L76 12 L90 28 L100 4 L110 28 L124 12 L130 40 Z" fill="#ffca3a" stroke="#14324f" stroke-width="3.5"/><circle cx="76" cy="12" r="4" fill="#ff4fa3" stroke="#14324f" stroke-width="2"/><circle cx="100" cy="4" r="4" fill="#3fb0f0" stroke="#14324f" stroke-width="2"/><circle cx="124" cy="12" r="4" fill="#58c453" stroke="#14324f" stroke-width="2"/></g>`;
-  if(p.face==='kacamata')s+=`<g stroke="#14324f" stroke-width="4.5" fill="rgba(90,200,250,.35)"><circle cx="79" cy="116" r="15"/><circle cx="121" cy="116" r="15"/><path d="M94 116 h12" fill="none"/><path d="M64 111 L50 103 M136 111 L150 103" stroke-linecap="round" fill="none"/></g>`;
-  if(p.neck==='syal')s+=`<g><path d="M56 146 Q100 168 144 146 L144 160 Q100 182 56 160 Z" fill="#ff5d5d" stroke="#14324f" stroke-width="3.5"/><path d="M116 160 l11 24 -15 2 -5 -22z" fill="#ff5d5d" stroke="#14324f" stroke-width="3"/></g>`;
-  return s;}
+const BUILTIN_ART={
+  head:{
+    topi:`<g><path d="M62 44 Q100 6 138 44 Z" fill="#ff5d5d" stroke="#14324f" stroke-width="3.5"/><ellipse cx="100" cy="44" rx="46" ry="9" fill="#ff5d5d" stroke="#14324f" stroke-width="3.5"/><circle cx="100" cy="12" r="6" fill="#ffd166" stroke="#14324f" stroke-width="3"/></g>`,
+    pita:`<g transform="translate(100 26)"><path d="M0 0 L-27 -13 L-22 11 Z" fill="#ff4fa3" stroke="#14324f" stroke-width="3"/><path d="M0 0 L27 -13 L22 11 Z" fill="#ff4fa3" stroke="#14324f" stroke-width="3"/><circle r="7.5" fill="#ff8fc8" stroke="#14324f" stroke-width="3"/></g>`,
+    mahkota:`<g><path d="M70 40 L76 12 L90 28 L100 4 L110 28 L124 12 L130 40 Z" fill="#ffca3a" stroke="#14324f" stroke-width="3.5"/><circle cx="76" cy="12" r="4" fill="#ff4fa3" stroke="#14324f" stroke-width="2"/><circle cx="100" cy="4" r="4" fill="#3fb0f0" stroke="#14324f" stroke-width="2"/><circle cx="124" cy="12" r="4" fill="#58c453" stroke="#14324f" stroke-width="2"/></g>`},
+  face:{kacamata:`<g stroke="#14324f" stroke-width="4.5" fill="rgba(90,200,250,.35)"><circle cx="79" cy="116" r="15"/><circle cx="121" cy="116" r="15"/><path d="M94 116 h12" fill="none"/><path d="M64 111 L50 103 M136 111 L150 103" stroke-linecap="round" fill="none"/></g>`},
+  neck:{syal:`<g><path d="M56 146 Q100 168 144 146 L144 160 Q100 182 56 160 Z" fill="#ff5d5d" stroke="#14324f" stroke-width="3.5"/><path d="M116 160 l11 24 -15 2 -5 -22z" fill="#ff5d5d" stroke="#14324f" stroke-width="3"/></g>`}
+};
+function decodeCells(data){const a=new Array(GRID*GRID).fill(0);const n=Math.min(data.length,a.length);
+  for(let i=0;i<n;i++){const v=parseInt(data[i],16);a[i]=isNaN(v)?0:Math.min(15,v);}return a;}
+const encodeCells=c=>c.map(i=>(i||0).toString(16)).join('');
+function designSVG(d){const r=SLOT_RECT[d.slot];if(!r||!d.data)return '';
+  const cells=decodeCells(d.data),cs=r.w/GRID,out=[];
+  for(let y=0;y<GRID;y++){let x=0;
+    while(x<GRID){const v=cells[y*GRID+x];if(!v){x++;continue;}
+      let n=1;while(x+n<GRID&&cells[y*GRID+x+n]===v)n++;
+      out.push(`<rect x="${(r.x+x*cs).toFixed(2)}" y="${(r.y+y*cs).toFixed(2)}" width="${(n*cs+.4).toFixed(2)}" height="${(cs+.4).toFixed(2)}" fill="${d.pal[v-1]||'#14324f'}"/>`);x+=n;}}
+  return out.length?`<g shape-rendering="crispEdges">${out.join('')}</g>`:'';}
+function designThumb(d,size=44){const cells=decodeCells(d.data),out=[];
+  for(let y=0;y<GRID;y++){let x=0;while(x<GRID){const v=cells[y*GRID+x];if(!v){x++;continue;}
+    let n=1;while(x+n<GRID&&cells[y*GRID+x+n]===v)n++;
+    out.push(`<rect x="${x}" y="${y}" width="${n+.06}" height="1.06" fill="${d.pal[v-1]||'#14324f'}"/>`);x+=n;}}
+  return `<svg viewBox="0 0 ${GRID} ${GRID}" width="${size}" height="${size}" shape-rendering="crispEdges"><rect width="${GRID}" height="${GRID}" fill="#fff9ef"/>${out.join('')}</svg>`;}
+function slotArt(p,slot){const id=p[slot];if(!id)return '';
+  if(id==='__preview')return PREVIEW_DESIGN&&PREVIEW_DESIGN.slot===slot?designSVG(PREVIEW_DESIGN):'';
+  const d=S.designs.find(x=>x.id===id);
+  if(d&&d.slot===slot)return designSVG(d);
+  return (BUILTIN_ART[slot]||{})[id]||'';}
+const accSVG=p=>slotArt(p,'head')+slotArt(p,'face')+slotArt(p,'neck');
 function moodOf(p){const now=Date.now();if(p.tempMood&&p.tempMoodUntil>now)return p.tempMood;if(p.sleepUntil&&p.sleepUntil>now)return 'sleep';if(p.energy<=1)return 'tired';const a=(p.full+p.fun+p.clean)/3;return a>=72?'happy':(a>=42?'neutral':'sad');}
 function slimeSVG(p,size=200,mood=null){
   const pal=petPal(p),m=mood||moodOf(p),u='u'+(++UID);
@@ -446,33 +622,29 @@ const imgOk=i=>i&&i.complete&&i.naturalWidth>0;
 const IMG={coin:svgImg(COIN_SVG),star:svgImg(STAR_SVG),clock:svgImg(CLOCK_SVG),food:{}};
 FOODS.forEach(f=>IMG.food[f.id]=svgImg(iconSVG(f.id,64)));
 let SPR={key:'',img:null};
-function spriteFor(p){const key=[p.id,p.element,p.evolved,p.skin,p.head,p.face,p.neck].join('|');if(SPR.key!==key)SPR={key,img:svgImg(slimeSVG(p,200,'happy'))};return SPR.img;}
+function spriteFor(p){const key=[p.id,p.element,p.evolved,p.skin,p.head,p.face,p.neck,S.designs.length].join('|');if(SPR.key!==key)SPR={key,img:svgImg(slimeSVG(p,200,'happy'))};return SPR.img;}
 
 /* ============================ UI HELPERS ============================ */
 function toast(emoji,msg){const t=document.createElement('div');t.className='toast-in bg-ink text-cream font-bold px-4 py-2 rounded-full border-[3px] border-cream/40 shadow-lg flex items-center gap-2 text-sm';t.innerHTML=`<span class="text-lg">${emoji}</span>${esc(msg)}`;$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='all .4s';t.style.opacity=0;t.style.transform='translateY(10px)';setTimeout(()=>t.remove(),400);},2400);}
-function burst(el,emojis,n=8){if(!el)return;const r=el.getBoundingClientRect();for(let i=0;i<n;i++){const s=document.createElement('span');s.className='particle';s.textContent=emojis[i%emojis.length];s.style.left=(r.width*.5+(Math.random()-.5)*r.width*.5)+'px';s.style.top=(r.height*.5+(Math.random()-.5)*r.height*.3)+'px';s.style.animationDelay=(Math.random()*.25)+'s';el.appendChild(s);setTimeout(()=>s.remove(),1500);}}
-function showModal(html){const m=$('#modal-root');m.innerHTML=`<div class="absolute inset-0 bg-ink/60 backdrop-blur-sm" onclick="closeModal()"></div><div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none"><div class="pointer-events-auto pop-in max-w-md w-full max-h-[88dvh] overflow-y-auto scroll-slim rounded-3xl">${html}</div></div>`;m.classList.remove('hide');}
-function closeModal(){$('#modal-root').classList.add('hide');$('#modal-root').innerHTML='';}
+function burst(el,emojis,n=8){if(!el)return;const r=el.getBoundingClientRect();if(!r.width)return;for(let i=0;i<n;i++){const s=document.createElement('span');s.className='particle';s.textContent=emojis[i%emojis.length];s.style.left=(r.width*.5+(Math.random()-.5)*r.width*.5)+'px';s.style.top=(r.height*.5+(Math.random()-.5)*r.height*.3)+'px';s.style.animationDelay=(Math.random()*.25)+'s';el.appendChild(s);setTimeout(()=>s.remove(),1500);}}
 function statRow(icon,label,val,cls){return `<div class="flex justify-between items-center gap-3 py-[3px]"><span class="opacity-80">${icon} ${label}</span><b class="font-disp text-base ${cls||''}">${val}</b></div>`;}
 
 /* ============================ PET CORE ============================ */
-function addCoins(n){S.coins+=n;if(n>0)sfx('coin');const c=$('#coinTxt');c.classList.remove('pop-in');void c.offsetWidth;c.classList.add('pop-in');renderHeader();}
+function addCoins(n){S.coins+=n;if(n>0)sfx('coin');const c=$('#coinTxt');if(c){c.classList.remove('pop-in');void c.offsetWidth;c.classList.add('pop-in');}renderHeader();}
 function toyBonus(){return Math.min(3,S.inv.toys.reduce((a,id)=>a+(TOYS.find(t=>t.id===id)?.bonus||0),0));}
-function applyExp(p,x){if(x<=0||!p)return;if(p.level>=MAX_LV){p.exp=0;return;}const before=p.level;p.exp+=x;
-  while(p.level<MAX_LV&&p.exp>=EXP_NEED(p.level)){p.exp-=EXP_NEED(p.level);p.level++;}
+function applyExp(p,x){if(x<=0||!p)return;if(p.level>=MAX_LV){p.exp=0;return;}p.exp+=x;let ups=0;
+  while(p.level<MAX_LV&&p.exp>=EXP_NEED(p.level)){p.exp-=EXP_NEED(p.level);p.level++;ups++;}
   if(p.level>=MAX_LV)p.exp=0;
-  if(p.level>before){sfx('level');toast('🎉',`${p.nick} naik ke LV.${p.level}! HP maks ${maxHP(p)}`);
-    if(before<EVO_LV&&p.level>=EVO_LV&&!p.evolved)toast('🧬','LV.10 tercapai! Saatnya EVOLUSI di Rumah!');
-    if(p.level>=MAX_LV)toast('👑','MAX LEVEL 100 tercapai!');
-    renderNav();}}
+  if(ups>0){sfx('level');toast('🎉',`${p.nick} naik ke LV.${p.level}! HP maks ${maxHP(p)}`);
+    if(p.level>=EVO_LV&&!p.evolved&&p.level-ups<EVO_LV)toast('🧬','LV.10 tercapai — saatnya EVOLUSI di Rumah!');renderNav();}}
 function canAct(p,need=true){if(!p){toast('🥚','Belum ada slime! Tetaskan telur dulu.');return false;}if(p.sleepUntil&&p.sleepUntil>Date.now()){toast('💤','Ssst… dia sedang tidur.');return false;}if(need&&p.energy<ACT_COST){toast('⚡','Energi habis! Beri makan atau tidurkan.');return false;}return true;}
 function setTempMood(p,m){p.tempMood=m;p.tempMoodUntil=Date.now()+2600;}
-const gameBusy=()=>[Run,Rain,T].some(g=>g.phase!=='idle'&&g.phase!=='over');
+const gameBusy=()=>[Run,Rain,T].some(g=>g.phase!=='idle'&&g.phase!=='over')||!!(B&&!B.over);
 function doPlay(){const p=activePet();if(!canAct(p))return;p.energy-=ACT_COST;p.fun=Math.min(100,p.fun+20);const e=4+toyBonus();applyExp(p,e);addCoins(2);setTempMood(p,'excite');burst($('#scene'),['🎾','⭐','✨','🫧']);sfx('pop');toast('🎾',`Main seru! +${e} EXP`);save();renderHome();}
 function doService(){const p=activePet();if(!canAct(p))return;p.energy-=ACT_COST;p.clean=Math.min(100,p.clean+45);applyExp(p,3);addCoins(1);setTempMood(p,'excite');burst($('#scene'),['🫧','🧼','✨','💧']);sfx('pop');toast('🫧','Kinclong! +3 EXP');save();renderHome();}
 function openFoodTray(){const p=activePet();if(!p)return;if(p.sleepUntil&&p.sleepUntil>Date.now())return toast('💤','Ssst… dia sedang tidur.');const owned=FOODS.filter(f=>(S.inv.foods[f.id]||0)>0);
   showModal(`<div class="panel p-5"><h3 class="font-disp text-2xl mb-1">🍽️ Pilih Makanan</h3><p class="text-xs font-bold opacity-70 mb-3">Makan = −${ACT_COST}⚡ lalu energi bertambah.</p>${owned.length?owned.map(f=>`<button onclick="doFeed('${f.id}')" class="itemcard w-full !flex-row items-center mb-2 hover:bg-cream2">${iconSVG(f.id,44)}<span class="flex-1 text-left"><b>${f.name}</b> ×${S.inv.foods[f.id]}<br><span class="text-xs opacity-70">+${f.energy}⚡ · +${f.full} kenyang · +3 EXP</span></span><span class="btn bg-gold !py-1 !px-3 text-sm">Makan!</span></button>`).join(''):`<p class="text-center py-6 font-bold">Tas makanan kosong 😅<br><button onclick="closeModal();setTab('shop')" class="btn bg-gold mt-3 text-sm">Belanja 🛍️</button></p>`}<button onclick="closeModal()" class="btn bg-white w-full mt-2 text-sm">Tutup</button></div>`);}
-function doFeed(fid){const p=activePet(),f=FOODS.find(x=>x.id===fid);if(!p||!f||(S.inv.foods[fid]||0)<=0)return;if(p.sleepUntil&&p.sleepUntil>Date.now())return toast('💤','Ssst… dia sedang tidur.');S.inv.foods[fid]--;p.energy=Math.max(0,Math.min(ENERGY_MAX,p.energy-ACT_COST+f.energy));p.full=Math.min(100,p.full+f.full);applyExp(p,3);addCoins(1);setTempMood(p,'excite');closeModal();sfx('eat');burst($('#scene'),['❤️','✨','🫧']);const el=$('#pet-holder');if(el){el.classList.remove('chomp');void el.offsetWidth;el.classList.add('chomp');}toast('😋',`${f.name} lezat! +3 EXP`);save();renderHome();}
+function doFeed(fid){const p=activePet(),f=FOODS.find(x=>x.id===fid);if(!p||!f||(S.inv.foods[fid]||0)<=0)return;if(p.sleepUntil&&p.sleepUntil>Date.now())return toast('💤','Ssst… dia sedang tidur.');S.inv.foods[fid]--;p.energy=Math.max(0,Math.min(ENERGY_MAX,p.energy-ACT_COST+f.energy));p.full=Math.min(100,p.full+f.full);applyExp(p,3);addCoins(1);setTempMood(p,'excite');closeModal();sfx('eat');burst($('#scene'),['❤️','✨','🫧']);const el=$('#pet-holder');if(el){el.classList.remove('chomp');void el.offsetWidth;el.classList.add('chomp');}toast('😋',`${f.name} lezat! +3 EXP`);save();renderHome();if(curTab==='shop')renderShop();}
 function sleepDur(){return S.inv.pillow?30000:60000;}
 function doSleep(){const p=activePet();if(!p)return;if(p.sleepUntil&&p.sleepUntil>Date.now())return;p.sleepUntil=Date.now()+sleepDur();p.tempMood=null;sfx('click');toast('💤',`Tidur… ${sleepDur()/1000} detik untuk energi penuh.`);save();renderHome();}
 function doWake(){const p=activePet();if(!p||!p.sleepUntil)return;const dur=sleepDur(),left=p.sleepUntil-Date.now();if(left<=0)p.energy=ENERGY_MAX;else{const g=Math.floor((dur-left)/dur*ENERGY_MAX);p.energy=Math.min(ENERGY_MAX,p.energy+g);toast('⏰',`Dibangunkan! +${g}⚡`);}p.sleepUntil=null;save();renderHome();}
@@ -481,27 +653,25 @@ function startIncubation(){if(S.incubator)return toast('🥚','Inkubator masih t
 function useInstantHatch(){if(!S.incubator)return;if(S.inv.hatch<=0)return toast('⚡','Instant-Hatch habis! Beli di Toko.');S.inv.hatch--;S.incubator.endsAt=Date.now();sfx('pop');toast('⚡','Instant-Hatch dipakai!');save();renderHeader();if(curTab==='egg')renderEgg();}
 let HATCH_PENDING=null;
 function hatchNow(){const inc=S.incubator;if(!inc||inc.endsAt>Date.now())return;if(gameBusy())return toast('🎮','Selesaikan minigame dulu!');const def=pickNick();
-  const pet={id:'p'+Date.now()+rnd(999),nick:def,element:null,evolved:false,level:1,exp:0,energy:ENERGY_MAX,full:80,fun:80,clean:80,skin:'default',head:null,face:null,neck:null,bonus:zeroBonus(),evoBonus:zeroBonus(),sleepUntil:null,tempMood:null,tempMoodUntil:0,bornAt:Date.now()};
+  const pet={id:'p'+Date.now()+rnd(999),nick:def,element:null,evolved:false,level:1,exp:0,energy:ENERGY_MAX,full:80,fun:80,clean:80,skin:'default',head:null,face:null,neck:null,bonus:zeroAttr(),gift:zeroAttr(),sleepUntil:null,tempMood:null,tempMoodUntil:0,bornAt:Date.now()};
   HATCH_PENDING={pet,def};sfx('hatch');
-  showModal(`<div class="panel p-6 text-center relative overflow-hidden"><p class="font-disp text-xl text-aqua">TOK… TOK… PLOP! 🎊</p><div class="my-2 flex justify-center pop-in"><div class="slime-idle">${slimeSVG(pet,160,'excite')}</div></div><div class="flex justify-center gap-2 mb-2 flex-wrap"><span class="chip">LV.1</span><span class="chip">🫧 Slime Murni</span><span class="chip">❤️ ${maxHP(pet)} HP</span></div><h3 class="font-disp text-2xl">Beri Nama Slime-mu!</h3><p class="text-xs font-bold opacity-70 mt-1 mb-3">Ketik nama sendiri, atau pakai nama default.<br>Kosongkan kolom untuk memakai default.</p><div class="flex gap-2 items-center"><input id="hatch-name" class="name-input" maxlength="${NAME_MAX}" placeholder="${esc(def)}" autocomplete="off" autocapitalize="words" spellcheck="false"/><button onclick="rerollHatchName()" class="btn bg-cream2 !px-3 !py-2 text-lg" title="Acak">🎲</button></div><div class="flex justify-between items-center text-[11px] font-bold opacity-80 mt-1.5"><button onclick="useDefaultName()" class="underline decoration-dotted hover:text-aqua">Default: <b id="hatch-def">${esc(def)}</b></button><span id="hatch-count">0/${NAME_MAX}</span></div><button onclick="confirmHatch()" class="btn bg-gold w-full mt-3 text-lg">Peluk & Mulai! 🤗</button><p class="text-[10px] font-bold opacity-50 mt-2">Evolusi di LV.10 mengungkap 1 dari 10 elemen langka + 5 poin atribut permanen! 🧬</p></div>`);
+  showModal(`<div class="panel p-6 text-center relative overflow-hidden"><p class="font-disp text-xl text-aqua">TOK… TOK… PLOP! 🎊</p><div class="my-2 flex justify-center pop-in"><div class="slime-idle">${slimeSVG(pet,160,'excite')}</div></div><div class="flex justify-center gap-2 mb-2 flex-wrap"><span class="chip">LV.1</span><span class="chip">🫧 Slime Murni</span><span class="chip">❤️ ${maxHP(pet)} HP</span></div><h3 class="font-disp text-2xl">Beri Nama Slime-mu!</h3><p class="text-xs font-bold opacity-70 mt-1 mb-3">Ketik nama sendiri, atau pakai nama default.<br>Kosongkan kolom untuk memakai default.</p><div class="flex gap-2 items-center"><input id="hatch-name" class="name-input" maxlength="${NAME_MAX}" placeholder="${esc(def)}" autocomplete="off" autocapitalize="words" spellcheck="false"/><button onclick="rerollHatchName()" class="btn bg-cream2 !px-3 !py-2 text-lg" title="Acak">🎲</button></div><div class="flex justify-between items-center text-[11px] font-bold opacity-80 mt-1.5"><button onclick="useDefaultName()" class="underline decoration-dotted hover:text-aqua">Default: <b id="hatch-def">${esc(def)}</b></button><span id="hatch-count">0/${NAME_MAX}</span></div><button onclick="confirmHatch()" class="btn bg-gold w-full mt-3 text-lg">Peluk & Mulai! 🤗</button><p class="text-[10px] font-bold opacity-50 mt-2">Level maks 100 · evolusi LV.10 membuka elemen langka + 5 poin atribut permanen! 🧬</p></div>`);
   const inp=$('#hatch-name');inp.addEventListener('input',hatchInputSync);inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();confirmHatch();}});hatchInputSync();}
 function hatchInputSync(){const i=$('#hatch-name'),c=$('#hatch-count');if(i&&c)c.textContent=`${i.value.length}/${NAME_MAX}`;}
 function rerollHatchName(){if(!HATCH_PENDING)return;HATCH_PENDING.def=pickNick();const d=$('#hatch-def'),i=$('#hatch-name');if(d)d.textContent=HATCH_PENDING.def;if(i)i.placeholder=HATCH_PENDING.def;sfx('click');}
 function useDefaultName(){if(!HATCH_PENDING)return;const i=$('#hatch-name');if(i){i.value=HATCH_PENDING.def;hatchInputSync();i.focus();}sfx('click');}
 function confirmHatch(){if(!HATCH_PENDING)return;const i=$('#hatch-name');const name=((i?i.value:'').trim().replace(/\s+/g,' ').slice(0,NAME_MAX))||HATCH_PENDING.def;const pet=HATCH_PENDING.pet;pet.nick=name;HATCH_PENDING=null;S.hatchCount++;S.pets.push(pet);S.activeId=pet.id;S.incubator=null;SPR.key='';sfx('level');save();closeModal();renderHeader();renderNav();setTab('home');burst($('#scene'),['✨','🎉','⭐','🫧'],14);toast('🤗',`${name} bergabung denganmu!`);}
 let EVO_BUSY=false;
-function rollEvoBonus(){const g=zeroBonus();const keys=['dmg','hp','def','dp'];for(let i=0;i<5;i++)g[keys[rnd(4)]]++;return g;}
+function giftChips(g){return ATTR_KEYS.filter(k=>g[k]>0).map(k=>{const a=ATTR.find(x=>x.k===k);return `<span class="chip !text-xs !bg-cream2">${a.emoji} ${a.k.toUpperCase()} <b class="text-violet">+${g[k]}</b></span>`;}).join(' ');}
 function evolve(){const p=activePet();if(!evoReady(p)||EVO_BUSY)return;if(gameBusy())return toast('🎮','Selesaikan minigame dulu!');EVO_BUSY=true;sfx('hatch');
   showModal(`<div class="panel p-6 text-center relative overflow-hidden" id="evo-panel"><p class="font-disp text-2xl text-violet">🧬 EVOLUSI!</p><p class="text-xs font-bold opacity-70">Cahaya elemen menyelimuti ${esc(p.nick)}…</p><div id="evo-stage" class="my-3 flex justify-center"><div style="animation:evoShake 1.1s infinite;filter:drop-shadow(0 0 18px #ffb703)">${slimeSVG(p,170,'excite')}</div></div><div id="evo-result"></div></div>`);
-  setTimeout(()=>{const el=EVO_KEYS[rnd(EVO_KEYS.length)];const gains=rollEvoBonus();
-    p.element=el;p.evolved=true;p.evoBonus={dmg:(p.evoBonus.dmg||0)+gains.dmg,hp:(p.evoBonus.hp||0)+gains.hp,def:(p.evoBonus.def||0)+gains.def,dp:(p.evoBonus.dp||0)+gains.dp};
-    if(!S.dex.includes(el))S.dex.push(el);SPR.key='';save();const E=EVOS[el];const stage=$('#evo-stage');
-    const gainChips=ATTR.filter(a=>gains[a.k]>0).map(a=>`<span class="chip !text-xs !bg-lime-200">${a.emoji} +${gains[a.k]} ${a.k.toUpperCase()}</span>`).join(' ');
-    if(stage){const fl=document.createElement('div');fl.className='evo-flash';$('#evo-panel').appendChild(fl);stage.innerHTML=`<div class="pop-in">${slimeSVG(p,175,'excite')}</div>`;
-      $('#evo-result').innerHTML=`<h3 class="font-disp text-3xl pop-in">${E.emoji} ${E.name}!</h3><p class="chip mt-1">${E.emoji} Slime ${E.label}</p>
-        <p class="text-sm font-bold opacity-75 mt-2">${esc(p.nick)} berevolusi jadi <b>Slime ${E.label}</b> dan mendapat <b>5 poin atribut permanen</b>:</p>
-        <div class="flex flex-wrap gap-1.5 justify-center mt-2">${gainChips}</div>
-        <button onclick="closeModal();renderHome();renderNav()" class="btn bg-gold w-full mt-3 text-lg">Luar biasa! ✨</button>`;
+  setTimeout(()=>{const el=EVO_KEYS[rnd(EVO_KEYS.length)],gift=zeroAttr();
+    for(let i=0;i<EVO_GIFT;i++)gift[ATTR_KEYS[rnd(4)]]++;
+    p.element=el;p.evolved=true;p.gift=gift;if(!S.dex.includes(el))S.dex.push(el);
+    SPR.key='';save();const E=EVOS[el],stage=$('#evo-stage');
+    if(stage){const fl=document.createElement('div');fl.className='evo-flash';$('#evo-panel').appendChild(fl);
+      stage.innerHTML=`<div class="pop-in">${slimeSVG(p,175,'excite')}</div>`;
+      $('#evo-result').innerHTML=`<h3 class="font-disp text-3xl pop-in">${E.emoji} ${E.name}!</h3><p class="chip mt-1">${E.emoji} Slime ${E.label}</p><p class="text-sm font-bold opacity-75 mt-2">${esc(p.nick)} mewarisi <b>${EVO_GIFT} poin atribut permanen</b>!</p><div class="flex flex-wrap justify-center gap-1.5 mt-2">${giftChips(gift)}</div><p class="text-[11px] font-bold opacity-60 mt-2">❤️ HP maksimum sekarang <b>${maxHP(p)}</b>.</p><button onclick="closeModal();renderHome();renderNav()" class="btn bg-gold w-full mt-3 text-lg">Luar biasa! ✨</button>`;
       burst($('#evo-panel'),['✨','🎉','⭐',E.emoji],16);sfx('level');}
     EVO_BUSY=false;renderNav();},1300);}
 
@@ -509,27 +679,27 @@ function evolve(){const p=activePet();if(!evoReady(p)||EVO_BUSY)return;if(gameBu
 function makeLoop(step){let raf=0,on=false,last=0;
   function tick(t){if(!on)return;const dt=Math.min(.034,Math.max(0,(t-last)/1000));last=t;try{step(dt,t);}catch(e){console.error('[game]',e);}if(on)raf=requestAnimationFrame(tick);}
   return{start(){if(on)return;on=true;last=performance.now();raf=requestAnimationFrame(tick);},stop(){on=false;cancelAnimationFrame(raf);raf=0;},get on(){return on;}};}
-function lerp(a,b,t){return a+(b-a)*t;}
+const lerp=(a,b,t)=>a+(b-a)*t;
 function hexLerp(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);return `rgb(${Math.round(lerp(pa>>16,pb>>16,t))},${Math.round(lerp((pa>>8)&255,(pb>>8)&255,t))},${Math.round(lerp(pa&255,pb&255,t))})`;}
 function hash(i){const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x);}
-function layoutStage(arenaSel,stageSel,padMin){const a=$(arenaSel),s=$(stageSel);if(!a||!s)return;const cs=getComputedStyle(a);
-  const aw=a.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
-  const ah=a.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-8;
+function layoutStage(arenaSel,stageSel,padMin){const a=$(arenaSel),s=$(stageSel);if(!a||!s)return;
+  const cs=getComputedStyle(a),aw=a.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),ah=a.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-8;
   if(aw<60||ah<60)return;let w=aw,h=w*9/16;const maxH=Math.max(100,ah-padMin);
   if(h>maxH){h=maxH;w=h*16/9;}
   s.style.width=Math.floor(w)+'px';s.style.height=Math.floor(h)+'px';s.style.setProperty('--s',(w/680).toFixed(3));}
 function fitCanvas(wrap,canvas){const w=wrap.clientWidth,h=wrap.clientHeight;if(w<10||h<10)return null;const dpr=Math.min(2,window.devicePixelRatio||1);const u=Math.max(.5,Math.min(h/420,w/680));canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);return{W:w/u,H:h/u,u,dpr,groundY:h/u-64};}
 function padPing(pad,x,y,glyph){if(!pad)return;pad.classList.add('ping');setTimeout(()=>pad.classList.remove('ping'),170);
-  const r=pad.getBoundingClientRect(),s=document.createElement('span');s.className='pad-arrow';s.textContent=glyph;s.style.left=(x-r.left)+'px';s.style.top=(y-r.top)+'px';pad.appendChild(s);setTimeout(()=>s.remove(),620);}
+  const r=pad.getBoundingClientRect(),s=document.createElement('span');s.className='pad-arrow';s.textContent=glyph;
+  s.style.left=(x-r.left)+'px';s.style.top=(y-r.top)+'px';pad.appendChild(s);setTimeout(()=>s.remove(),620);}
 function bindSwipeUp(el,game,pad){let ptr=null;
-  el.addEventListener('pointerdown',e=>{e.preventDefault();ptr={x:e.clientX,y:e.clientY,sw:false};if(e.pointerType==='mouse'&&el.tagName==='CANVAS'){game.jump();ptr.sw=true;}try{el.setPointerCapture(e.pointerId);}catch(_){}});
+  el.addEventListener('pointerdown',e=>{e.preventDefault();ptr={y:e.clientY,sw:false};if(e.pointerType==='mouse'&&el.tagName==='CANVAS'){game.jump();ptr.sw=true;}try{el.setPointerCapture(e.pointerId);}catch(_){}});
   el.addEventListener('pointermove',e=>{if(!ptr||ptr.sw)return;if(ptr.y-e.clientY>16){ptr.sw=true;game.jump();if(pad)padPing(pad,e.clientX,e.clientY,'▲');}});
   el.addEventListener('pointerup',e=>{if(ptr&&!ptr.sw&&ptr.y-e.clientY>10){game.jump();if(pad)padPing(pad,e.clientX,e.clientY,'▲');}ptr=null;});
   el.addEventListener('pointercancel',()=>ptr=null);el.addEventListener('contextmenu',e=>e.preventDefault());}
 function bindDrag(el,game,pad){let ptr=null;
   el.addEventListener('pointerdown',e=>{e.preventDefault();ptr={x:e.clientX,base:game.targetX,moved:0};try{el.setPointerCapture(e.pointerId);}catch(_){}});
   el.addEventListener('pointermove',e=>{if(!ptr)return;const dx=(e.clientX-ptr.x)/game.u;ptr.moved=Math.max(ptr.moved,Math.abs(e.clientX-ptr.x));game.targetX=Math.min(Math.max(ptr.base+dx,60),game.W-60);});
-  const up=e=>{if(ptr&&ptr.moved<6&&pad){const r=pad.getBoundingClientRect();const dir=(e.clientX-r.left)<r.width/2?-1:1;game.targetX=Math.min(Math.max(game.targetX+dir*70,60),game.W-60);padPing(pad,e.clientX,e.clientY,dir<0?'◀':'▶');}ptr=null;};
+  const up=e=>{if(ptr&&ptr.moved<6&&pad){const r=pad.getBoundingClientRect(),dir=(e.clientX-r.left)<r.width/2?-1:1;game.targetX=Math.min(Math.max(game.targetX+dir*70,60),game.W-60);padPing(pad,e.clientX,e.clientY,dir<0?'◀':'▶');}ptr=null;};
   el.addEventListener('pointerup',up);el.addEventListener('pointercancel',()=>ptr=null);el.addEventListener('contextmenu',e=>e.preventDefault());}
 
 /* ============================ SLIMEGO! ============================ */
@@ -552,12 +722,11 @@ const Run={
   reset(){Object.assign(this,{dist:0,speed:RUN.BASE,coins:0,stars:0,foods:[],continues:3,used:0,penalty:0,obstacles:[],pickups:[],parts:[],pops:[],spawnT:1.4,shake:0,combo:0,comboT:0,countT:1,crashT:0,contT:0,msgT:0,worldX:0,hud:{}});
     this.slime={y:0,vy:0,grounded:true,squash:0,inv:0,buffer:0};
     this.clouds=Array.from({length:5},()=>({x:Math.random()*this.W,y:30+Math.random()*110,s:.6+Math.random()*.8,v:8+Math.random()*14}));
-    this.starsBg=Array.from({length:70},()=>({x:Math.random(),y:Math.random()*.55,r:.8+Math.random()*1.6,p:Math.random()*6}));
-    closeMenu();closeResult();this.hideMsg();},
+    this.starsBg=Array.from({length:70},()=>({x:Math.random(),y:Math.random()*.55,r:.8+Math.random()*1.6,p:Math.random()*6}));this.hideMsg();},
   start(){if(this.phase!=='idle'&&this.phase!=='over')return;
     const p=activePet();if(!p)return toast('🥚','Tetaskan slime dulu!');if(p.sleepUntil&&p.sleepUntil>Date.now())return toast('💤','Slime-mu sedang tidur!');if(p.energy<ACT_COST)return toast('⚡',`Butuh ${ACT_COST}⚡!`);
     Rain.teardown();T.teardown();closeMenu();closeResult();
-    p.energy-=ACT_COST;save();this.pet=p;spriteFor(p);
+    p.energy-=ACT_COST;save();this.pet=p;SPR.key='';spriteFor(p);
     hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-rain');hideEl('arena-tactic');showEl('arena-run');
     this.resize();this.reset();this.phase='countdown';this.setMsg('SIAP…');sfx('click');this.loop.start();renderHome();},
   setMsg(t){$('#run-msg-txt').textContent=t;openOv('run-msg');const s=$('#run-msg-txt');s.classList.remove('pop-in');void s.offsetWidth;s.classList.add('pop-in');},
@@ -591,7 +760,7 @@ const Run={
     else if(Math.random()<.07)this.pickups.push({type:'star',x:x+w+gap*this.speed*.55,h:150,ph:0});},
   crash(){this.phase='crash';this.crashT=.7;this.shake=14;sfx('crash');musicStop();const f=$('#run-flash');f.style.animation='none';void f.offsetWidth;f.style.animation='flashRed .5s ease-out forwards';const pal=petPal(this.pet);for(let i=0;i<14;i++)this.parts.push({x:RUN.X+(Math.random()-.5)*50,y:this.groundY-30-Math.random()*40,vx:(Math.random()-.5)*320,vy:-Math.random()*330,g:900,life:.9,max:.9,r:4+Math.random()*7,c:pal.c2,type:'goo'});},
   openContinue(){this.phase='continue';this.contT=6;const after=Math.floor(this.coins*.8);
-    showMenu(`<div class="panel p-6 text-center w-full max-w-sm pop-in"><p class="font-disp text-4xl text-coral">💥 ADUH!</p><p class="text-sm font-bold mt-2">Kesempatan lanjut tersisa: <b class="font-disp text-xl">${this.continues}</b>/3</p><p class="text-xs font-bold opacity-70 mt-1">Lanjut = −20% koin run sebagai kompensasi.<br>🪙 ${this.coins} → <b class="text-coral">${after}</b></p><div class="bar mt-3"><div id="cont-bar" class="!bg-coral" style="width:100%"></div></div><div class="flex flex-col gap-2 mt-4"><button onclick="Run.chooseContinue(true)" class="btn bg-gold text-lg">🔁 Lanjut (−20%)</button><button onclick="Run.chooseContinue(false)" class="btn bg-white">🏁 Selesai & Simpan</button></div></div>`);},
+    showMenu(`<div class="panel p-6 text-center w-full max-w-sm pop-in"><p class="font-disp text-4xl text-coral">💥 ADUH!</p><p class="text-sm font-bold mt-2">Kesempatan lanjut tersisa: <b class="font-disp text-xl">${this.continues}</b>/3</p><p class="text-xs font-bold opacity-70 mt-1">Lanjut = −20% koin run.<br>🪙 ${this.coins} → <b class="text-coral">${after}</b></p><div class="bar mt-3"><div id="cont-bar" class="!bg-coral" style="width:100%"></div></div><div class="flex flex-col gap-2 mt-4"><button onclick="Run.chooseContinue(true)" class="btn bg-gold text-lg">🔁 Lanjut (−20%)</button><button onclick="Run.chooseContinue(false)" class="btn bg-white">🏁 Selesai & Simpan</button></div></div>`);},
   chooseContinue(yes){if(this.phase!=='continue')return;closeMenu();if(!yes)return this.finish();
     const before=this.coins;this.coins=Math.floor(this.coins*.8);this.penalty+=before-this.coins;this.continues--;this.used++;
     this.obstacles=this.obstacles.filter(o=>o.x>RUN.X+this.speed*1.5);
@@ -603,7 +772,7 @@ const Run={
     this.phase='over';
     const evoBtn=evoReady(p)?`<button onclick="Run.teardown();setTab('home');evolve()" class="btn bg-violet text-white w-full glow-pulse">🧬 EVOLUSI SEKARANG!</button>`:'';
     showResult({title:newBest?'🏆 REKOR BARU!':'🏁 RUN SELESAI!',cls:newBest?'text-gold':'text-aqua',sub:`${esc(p?p.nick:'Slime')} · SlimeGo! · ${dist} m`,
-      body:`<div class="text-sm font-bold">${statRow('🏃','Jarak tempuh',dist+' m')}${statRow('🪙','Koin didapat','+'+this.coins,'text-gold')}${this.penalty>0?statRow('🔁',`Kompensasi (${this.used}× lanjut)`,'−'+this.penalty,'text-coral'):''}${statRow('⭐','EXP didapat','+'+exp,'text-leaf')}${statRow('🏆','Rekor terbaik',S.bestRun+' m')}<p class="font-disp text-sm pt-3 pb-1.5 opacity-70">🎁 ITEM DIDAPAT (DITUMPUK)</p><div class="flex flex-wrap gap-1.5">${itemChips(this.foods)}</div></div>`,
+      body:`<div class="text-sm font-bold">${statRow('🏃','Jarak tempuh',dist+' m')}${statRow('🪙','Koin didapat','+'+this.coins,'text-gold')}${this.penalty>0?statRow('🔁',`Kompensasi (${this.used}× lanjut)`,'−'+this.penalty,'text-coral'):''}${statRow('⭐','EXP didapat','+'+exp,'text-leaf')}${statRow('🏆','Rekor terbaik',S.bestRun+' m')}<p class="font-disp text-sm pt-3 pb-1.5 opacity-70">🎁 ITEM DIDAPAT</p><div class="flex flex-wrap gap-1.5">${itemChips(this.foods)}</div></div>`,
       buttons:`${evoBtn}<button onclick="Run.start()" class="btn bg-gold text-lg" ${!activePet()||activePet().energy<ACT_COST?'disabled':''}>↺ Main Lagi (−${ACT_COST}⚡)</button><button onclick="Run.teardown();showArenaHub()" class="btn bg-white">🏠 Keluar ke Arena</button>`});},
   step(dt,t){
     if(this.phase==='countdown'){this.countT-=dt;this.clouds.forEach(c=>{c.x-=c.v*dt;if(c.x<-160)c.x=this.W+120;});if(this.countT<=0){this.phase='play';this.setMsg('GO!');this.msgT=.45;musicStart();sfx('pop');}}
@@ -624,7 +793,7 @@ const Run={
     for(const pk of this.pickups){if(pk.taken)continue;if(Math.abs(pk.x-RUN.X)<36&&Math.abs(pk.h-cy)<44){pk.taken=true;
       if(pk.type==='coin'){this.coins++;this.combo++;this.comboT=.8;sfx('coinrun',this.combo);this.pops.push({x:pk.x,y:this.groundY-pk.h-14,txt:'+1',c:'#ffb703',t:0});for(let i=0;i<5;i++)this.parts.push({x:pk.x,y:this.groundY-pk.h,vx:(Math.random()-.5)*160,vy:-Math.random()*160,g:400,life:.45,max:.45,r:2.5,c:'#ffd166',type:'s'});}
       else if(pk.type==='star'){this.stars++;sfx('star');this.pops.push({x:pk.x,y:this.groundY-pk.h-14,txt:'⭐ +3 EXP',c:'#8b5cf6',t:0});}
-      else{const pool=['apel','roti','ceri','pisang'];const f=pool[rnd(pool.length)];this.foods.push(f);sfx('eat');this.pops.push({x:pk.x,y:this.groundY-pk.h-14,txt:`+ ${FOODS.find(x=>x.id===f).name}!`,c:'#58c453',t:0});}}}
+      else{const pool=['apel','roti','ceri','pisang'],f=pool[rnd(pool.length)];this.foods.push(f);sfx('eat');this.pops.push({x:pk.x,y:this.groundY-pk.h-14,txt:`+ ${FOODS.find(x=>x.id===f).name}!`,c:'#58c453',t:0});}}}
     this.pickups=this.pickups.filter(pk=>!pk.taken);
     if(s.inv<=0){const sx=RUN.X-26,sw=52,sh=64,sy=s.y;for(const o of this.obstacles){const ox=o.x+5,ow=o.w-10,oTop=o.type==='bee'?o.h+10:o.h-6,oBot=o.type==='bee'?o.h-10:0;if(sx<ox+ow&&sx+sw>ox&&sy<oTop&&sy+sh>oBot){this.crash();break;}}}
     this.updParts(dt);this.clouds.forEach(c=>{c.x-=c.v*dt;if(c.x<-160)c.x=this.W+120;});this.shake=Math.max(0,this.shake-40*dt);},
@@ -666,18 +835,16 @@ const Rain={
   resize(){layoutStage('#arena-rain','#rain-wrap',118);const f=fitCanvas($('#rain-wrap'),$('#rain-canvas'));if(f){Object.assign(this,f);this.slimeX=Math.min(Math.max(this.slimeX,60),this.W-60);this.targetX=Math.min(Math.max(this.targetX,60),this.W-60);}},
   reset(){Object.assign(this,{timeLeft:15,elapsed:0,items:0,coins:0,clocks:0,foodsCaught:[],falling:[],parts:[],pops:[],spawnT:.3,countT:1,msgT:0,squash:0,hud:{},_knob:-1});
     this.slimeX=this.W/2;this.targetX=this.W/2;
-    this.clouds=Array.from({length:5},()=>({x:Math.random()*this.W,y:26+Math.random()*100,s:.6+Math.random()*.8,v:8+Math.random()*12}));
-    closeMenu();closeResult();this.hideMsg();},
+    this.clouds=Array.from({length:5},()=>({x:Math.random()*this.W,y:26+Math.random()*100,s:.6+Math.random()*.8,v:8+Math.random()*12}));this.hideMsg();},
   start(){if(this.phase!=='idle'&&this.phase!=='over')return;
     const p=activePet();if(!p)return toast('🥚','Tetaskan slime dulu!');if(p.sleepUntil&&p.sleepUntil>Date.now())return toast('💤','Slime-mu sedang tidur!');if(p.energy<ACT_COST)return toast('⚡',`Butuh ${ACT_COST}⚡!`);
     Run.teardown();T.teardown();closeMenu();closeResult();
-    p.energy-=ACT_COST;save();this.pet=p;spriteFor(p);
+    p.energy-=ACT_COST;save();this.pet=p;SPR.key='';spriteFor(p);
     hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-run');hideEl('arena-tactic');showEl('arena-rain');
     this.resize();this.reset();this.phase='countdown';this.setMsg('SIAP…');sfx('click');this.loop.start();renderHome();},
   setMsg(t){$('#rain-msg-txt').textContent=t;openOv('rain-msg');const s=$('#rain-msg-txt');s.classList.remove('pop-in');void s.offsetWidth;s.classList.add('pop-in');},
   hideMsg(){closeOv('rain-msg');},
   suspend(){if(this.phase==='countdown'||this.phase==='play')this.openMenu('pause');},
-  wake(){},
   openMenu(mode){if(!['countdown','play'].includes(this.phase))return;this._prev=this.phase;this.phase='menu';this.loop.stop();musicStop();
     showMenu(mode==='quit'
       ?`<div class="panel p-6 text-center w-full max-w-sm pop-in"><p class="font-disp text-3xl text-coral">KELUAR?</p><p class="text-sm font-bold opacity-70 mt-1">Disimpan: 🍎 ${this.items} item · 🪙 ${this.coins}</p><div class="flex flex-col gap-2 mt-4"><button onclick="Rain.resume()" class="btn bg-gold text-lg">▶ Lanjut Main</button><button onclick="Rain.quit()" class="btn bg-red-200">🏠 Keluar & Simpan</button></div></div>`
@@ -689,8 +856,7 @@ const Rain={
     this.falling.push({type:clock?'clock':'food',food:f.id,x:60+Math.random()*(this.W-120),y:-30,v:165+this.elapsed*7+Math.random()*40,rot:(Math.random()-.5)*.6,vr:(Math.random()-.5)*2,wob:Math.random()*6});},
   catchItem(it){
     if(it.type==='clock'){this.clocks++;this.timeLeft+=3;sfx('clock');this.pops.push({x:it.x,y:this.groundY-110,txt:'⏰ +3s',c:'#3fb0f0',t:0});this.squash=.2;for(let i=0;i<8;i++)this.parts.push({x:it.x,y:this.groundY-70,vx:(Math.random()-.5)*200,vy:-Math.random()*200,g:350,life:.5,max:.5,r:3,c:'#9fe0fb',type:'s'});}
-    else{this.items++;this.foodsCaught.push(it.food);this.squash=.24;sfx('eat');
-      this.pops.push({x:it.x,y:this.groundY-100,txt:'+1 🍎',c:'#58c453',t:0});
+    else{this.items++;this.foodsCaught.push(it.food);this.squash=.24;sfx('eat');this.pops.push({x:it.x,y:this.groundY-100,txt:'+1 🍎',c:'#58c453',t:0});
       if(this.items%3===0){this.coins++;sfx('coinrun',this.coins);this.pops.push({x:this.slimeX,y:this.groundY-140,txt:'+1 🪙',c:'#ffb703',t:0});for(let i=0;i<8;i++)this.parts.push({x:this.slimeX,y:this.groundY-80,vx:(Math.random()-.5)*220,vy:-Math.random()*220,g:380,life:.55,max:.55,r:3,c:'#ffd166',type:'s'});}
       for(let i=0;i<5;i++)this.parts.push({x:it.x,y:this.groundY-70,vx:(Math.random()-.5)*150,vy:-Math.random()*150,g:350,life:.4,max:.4,r:2.5,c:'#ff8fc8',type:'s'});}},
   finish(){if(this.phase==='over'||this.phase==='idle')return;
@@ -701,7 +867,7 @@ const Rain={
     addCoins(this.coins);if(p)applyExp(p,exp);S.rainPlays++;S.rainBest=Math.max(S.rainBest,this.items);save();renderHome();renderNav();sfx('win');this.phase='over';
     const evoBtn=evoReady(p)?`<button onclick="Rain.teardown();setTab('home');evolve()" class="btn bg-violet text-white w-full glow-pulse">🧬 EVOLUSI SEKARANG!</button>`:'';
     showResult({title:'🌧️ SLIME RAIN SELESAI!',cls:'text-aqua',sub:`${esc(p?p.nick:'Slime')} · ${this.items} item tertangkap`,
-      body:`<div class="text-sm font-bold">${statRow('🍎','Item ditangkap',this.items)}${statRow('🪙','Koin (3 item = 1)','+'+this.coins,'text-gold')}${statRow('⏰','Jam ditangkap (+3s)',this.clocks,'text-aqua')}${statRow('⭐','EXP didapat','+'+exp,'text-leaf')}${statRow('🏆','Rekor item',S.rainBest)}<p class="font-disp text-sm pt-3 pb-1.5 opacity-70">📦 LOG ITEM TERTANGKAP</p><div class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 flex flex-wrap gap-1.5">${itemChips(this.foodsCaught)}</div><p class="font-disp text-sm pt-3 pb-1.5 opacity-70">🎁 SISA ITEM MASUK TAS (${leftover})</p><div class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 flex flex-wrap gap-1.5">${itemChips(leftIds)}</div></div>`,
+      body:`<div class="text-sm font-bold">${statRow('🍎','Item ditangkap',this.items)}${statRow('🪙','Koin (3 item = 1)','+'+this.coins,'text-gold')}${statRow('⏰','Jam (+3s)',this.clocks,'text-aqua')}${statRow('⭐','EXP didapat','+'+exp,'text-leaf')}${statRow('🏆','Rekor item',S.rainBest)}<p class="font-disp text-sm pt-3 pb-1.5 opacity-70">📦 LOG ITEM TERTANGKAP</p><div class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 flex flex-wrap gap-1.5">${itemChips(this.foodsCaught)}</div><p class="font-disp text-sm pt-3 pb-1.5 opacity-70">🎁 SISA ITEM MASUK TAS (${leftover})</p><div class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 flex flex-wrap gap-1.5">${itemChips(leftIds)}</div></div>`,
       buttons:`${evoBtn}<button onclick="Rain.start()" class="btn bg-gold text-lg" ${!activePet()||activePet().energy<ACT_COST?'disabled':''}>↺ Main Lagi (−${ACT_COST}⚡)</button><button onclick="Rain.teardown();showArenaHub()" class="btn bg-white">🏠 Keluar ke Arena</button>`});},
   step(dt,t){
     if(this.phase==='countdown'){this.countT-=dt;this.clouds.forEach(c=>{c.x-=c.v*dt;if(c.x<-160)c.x=this.W+120;});if(this.countT<=0){this.phase='play';this.setMsg('GO!');this.msgT=.45;musicStart();sfx('pop');}}
@@ -710,13 +876,11 @@ const Rain={
   update(dt,t){this.timeLeft-=dt;this.elapsed+=dt;
     if(this.keys.left)this.targetX-=420*dt;if(this.keys.right)this.targetX+=420*dt;
     this.targetX=Math.min(Math.max(this.targetX,60),this.W-60);
-    this.slimeX+=(this.targetX-this.slimeX)*Math.min(1,14*dt);
-    this.squash+=(0-this.squash)*Math.min(1,10*dt);
+    this.slimeX+=(this.targetX-this.slimeX)*Math.min(1,14*dt);this.squash+=(0-this.squash)*Math.min(1,10*dt);
     this.spawnT-=dt;if(this.spawnT<=0){this.spawn();this.spawnT=Math.max(.28,.6-this.elapsed*.012);}
     const top=this.groundY-90;
     for(const it of this.falling){it.y+=it.v*dt;it.rot+=it.vr*dt;it.x+=Math.sin(t/300+it.wob)*.4;
-      if(!it.done&&it.y>top-14&&it.y<this.groundY-4&&Math.abs(it.x-this.slimeX)<54){it.done=true;this.catchItem(it);}
-      else if(it.y>this.groundY+24)it.done=true;}
+      if(!it.done&&it.y>top-14&&it.y<this.groundY-4&&Math.abs(it.x-this.slimeX)<54){it.done=true;this.catchItem(it);}else if(it.y>this.groundY+24)it.done=true;}
     this.falling=this.falling.filter(it=>!it.done);
     this.parts.forEach(p=>{p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;});this.parts=this.parts.filter(p=>p.life>0);
     this.pops.forEach(p=>p.t+=dt);this.pops=this.pops.filter(p=>p.t<.9);
@@ -744,8 +908,7 @@ const Rain={
 
 /* ============================ SLIME TACTIC ============================ */
 const T={
-  phase:'idle',pet:null,diff:null,turn:1,fast:false,log:[],stats:null,
-  timers:[],typeIv:null,autoPause:false,
+  phase:'idle',pet:null,diff:null,turn:1,fast:false,log:[],stats:null,P:null,E:null,timers:[],typeIv:null,autoPause:false,
   active(){return this.phase!=='idle'&&this.phase!=='over';},
   init(){new ResizeObserver(()=>this.resize()).observe($('#arena-tactic'));},
   resize(){layoutStage('#arena-tactic','#tac-wrap',148);},
@@ -754,59 +917,55 @@ const T={
   toggleFast(){this.fast=!this.fast;$('#tac-fast').classList.toggle('bg-gold',this.fast);$('#tac-fast').classList.toggle('bg-cream2',!this.fast);sfx('click');toast('⏩',this.fast?'Mode cepat aktif':'Mode normal');},
   teardown(){this.clearTimers();this.phase='idle';closeOv('tac-dice');closeMenu();closeResult();if(!Run.loop.on&&!Rain.loop.on)musicStop();},
   suspend(){if(this.phase==='player')this.openMenu('pause');else if(this.active())this.autoPause=true;},
-  wake(){},
-  start(diffKey){
-    if(this.active())return;
+  start(diffKey){if(this.active())return;
     const p=activePet();if(!p)return toast('🥚','Tetaskan slime dulu!');
     if(p.sleepUntil&&p.sleepUntil>Date.now())return toast('💤','Slime-mu sedang tidur!');
     if(p.energy<ACT_COST)return toast('⚡',`Butuh ${ACT_COST}⚡!`);
     Run.teardown();Rain.teardown();this.clearTimers();closeMenu();closeResult();
     p.energy-=ACT_COST;save();renderHome();
-    const D=DIFFS[diffKey];const lv=clampLv(p.level+D.off[0]+rnd(D.off[1]-D.off[0]+1));const f=D.foes[rnd(D.foes.length)];
-    this.diff=diffKey;this.pet=p;this.turn=1;this.log=[];this.autoPause=false;
-    this.stats={dealt:0,taken:0,crit:0,hit:0,miss:0};
-    const tb=totalBonus(p);
-    this.P={name:p.nick.toUpperCase(),lv:p.level,hp:maxHP(p),max:maxHP(p),dmg:tb.dmg+Math.floor(p.level/4),def:tb.def,dp:tb.dp,shield:0,focus:false,pet:p};
-    this.E={name:f.n,lv,hp:10+(lv-1)*2,max:10+(lv-1)*2,dmg:Math.floor(lv/6)+Math.floor(lv/8),def:Math.min(6,Math.floor(lv/6)),dp:Math.min(6,Math.floor(lv/6)),shield:0,focus:false,
-      pet:{id:'foe',nick:f.n,element:f.e,evolved:true,skin:'default',head:null,face:null,neck:null,level:lv,energy:10,full:80,fun:80,clean:80,bonus:zeroBonus(),evoBonus:zeroBonus()}};
+    const D=DIFFS[diffKey],lv=Math.max(1,Math.min(MAX_LV,p.level+D.off[0]+rnd(D.off[1]-D.off[0]+1))),f=D.foes[rnd(D.foes.length)],ta=totAttr(p);
+    this.diff=diffKey;this.pet=p;this.turn=1;this.log=[];this.autoPause=false;this.stats={dealt:0,taken:0,crit:0,hit:0,miss:0};
+    this.P={name:p.nick.toUpperCase(),lv:p.level,hp:maxHP(p),max:maxHP(p),dmg:powAtk(p.level)+ta.dmg,def:powDef(p.level)+ta.def,dp:ta.dp,shield:0,focus:false,pet:p};
+    this.E={name:f.n,lv,hp:10+(lv-1)*2,max:10+(lv-1)*2,dmg:powAtk(lv)+Math.floor(lv/12),def:powDef(lv),dp:Math.min(6,Math.floor(lv/10)),shield:0,focus:false,
+      pet:{id:'foe',nick:f.n,element:f.e,evolved:true,skin:'default',head:null,face:null,neck:null,level:lv,energy:10,full:80,fun:80,clean:80,bonus:zeroAttr(),gift:zeroAttr()}};
     hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-run');hideEl('arena-rain');showEl('arena-tactic');
     this.resize();this.renderScreen();this.setButtons(false);closeOv('tac-dice');
     $('#tac-turn').textContent='1';
     const dc=$('#tac-diffchip');dc.innerHTML=`${D.emoji} ${D.label} · LV.${lv} · ×${D.mult}`;dc.style.background=D.color;
-    this.buffs();
-    this.phase='intro';sfx('select');musicStart();
+    this.buffs();this.phase='intro';sfx('select');musicStart();
     this.say(`${f.n} LIAR MUNCUL!`);
-    this.log.push({t:0,k:'sys',x:`${D.label} (×${D.mult}) · Musuh LV.${lv} dengan ${this.E.max} HP`});
-    this.after(1200,()=>this.beginTurn());
-  },
+    this.log.push({t:0,k:'sys',x:`${D.label} · Musuh LV.${lv} (${this.E.max} HP) · hadiah ×${D.mult}`});
+    this.after(1200,()=>this.beginTurn());},
   renderScreen(){const P=this.P,E=this.E;
     $('#tac-screen').innerHTML=`<div class="gb" id="tac-gb">
       <div class="gb-info" style="top:4%;left:3%;width:41%"><div class="gb-row"><span class="gb-name">${esc(E.name)}</span><span class="gb-lv">Lv${E.lv}</span></div><div class="gb-hpbar"><div class="gb-hpfill" id="tac-ehp" style="width:100%"></div></div><div class="gb-hpnum" id="tac-ehpn">${E.hp}/${E.max}</div></div>
       <div class="gb-sprite" id="tac-esprite" style="top:19%;right:5%;width:19%">${slimeSVG(E.pet,200,'neutral')}</div>
       <div class="gb-sprite" id="tac-psprite" style="bottom:28%;left:4%;width:24%">${slimeSVG(P.pet,200,'happy')}</div>
       <div class="gb-info" style="bottom:28%;right:3%;width:41%"><div class="gb-row"><span class="gb-name">${esc(P.name)}</span><span class="gb-lv">Lv${P.lv}</span></div><div class="gb-hpbar"><div class="gb-hpfill" id="tac-php" style="width:100%"></div></div><div class="gb-hpnum" id="tac-phpn">${P.hp}/${P.max}</div></div>
-      <div class="gb-msg"><span id="tac-msg"></span><span class="gb-cursor">▼</span></div>
-      <div class="gb-flash" id="tac-flash"></div></div>`;},
-  say(txt){const el=$('#tac-msg');if(!el)return;if(this.typeIv)clearInterval(this.typeIv);el.textContent='';let i=0;const s=String(txt);
+      <div class="gb-msg"><span id="tac-msg"></span><span class="gb-cursor">▼</span></div><div class="gb-flash" id="tac-flash"></div></div>`;},
+  say(txt){const el=$('#tac-msg');if(!el)return;if(this.typeIv)clearInterval(this.typeIv);
+    el.textContent='';let i=0;const s=String(txt);
     this.typeIv=setInterval(()=>{i++;el.textContent=s.slice(0,i);if(i>=s.length){clearInterval(this.typeIv);this.typeIv=null;}},this.fast?12:26);},
-  buffs(){const el=$('#tac-buffs');if(!el||!this.P)return;const p=[];if(this.P.shield)p.push('🛡️'+this.P.shield);if(this.P.focus)p.push('✨ Fokus');el.innerHTML=p.length?p.join(' · '):'🎲 D20 &gt; 10 = HIT';},
+  buffs(){const el=$('#tac-buffs');if(!el||!this.P)return;const a=[];if(this.P.shield)a.push('🛡️'+this.P.shield);if(this.P.focus)a.push('✨ Fokus');el.innerHTML=a.length?a.join(' · '):'🎲 D20 &gt; 10 = HIT';},
   setButtons(on){['atk','foc','grd','heal'].forEach(k=>{const b=$('#tac-a-'+k);if(b)b.disabled=!on;});
-    const can=this.phase==='player'||this.phase==='menu';const pb=$('#tac-pausebtn'),qb=$('#tac-quitbtn');if(pb)pb.disabled=!can;if(qb)qb.disabled=!can;},
+    const can=this.phase==='player'||this.phase==='menu',pb=$('#tac-pausebtn'),qb=$('#tac-quitbtn');if(pb)pb.disabled=!can;if(qb)qb.disabled=!can;},
   beginTurn(){if(!this.active())return;this.phase='player';$('#tac-turn').textContent=this.turn;this.setButtons(true);this.say(`${this.P.name} mau apa?`);if(this.autoPause){this.autoPause=false;this.openMenu('pause');}},
-  bars(){const P=this.P,E=this.E;const pe=$('#tac-php'),ee=$('#tac-ehp'),pn=$('#tac-phpn'),en=$('#tac-ehpn');
+  bars(){const P=this.P,E=this.E,pe=$('#tac-php'),ee=$('#tac-ehp'),pn=$('#tac-phpn'),en=$('#tac-ehpn');
     if(pe)pe.style.width=Math.max(0,P.hp/P.max*100)+'%';if(ee)ee.style.width=Math.max(0,E.hp/E.max*100)+'%';
     if(pn)pn.textContent=`${Math.max(0,P.hp)}/${P.max}`;if(en)en.textContent=`${Math.max(0,E.hp)}/${E.max}`;this.buffs();},
-  float(side,txt){const el=$(side==='p'?'#tac-psprite':'#tac-esprite');if(!el)return;const s=document.createElement('span');s.className='dmg-float';s.textContent=txt;s.style.left='50%';s.style.top='6%';el.appendChild(s);setTimeout(()=>s.remove(),950);},
+  float(side,txt){const el=$(side==='p'?'#tac-psprite':'#tac-esprite');if(!el)return;
+    const s=document.createElement('span');s.className='dmg-float';s.textContent=txt;s.style.left='50%';s.style.top='6%';el.appendChild(s);setTimeout(()=>s.remove(),950);},
   shake(){const g=$('#tac-gb');if(!g)return;g.classList.remove('gb-hit');void g.offsetWidth;g.classList.add('gb-hit');},
   flash(){const f=$('#tac-flash');if(!f)return;f.classList.remove('go');void f.offsetWidth;f.classList.add('go');},
   openMenu(mode){if(this.phase!=='player')return;this.phase='menu';musicStop();this.setButtons(false);
     showMenu(mode==='quit'
-      ?`<div class="panel p-6 text-center w-full max-w-sm pop-in"><p class="font-disp text-3xl text-coral">KABUR?</p><p class="text-sm font-bold opacity-70 mt-1">Pertarungan dihitung kalah — hadiah kecil tetap diberikan.</p><div class="flex flex-col gap-2 mt-4"><button onclick="T.resume()" class="btn bg-gold text-lg">▶ Lanjut Bertarung</button><button onclick="T.flee()" class="btn bg-red-200">🏃 Kabur & Simpan</button></div></div>`
+      ?`<div class="panel p-6 text-center w-full max-w-sm pop-in"><p class="font-disp text-3xl text-coral">KABUR?</p><p class="text-sm font-bold opacity-70 mt-1">Dihitung kalah — hadiah kecil tetap diberikan.</p><div class="flex flex-col gap-2 mt-4"><button onclick="T.resume()" class="btn bg-gold text-lg">▶ Lanjut Bertarung</button><button onclick="T.flee()" class="btn bg-red-200">🏃 Kabur & Simpan</button></div></div>`
       :`<div class="panel p-6 text-center w-full max-w-sm pop-in"><p class="font-disp text-3xl">⏸ JEDA</p><p class="text-sm font-bold opacity-70 mt-1">Giliran ${this.turn} · ❤️ ${this.P.hp}/${this.P.max} HP</p><div class="flex flex-col gap-2 mt-4"><button onclick="T.resume()" class="btn bg-gold text-lg">▶ Lanjut</button><button onclick="T.flee()" class="btn bg-white">🏃 Kabur & Simpan</button></div></div>`);},
   resume(){if(this.phase!=='menu')return;closeMenu();this.phase='player';this.setButtons(true);musicStart();this.say(`${this.P.name} mau apa?`);},
   flee(){if(this.phase!=='menu')return;closeMenu();this.log.push({t:this.turn,k:'sys',x:'Kamu kabur dari pertarungan.'});this.finish('flee');},
   act(kind){if(this.phase!=='player')return;this.phase='anim';this.setButtons(false);sfx('select');
-    const names={atk:'SERANG',foc:'FOKUS',grd:'BERTAHAN',heal:'PULIH'};this.say(`${this.P.name} pakai ${names[kind]}!`);this.after(420,()=>this.resolve(this.P,this.E,kind,true));},
+    const names={atk:'SERANG',foc:'FOKUS',grd:'BERTAHAN',heal:'PULIH'};
+    this.say(`${this.P.name} pakai ${names[kind]}!`);this.after(420,()=>this.resolve(this.P,this.E,kind,true));},
   resolve(actor,target,kind,isPlayer){
     const roll=1+rnd(20),dp=actor.dp+(actor.focus?3:0),total=roll+dp;
     const fumble=roll===1,crit=!fumble&&(roll===20||(actor.focus&&roll>=18)),hit=!fumble&&total>10;
@@ -822,7 +981,7 @@ const T={
           if(isPlayer){this.stats.dealt+=dmg;this.stats.hit++;if(crit)this.stats.crit++;}else this.stats.taken+=dmg;
           this.bars();this.float(isPlayer?'e':'p','-'+dmg);this.shake();if(crit)this.flash();sfx(crit?'crit':'hit');
           this.say(crit?`KRITIKAL! ${dmg} damage!`:`Kena! ${dmg} damage${absorbed?` (perisai -${absorbed})`:''}.`);
-          this.log.push({t:this.turn,k:isPlayer?'p':'e',x:`${who} SERANG · D20 ${roll}${dp?`+${dp}`:''}=${total} → ${crit?'CRITICAL':'HIT'} · dadu ${dice.join('+')}${actor.dmg?` +${actor.dmg} DMG`:''}${target.def?` −${target.def} DEF`:''}${absorbed?` −${absorbed} perisai`:''} = ${dmg} damage`});
+          this.log.push({t:this.turn,k:isPlayer?'p':'e',x:`${who} SERANG · ${total} → ${crit?'CRITICAL':'HIT'} · dadu ${dice.join('+')} +${actor.dmg} DMG${target.def?` −${target.def} DEF`:''}${absorbed?` −${absorbed} perisai`:''} = ${dmg} damage`});
           actor.focus=false;this.bars();this.after(850,()=>this.next(isPlayer));});
       } else if(kind==='grd'){
         if(hit){actor.shield=2+actor.def;this.say(`${who} memasang perisai ${actor.shield}!`);sfx('guard');this.float(isPlayer?'p':'e','🛡'+actor.shield);this.log.push({t:this.turn,k:isPlayer?'p':'e',x:`${who} BERTAHAN · ${total} → perisai ${actor.shield}`});}
@@ -833,13 +992,9 @@ const T={
         else{this.say(`${who} gagal fokus…`);sfx('miss');this.log.push({t:this.turn,k:isPlayer?'p':'e',x:`${who} FOKUS · ${total} → gagal`});}
         this.bars();this.after(750,()=>this.next(isPlayer));
       } else {
-        const healScale=Math.max(1,Math.floor(actor.lv/4));
-        if(hit){const d=1+rnd(4),heal=Math.min(d+healScale,actor.max-actor.hp);actor.hp+=heal;this.float(isPlayer?'p':'e','+'+heal);sfx('heal');this.say(`${who} pulih ${heal} HP!`);this.log.push({t:this.turn,k:isPlayer?'p':'e',x:`${who} PULIH · ${total} → +${heal} HP`});}
+        if(hit){const d=1+rnd(4),heal=Math.min(d+1,actor.max-actor.hp);actor.hp+=heal;this.float(isPlayer?'p':'e','+'+heal);sfx('heal');this.say(`${who} pulih ${heal} HP!`);this.log.push({t:this.turn,k:isPlayer?'p':'e',x:`${who} PULIH · ${total} → +${heal} HP`});}
         else{this.say(`${who} gagal memulih…`);sfx('miss');this.log.push({t:this.turn,k:isPlayer?'p':'e',x:`${who} PULIH · ${total} → gagal`});}
-        this.bars();this.after(750,()=>this.next(isPlayer));
-      }
-    });
-  },
+        this.bars();this.after(750,()=>this.next(isPlayer));}});},
   showDice(roll,dp,total,hit,crit,fumble,kind,done){
     const label={atk:'SERANGAN',foc:'FOKUS',grd:'BERTAHAN',heal:'PEMULIHAN'}[kind];
     $('#tac-dice').innerHTML=`<div class="panel p-4 text-center pop-in w-full max-w-xs max-h-full overflow-y-auto scroll-slim"><p class="font-disp text-base text-ink/70">🎲 ROLL D20 · ${label}</p><div class="die-box mx-auto my-2 die-roll" id="tac-die">${d20SVG(1)}</div><p class="text-[11px] font-bold opacity-60">D20 ${dp?`+ ${dp} DP `:''}&gt; 10 = HIT</p><div id="tac-stamp" class="min-h-8 mt-1"></div><div id="tac-dmgdice" class="flex justify-center gap-2 mt-1"></div></div>`;
@@ -847,72 +1002,176 @@ const T={
     const die=$('#tac-die');let ticks=0;
     const iv=setInterval(()=>{ticks++;if(die)die.innerHTML=d20SVG(1+rnd(20));if(ticks%2===0)sfx('tick');},70);this.timers.push(iv);
     this.after(680,()=>{clearInterval(iv);if(die){die.classList.remove('die-roll');die.innerHTML=d20SVG(roll);die.classList.add('pop-in');}
-      const st=$('#tac-stamp');const txt=fumble?'FUMBLE!':crit?'CRITICAL!':hit?'HIT!':'MISS';const col=fumble||!hit?'text-coral':crit?'text-gold':'text-leaf';
+      const st=$('#tac-stamp'),txt=fumble?'FUMBLE!':crit?'CRITICAL!':hit?'HIT!':'MISS',col=fumble||!hit?'text-coral':crit?'text-gold':'text-leaf';
       if(st)st.innerHTML=`<p class="font-disp text-3xl stamp ${col}">${txt}</p><p class="text-xs font-bold opacity-70">${roll}${dp?` + ${dp}`:''} = <b>${total}</b></p>`;
       sfx(fumble?'error':crit?'crit':hit?'pop':'miss');
-      this.after(crit?620:480,()=>{if(kind!=='atk'||!hit)closeOv('tac-dice');done();});});
-  },
-  showDamage(dice,crit,done){
-    const box=$('#tac-dmgdice');if(box)box.innerHTML=dice.map((_,i)=>`<div class="die-sm die-roll" id="tac-d4-${i}">${d4SVG(1)}</div>`).join('');
+      this.after(crit?620:480,()=>{if(kind!=='atk'||!hit)closeOv('tac-dice');done();});});},
+  showDamage(dice,crit,done){const box=$('#tac-dmgdice');
+    if(box)box.innerHTML=dice.map((_,i)=>`<div class="die-sm die-roll" id="tac-d4-${i}">${d4SVG(1)}</div>`).join('');
     const iv=setInterval(()=>{dice.forEach((_,i)=>{const e=$('#tac-d4-'+i);if(e)e.innerHTML=d4SVG(1+rnd(4));});sfx('tick');},80);this.timers.push(iv);
     this.after(560,()=>{clearInterval(iv);dice.forEach((v,i)=>{const e=$('#tac-d4-'+i);if(e){e.classList.remove('die-roll');e.innerHTML=d4SVG(v);e.classList.add('pop-in');}});
       const st=$('#tac-stamp');if(st)st.innerHTML+=`<p class="text-xs font-bold text-gold">${crit?'2D4':'1D4'} = ${dice.reduce((a,b)=>a+b,0)}</p>`;
-      this.after(520,()=>{closeOv('tac-dice');done();});});
-  },
-  next(wasPlayer){
-    if(this.E.hp<=0)return this.finish('win');
-    if(this.P.hp<=0)return this.finish('lose');
-    if(!wasPlayer){this.turn++;if(this.turn>40)return this.finish('draw');return this.beginTurn();}
+      this.after(520,()=>{closeOv('tac-dice');done();});});},
+  next(wasPlayer){if(this.E.hp<=0)return this.finish('win');if(this.P.hp<=0)return this.finish('lose');
+    if(!wasPlayer){this.turn++;if(this.turn>TAC_TURN_CAP)return this.finish('draw');return this.beginTurn();}
     this.phase='enemy';this.setButtons(false);
     this.after(500,()=>{const E=this.E,P=this.P;let kind='atk';const r=Math.random();
       if(E.hp<E.max*.35&&r<.4)kind='heal';else if(!E.focus&&r<.22)kind='foc';else if(r<.34&&P.focus)kind='grd';
-      const names={atk:'SERANG',foc:'FOKUS',grd:'BERTAHAN',heal:'PULIH'};this.say(`${E.name} pakai ${names[kind]}!`);this.after(420,()=>this.resolve(E,P,kind,false));});
-  },
-  finish(outcome){
-    if(this.phase==='over'||this.phase==='idle')return;
+      const names={atk:'SERANG',foc:'FOKUS',grd:'BERTAHAN',heal:'PULIH'};
+      this.say(`${E.name} pakai ${names[kind]}!`);this.after(420,()=>this.resolve(E,P,kind,false));});},
+  finish(outcome){if(this.phase==='over'||this.phase==='idle')return;
     this.clearTimers();musicStop();closeOv('tac-dice');closeMenu();this.setButtons(false);
-    const D=DIFFS[this.diff],p=this.pet,mult=D.mult;
-    const baseExp=4+Math.floor(this.E.lv*1.5),baseCoins=8+this.E.lv*2;
-    let exp=0,coins=0,title='',cls='',drops=[];
-    if(outcome==='win'){exp=baseExp*mult;coins=baseCoins*mult;title='🏆 MENANG!';cls='text-gold';S.tacWins++;sfx('win');for(let i=0;i<mult;i++)drops.push(FOODS[rnd(FOODS.length)].id);}
-    else if(outcome==='lose'){exp=2;coins=2;title='💀 KALAH…';cls='text-coral';sfx('lose');}
-    else if(outcome==='draw'){exp=4;coins=6;title='🤝 SERI';cls='text-aqua';sfx('pop');}
+    const D=DIFFS[this.diff],p=this.pet,m=D.mult,baseExp=5+this.E.lv*2,baseCoins=10+this.E.lv*2;
+    let exp=0,coins=0,itemCount=0,title='',cls='';
+    if(outcome==='win'){exp=baseExp*m;coins=baseCoins*m;itemCount=m;title='🏆 MENANG!';cls='text-gold';S.tacWins++;sfx('win');}
+    else if(outcome==='lose'){exp=2;coins=3;title='💀 KALAH…';cls='text-coral';sfx('lose');}
+    else if(outcome==='draw'){exp=Math.floor(baseExp*.4*m);coins=Math.floor(baseCoins*.4*m);title='🤝 SERI';cls='text-aqua';sfx('pop');}
     else{exp=1;coins=2;title='🏃 KABUR';cls='text-ink/70';sfx('miss');}
-    S.tacPlays++;drops.forEach(f=>S.inv.foods[f]=(S.inv.foods[f]||0)+1);
-    addCoins(coins);if(p)applyExp(p,exp);save();renderHome();renderNav();this.phase='over';
+    const drops=[];for(let i=0;i<itemCount;i++){const f=FOODS[rnd(FOODS.length)].id;drops.push(f);S.inv.foods[f]=(S.inv.foods[f]||0)+1;}
+    S.tacPlays++;addCoins(coins);if(p)applyExp(p,exp);save();renderHome();renderNav();this.phase='over';
     const logHtml=this.log.map(l=>`<li class="logrow ${l.k==='p'?'text-ink':l.k==='e'?'text-coral':'text-ink/55'}"><span class="chip !text-[10px] !py-0 !px-1.5 shrink-0 ${l.k==='e'?'!bg-coral/20':l.k==='p'?'!bg-aqua/20':''}">${l.t?('T'+l.t):'INFO'}</span><span class="flex-1">${esc(l.x)}</span></li>`).join('');
     const evoBtn=evoReady(p)?`<button onclick="T.teardown();setTab('home');evolve()" class="btn bg-violet text-white w-full glow-pulse">🧬 EVOLUSI SEKARANG!</button>`:'';
-    showResult({title,cls,sub:`${D.emoji} ${D.label} ×${mult} · ${esc(this.E.name)} LV.${this.E.lv} · ${this.turn} giliran`,
-      body:`<div class="text-sm font-bold">${statRow('🪙','Koin didapat','+'+coins,'text-gold')}${statRow('⭐','EXP didapat','+'+exp,'text-leaf')}${statRow('⚔️','Damage diberi',this.stats.dealt)}${statRow('💢','Damage diterima',this.stats.taken)}${statRow('🎯','Hit / Miss / Kritikal',`${this.stats.hit} / ${this.stats.miss} / ${this.stats.crit}`)}${statRow('❤️','HP tersisa',`${Math.max(0,this.P.hp)}/${this.P.max}`)}
-        <p class="font-disp text-sm pt-3 pb-1.5 opacity-70">🎁 HADIAH ITEM (×${mult})</p><div class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 flex flex-wrap gap-1.5">${itemChips(drops)}</div>
-        <p class="font-disp text-sm pt-3 pb-1.5 opacity-70">📜 LOG PERTARUNGAN · ${this.log.length} ENTRI</p><ul class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 space-y-2">${logHtml}</ul></div>`,
-      buttons:`${evoBtn}<button onclick="T.start('${this.diff}')" class="btn bg-gold text-lg" ${!activePet()||activePet().energy<ACT_COST?'disabled':''}>↺ Tanding Lagi (−${ACT_COST}⚡)</button><button onclick="T.teardown();showArenaHub()" class="btn bg-white">🏠 Keluar ke Arena</button>`});
-  }
+    showResult({title,cls,sub:`${D.emoji} ${D.label} ×${m} · ${esc(this.E.name)} LV.${this.E.lv} · ${this.turn} giliran`,
+      body:`<div class="text-sm font-bold">${statRow('🪙','Koin didapat','+'+coins,'text-gold')}${statRow('⭐','EXP didapat','+'+exp,'text-leaf')}${statRow('⚔️','Damage diberi',this.stats.dealt)}${statRow('💢','Damage diterima',this.stats.taken)}${statRow('🎯','Hit / Miss / Krit',`${this.stats.hit} / ${this.stats.miss} / ${this.stats.crit}`)}${statRow('❤️','HP tersisa',`${Math.max(0,this.P.hp)}/${this.P.max}`)}<p class="font-disp text-sm pt-3 pb-1.5 opacity-70">🎁 HADIAH ITEM (×${m})</p><div class="flex flex-wrap gap-1.5">${itemChips(drops)}</div><p class="font-disp text-sm pt-3 pb-1.5 opacity-70">📜 LOG PERTARUNGAN · ${this.log.length} ENTRI</p><ul class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 space-y-2">${logHtml}</ul></div>`,
+      buttons:`${evoBtn}<button onclick="T.start('${this.diff}')" class="btn bg-gold text-lg" ${!activePet()||activePet().energy<ACT_COST?'disabled':''}>↺ Tanding Lagi (−${ACT_COST}⚡)</button><button onclick="T.teardown();showArenaHub()" class="btn bg-white">🏠 Keluar ke Arena</button>`});}
 };
 
-/* ============================ RPS DUEL ============================ */
+/* ============================ RPS ============================ */
 let B=null;
 const hearts=n=>'❤️'.repeat(n)+'🤍'.repeat(3-n);
-function startDuel(id){const p=activePet();if(!canAct(p))return;p.energy-=ACT_COST;save();B={bot:BOTS.find(b=>b.id===id),hpP:3,hpE:3,round:0,busy:false,over:false,log:[]};sfx('click');renderDuel();renderHome();}
+function startDuel(id){const p=activePet();if(!canAct(p))return;if(gameBusy())return toast('🎮','Selesaikan permainan dulu!');
+  p.energy-=ACT_COST;save();B={bot:BOTS.find(b=>b.id===id),hpP:3,hpE:3,round:0,busy:false,over:false,log:[]};sfx('click');renderDuel();renderHome();}
+function duelAgain(){closeResult();B=null;showArenaHub();renderDuelPick();}
+function duelExit(){closeResult();B=null;showArenaHub();}
 function pickRPS(id){if(!B||B.busy||B.over)return;B.busy=true;sfx('click');const pick=RPS.find(r=>r.id===id);
-  $('#p-choice').textContent='✊';$('#e-choice').textContent='✊';const step=$('#round-step');step.textContent='Gunting…';setTimeout(()=>step.textContent='Batu…',300);setTimeout(()=>step.textContent='Kertas!',600);
-  setTimeout(()=>{if(!B)return;const e=RPS[rnd(3)];$('#p-choice').textContent=pick.e;$('#e-choice').textContent=e.e;const res=pick.beats===e.id?'win':(e.beats===pick.id?'lose':'draw');if(res==='win'){B.hpE--;sfx('pop');}else if(res==='lose'){B.hpP--;sfx('error');}
+  $('#p-choice').textContent='✊';$('#e-choice').textContent='✊';const step=$('#round-step');
+  step.textContent='Gunting…';setTimeout(()=>{if(step.isConnected)step.textContent='Batu…';},300);setTimeout(()=>{if(step.isConnected)step.textContent='Kertas!';},600);
+  setTimeout(()=>{if(!B||!$('#p-choice'))return;const e=RPS[rnd(3)];$('#p-choice').textContent=pick.e;$('#e-choice').textContent=e.e;
+    const res=pick.beats===e.id?'win':(e.beats===pick.id?'lose':'draw');
+    if(res==='win'){B.hpE--;sfx('pop');}else if(res==='lose'){B.hpP--;sfx('error');}
     const bn=$('#round-banner');bn.textContent=res==='win'?'RONDE MENANG! 🎉':res==='lose'?'KALAH RONDE 💦':'SERI! 🤝';bn.className='font-disp text-lg text-center '+(res==='win'?'text-leaf':res==='lose'?'text-coral':'text-gold');
     B.round++;B.log.unshift(`R${B.round}: ${pick.e} vs ${e.e} → ${res==='win'?'MENANG':res==='lose'?'KALAH':'SERI'}`);
     if(B.hpE<=0)return endDuel('win');if(B.hpP<=0)return endDuel('lose');if(B.round>=8)return endDuel(B.hpE<B.hpP?'win':B.hpP<B.hpE?'lose':'draw');
-    $('#hp-p').innerHTML=hearts(B.hpP);$('#hp-e').innerHTML=hearts(B.hpE);B.busy=false;$('#b-log').innerHTML=B.log.slice(0,4).map(x=>`<li>• ${x}</li>`).join('');},950);}
-function endDuel(res){B.over=true;const p=activePet();const coins=res==='win'?B.bot.coins:res==='draw'?Math.round(B.bot.coins/2):2,exp=res==='win'?5:res==='draw'?3:0;applyExp(p,exp);addCoins(coins);setTempMood(p,res==='lose'?'sad':'excite');sfx(res==='win'?'win':res==='lose'?'lose':'pop');save();renderHome();
-  showResult({title:res==='win'?'🏆 MENANG!':res==='lose'?'💦 KALAH…':'🤝 SERI',cls:res==='win'?'text-leaf':res==='lose'?'text-coral':'text-gold',sub:`Duel Gunting-Batu-Kertas · ${B.bot.name} · ${B.round} ronde`,
-    body:`<div class="text-sm font-bold">${statRow('🪙','Koin didapat','+'+coins,'text-gold')}${statRow('⭐','EXP didapat','+'+exp,'text-leaf')}${statRow('❤️','Nyawa tersisa',hearts(B.hpP))}<p class="font-disp text-sm pt-3 pb-1.5 opacity-70">📜 LOG RONDE</p><ul class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 space-y-1.5">${B.log.map(x=>`<li class="logrow">${esc(x)}</li>`).join('')}</ul></div>`,
-    buttons:`<button onclick="closeResult();B=null;renderDuel()" class="btn bg-gold text-lg">↺ Lawan Lagi (−${ACT_COST}⚡)</button><button onclick="closeResult();B=null;showArenaHub()" class="btn bg-white">🏠 Keluar ke Arena</button>`});}
-function renderDuel(){const p=activePet();hideEl('arena-hub');hideEl('arena-run');hideEl('arena-rain');hideEl('arena-tactic');showEl('arena-rps');
-  $('#arena-rps').innerHTML=`<div class="h-full flex flex-col p-2 gap-2 max-w-2xl mx-auto w-full"><div class="panel flex-1 min-h-0 p-3 flex flex-col"><div class="flex items-center justify-between shrink-0"><div class="text-center flex-1"><div class="mx-auto w-fit slime-idle">${slimeSVG(p,80)}</div><p class="font-disp text-sm">${esc(p.nick)}</p><p id="hp-p" class="text-base">${hearts(B.hpP)}</p></div><div class="text-center px-2"><p class="font-disp text-2xl text-coral">VS</p><p id="round-step" class="font-disp text-xs min-h-4"></p><p class="text-[10px] font-bold opacity-60">Ronde ${B.round}/8</p></div><div class="text-center flex-1"><div class="w-14 h-14 mx-auto rounded-full grid place-items-center text-3xl border-4 border-ink" style="background:${B.bot.aura}">${B.bot.emoji}</div><p class="font-disp text-sm">${B.bot.name}</p><p id="hp-e" class="text-base">${hearts(B.hpE)}</p></div></div><div class="flex justify-center items-center gap-8 my-1 min-h-12 shrink-0"><span id="p-choice" class="text-5xl">❔</span><span class="font-disp opacity-40">×</span><span id="e-choice" class="text-5xl">❔</span></div><p id="round-banner" class="font-disp text-lg text-center min-h-6"></p><ul id="b-log" class="text-[12px] font-bold opacity-70 mt-1 flex-1 overflow-y-auto scroll-slim space-y-1">${B.log.slice(0,4).map(x=>`<li>• ${x}</li>`).join('')}</ul></div><div class="grid grid-cols-3 gap-2 shrink-0">${RPS.map(r=>`<button onclick="pickRPS('${r.id}')" class="btn bg-cream2 flex-col !gap-0 !py-1.5 ${B.busy?'opacity-50 pointer-events-none':''}"><span class="text-2xl">${r.e}</span><span class="text-xs">${r.label}</span></button>`).join('')}</div></div>`;}
+    $('#hp-p').innerHTML=hearts(B.hpP);$('#hp-e').innerHTML=hearts(B.hpE);B.busy=false;$('#b-log').innerHTML=B.log.slice(0,4).map(x=>`<li>• ${esc(x)}</li>`).join('');},950);}
+function endDuel(res){B.over=true;const p=activePet();
+  const coins=res==='win'?B.bot.coins:res==='draw'?Math.round(B.bot.coins/2):2,exp=res==='win'?5+Math.floor((p?p.level:1)*.6):res==='draw'?3:0;
+  applyExp(p,exp);addCoins(coins);if(p)setTempMood(p,res==='lose'?'sad':'excite');
+  sfx(res==='win'?'win':res==='lose'?'lose':'pop');save();renderHome();
+  showResult({title:res==='win'?'🏆 MENANG!':res==='lose'?'💦 KALAH…':'🤝 SERI',cls:res==='win'?'text-leaf':res==='lose'?'text-coral':'text-gold',
+    sub:`Gunting-Batu-Kertas · ${B.bot.name} · ${B.round} ronde`,
+    body:`<div class="text-sm font-bold">${statRow('🪙','Koin','+'+coins,'text-gold')}${statRow('⭐','EXP','+'+exp,'text-leaf')}${statRow('❤️','Nyawa',hearts(B.hpP))}<p class="font-disp text-sm pt-3 pb-1.5 opacity-70">📜 LOG RONDE</p><ul class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 space-y-1.5">${B.log.map(x=>`<li class="logrow">${esc(x)}</li>`).join('')}</ul></div>`,
+    buttons:`<button onclick="duelAgain()" class="btn bg-gold text-lg">↺ Lawan Lagi</button><button onclick="duelExit()" class="btn bg-white">🏠 Keluar ke Arena</button>`});}
+function renderDuel(){const p=activePet();if(!p||!B)return;
+  hideEl('arena-hub');hideEl('arena-run');hideEl('arena-rain');hideEl('arena-tactic');showEl('arena-rps');
+  $('#arena-rps').innerHTML=`<div class="h-full flex flex-col p-2 gap-2 max-w-2xl mx-auto w-full"><div class="panel flex-1 min-h-0 p-3 flex flex-col"><div class="flex items-center justify-between shrink-0"><div class="text-center flex-1"><div class="mx-auto w-fit slime-idle">${slimeSVG(p,80)}</div><p class="font-disp text-sm">${esc(p.nick)}</p><p id="hp-p" class="text-base">${hearts(B.hpP)}</p></div><div class="text-center px-2"><p class="font-disp text-2xl text-coral">VS</p><p id="round-step" class="font-disp text-xs min-h-4"></p><p class="text-[10px] font-bold opacity-60">Ronde ${B.round}/8</p></div><div class="text-center flex-1"><div class="w-14 h-14 mx-auto rounded-full grid place-items-center text-3xl border-4 border-ink" style="background:${B.bot.aura}">${B.bot.emoji}</div><p class="font-disp text-sm">${B.bot.name}</p><p id="hp-e" class="text-base">${hearts(B.hpE)}</p></div></div><div class="flex justify-center items-center gap-8 my-1 min-h-12 shrink-0"><span id="p-choice" class="text-5xl">❔</span><span class="font-disp opacity-40">×</span><span id="e-choice" class="text-5xl">❔</span></div><p id="round-banner" class="font-disp text-lg text-center min-h-6"></p><ul id="b-log" class="text-[12px] font-bold opacity-70 mt-1 flex-1 overflow-y-auto scroll-slim space-y-1">${B.log.slice(0,4).map(x=>`<li>• ${esc(x)}</li>`).join('')}</ul></div><div class="grid grid-cols-3 gap-2 shrink-0">${RPS.map(r=>`<button onclick="pickRPS('${r.id}')" class="btn bg-cream2 flex-col !gap-0 !py-1.5 ${B.busy?'opacity-50 pointer-events-none':''}"><span class="text-2xl">${r.e}</span><span class="text-xs">${r.label}</span></button>`).join('')}</div></div>`;}
+
+/* ============================ STUDIO ============================ */
+const STU={slot:'head',pal:[...DEF_PAL],color:3,tool:'brush',size:1,mirror:true,grid:true,
+  drafts:{head:new Array(GRID*GRID).fill(0),face:new Array(GRID*GRID).fill(0),neck:new Array(GRID*GRID).fill(0)},
+  undo:[],redo:[],drawing:false,last:null,px:10,dpr:1,open:false};
+const stuCells=()=>STU.drafts[STU.slot];
+function stuSnapshot(){STU.undo.push(Array.from(stuCells()));if(STU.undo.length>26)STU.undo.shift();STU.redo.length=0;}
+function stuResize(){const box=$('#stu-area'),c=$('#stu-canvas');if(!box||!c)return;
+  const w=box.clientWidth,h=box.clientHeight;if(w<40||h<40)return;
+  const size=Math.max(120,Math.min(w-16,h-16)),dpr=Math.min(2,window.devicePixelRatio||1);
+  c.style.width=size+'px';c.style.height=size+'px';c.width=Math.round(size*dpr);c.height=Math.round(size*dpr);
+  STU.px=size/GRID;STU.dpr=dpr;stuDraw();}
+function stuDraw(){const c=$('#stu-canvas'),ctx=c.getContext('2d');if(!ctx)return;
+  const size=STU.px*GRID,cells=stuCells();
+  ctx.setTransform(STU.dpr,0,0,STU.dpr,0,0);ctx.clearRect(0,0,size,size);
+  for(let y=0;y<GRID;y++)for(let x=0;x<GRID;x++){ctx.fillStyle=((x+y)%2)?'#fff9ef':'#f3ead9';ctx.fillRect(x*STU.px,y*STU.px,STU.px,STU.px);}
+  for(let y=0;y<GRID;y++)for(let x=0;x<GRID;x++){const v=cells[y*GRID+x];if(v){ctx.fillStyle=STU.pal[v-1]||'#14324f';ctx.fillRect(x*STU.px,y*STU.px,STU.px+.5,STU.px+.5);}}
+  if(STU.grid){ctx.strokeStyle='rgba(20,50,79,.10)';ctx.lineWidth=1;ctx.beginPath();
+    for(let i=1;i<GRID;i++){ctx.moveTo(i*STU.px,0);ctx.lineTo(i*STU.px,size);ctx.moveTo(0,i*STU.px);ctx.lineTo(size,i*STU.px);}ctx.stroke();}
+  if(STU.mirror){ctx.strokeStyle='rgba(255,183,3,.85)';ctx.lineWidth=2;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(size/2,0);ctx.lineTo(size/2,size);ctx.stroke();ctx.setLineDash([]);}}
+function stuPaint(cx,cy){const cells=stuCells(),n=STU.size,off=Math.floor((n-1)/2),val=STU.tool==='erase'?0:STU.color;
+  for(let dy=0;dy<n;dy++)for(let dx=0;dx<n;dx++){
+    const x=cx+dx-off,y=cy+dy-off;if(x<0||y<0||x>=GRID||y>=GRID)continue;
+    cells[y*GRID+x]=val;if(STU.mirror){const mx=GRID-1-x;if(mx>=0&&mx<GRID)cells[y*GRID+mx]=val;}}}
+function stuLine(x0,y0,x1,y1){const dx=Math.abs(x1-x0),dy=Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let err=dx-dy,x=x0,y=y0;
+  for(let i=0;i<200;i++){stuPaint(x,y);if(x===x1&&y===y1)break;const e2=2*err;if(e2>-dy){err-=dy;x+=sx;}if(e2<dx){err+=dx;y+=sy;}}}
+function stuFill(cx,cy){const cells=stuCells(),target=cells[cy*GRID+cx],val=STU.tool==='erase'?0:STU.color;
+  if(target===val)return;const q=[[cx,cy]];let guard=0;
+  while(q.length&&guard++<4000){const [x,y]=q.pop();if(x<0||y<0||x>=GRID||y>=GRID)continue;
+    if(cells[y*GRID+x]!==target)continue;cells[y*GRID+x]=val;
+    q.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);}
+  if(STU.mirror){const copy=Array.from(cells);for(let y=0;y<GRID;y++)for(let x=0;x<GRID;x++)cells[y*GRID+(GRID-1-x)]=copy[y*GRID+x];}}
+function stuPos(e){const r=$('#stu-canvas').getBoundingClientRect();
+  return[Math.max(0,Math.min(GRID-1,Math.floor((e.clientX-r.left)/r.width*GRID))),Math.max(0,Math.min(GRID-1,Math.floor((e.clientY-r.top)/r.height*GRID)))];}
+function stuPreview(){const p=activePet();const box=$('#stuPreview');if(!box)return;
+  const data=encodeCells(stuCells());
+  PREVIEW_DESIGN={slot:STU.slot,pal:STU.pal,data};
+  const base=p||{id:'demo',nick:'Demo',element:null,evolved:false,level:1,energy:10,full:80,fun:80,clean:80,skin:'default',head:null,face:null,neck:null,bonus:zeroAttr(),gift:zeroAttr()};
+  const clone={...base,[STU.slot]:'__preview'};
+  box.innerHTML=slimeSVG(clone,120,'happy');PREVIEW_DESIGN=null;}
+function stuSyncUI(){
+  ['head','face','neck'].forEach(k=>{const b=$('#stu-slot-'+k);if(b)b.classList.toggle('active',STU.slot===k);});
+  ['brush','erase','fill'].forEach(k=>{const b=$('#stu-t-'+k);if(b)b.classList.toggle('on',STU.tool===k);});
+  $('#stuMirror').classList.toggle('on',STU.mirror);$('#stuGrid').classList.toggle('on',STU.grid);
+  $('#stuSizeTxt').textContent=STU.size;$('#stuSize').value=STU.size;
+  $('#stuCur').style.background=STU.pal[STU.color-1];$('#stuCustom').value=STU.pal[STU.color-1];
+  $('#stuPal').innerHTML=STU.pal.map((c,i)=>`<button class="swatch ${STU.color===i+1?'on':''}" style="background:${c}" onclick="stuColor(${i+1})" title="Warna ${i+1}"></button>`).join('');
+  const blanks=S.inv.blanks[STU.slot]||0,has=S.inv.canvas;
+  $('#stuBlank').innerHTML=`${SLOTS[STU.slot].emoji} Pola: <b>${blanks}</b>`;
+  const painted=stuCells().some(v=>v);
+  const btn=$('#stuCraft');btn.disabled=!has||blanks<=0||!painted;
+  btn.innerHTML=!has?'🔒 Butuh Kanvas Ajaib':blanks<=0?`🔒 Butuh Pola ${SLOTS[STU.slot].label}`:`🎁 Tukar → Kostum ${SLOTS[STU.slot].label} (−1 Pola)`;
+  $('#stuHint').textContent=`Slot ${SLOTS[STU.slot].label} · ${STU.tool==='brush'?'Kuas':STU.tool==='erase'?'Hapus':'Isi'} ${STU.size}px`;}
+function stuColor(i){STU.color=i;stuSyncUI();sfx('click');}
+function stuTool(t){STU.tool=t;stuSyncUI();sfx('click');}
+function stuToggle(k){STU[k]=!STU[k];stuDraw();stuSyncUI();sfx('click');}
+function stuSetSlot(s){if(STU.slot===s)return;STU.slot=s;STU.undo=[];STU.redo=[];stuDraw();stuPreview();stuSyncUI();sfx('click');}
+function stuUndo(){if(!STU.undo.length)return toast('↺','Tidak ada yang bisa dibatalkan.');
+  STU.redo.push(Array.from(stuCells()));STU.drafts[STU.slot]=STU.undo.pop();stuDraw();stuPreview();stuSyncUI();sfx('click');}
+function stuRedo(){if(!STU.redo.length)return toast('↻','Tidak ada yang bisa diulang.');
+  STU.undo.push(Array.from(stuCells()));STU.drafts[STU.slot]=STU.redo.pop();stuDraw();stuPreview();stuSyncUI();sfx('click');}
+function stuClear(){stuSnapshot();STU.drafts[STU.slot]=new Array(GRID*GRID).fill(0);stuDraw();stuPreview();stuSyncUI();sfx('pop');}
+function stuRandom(){stuSnapshot();const c=new Array(GRID*GRID).fill(0),cx=(GRID-1)/2,cy=GRID*.55;
+  for(let y=0;y<GRID;y++)for(let x=0;x<=Math.floor(cx);x++){
+    const d=Math.hypot((x-cx)/9,(y-cy)/8);
+    if(d<1&&Math.random()>.28-d*.2){const v=Math.random()<.22?Math.max(1,STU.color-1):STU.color;c[y*GRID+x]=v;c[y*GRID+(GRID-1-x)]=v;}}
+  STU.drafts[STU.slot]=c;stuDraw();stuPreview();stuSyncUI();sfx('star');}
+function stuCraft(){const p=activePet();
+  if(!S.inv.canvas)return toast('🔒','Beli Kanvas Ajaib dulu di Toko!');
+  if(!p)return toast('🥚','Butuh slime aktif untuk memakai kostum.');
+  if((S.inv.blanks[STU.slot]||0)<=0)return toast('🔒',`Butuh Pola ${SLOTS[STU.slot].label}!`);
+  if(!stuCells().some(v=>v))return toast('✏️','Kanvas masih kosong!');
+  const nameEl=$('#stuName');
+  const name=(nameEl.value||'').trim().slice(0,16)||`${SLOTS[STU.slot].label} Karya #${S.crafted+1}`;
+  const d={id:'c'+Date.now()+rnd(99),name,slot:STU.slot,pal:[...STU.pal],data:encodeCells(stuCells())};
+  S.inv.blanks[STU.slot]--;S.designs.push(d);S.crafted++;p[STU.slot]=d.id;SPR.key='';
+  save();sfx('craft');stuClear();nameEl.value='';stuSyncUI();renderHome();renderNav();
+  showModal(`<div class="panel p-6 text-center"><p class="font-disp text-2xl text-violet">🎁 KOSTUM JADI!</p>
+    <div class="flex justify-center my-3 pop-in">${slimeSVG(p,150,'excite')}</div>
+    <div class="flex items-center justify-center gap-2">${designThumb(d,40)}<b class="font-disp text-xl">${esc(d.name)}</b></div>
+    <p class="text-xs font-bold opacity-70 mt-2">Desain ditukar dengan 1 Pola ${SLOTS[d.slot].label} dan langsung dipakai ${esc(p.nick)}!</p>
+    <div class="flex flex-col gap-2 mt-4"><button onclick="closeModal()" class="btn bg-gold">🎨 Gambar Lagi</button><button onclick="closeModal();closeStudio();setTab('home')" class="btn bg-white text-sm">🏠 Lihat di Kandang</button></div></div>`);}
+function openStudio(){if(!S.inv.canvas){shopTab='kreativitas';setTab('shop');return toast('🔒','Beli Kanvas Ajaib dulu ya!');}
+  STU.open=true;showEl('studio');stuResize();stuDraw();stuPreview();stuSyncUI();sfx('select');}
+function closeStudio(){STU.open=false;hideEl('studio');PREVIEW_DESIGN=null;sfx('click');if(curTab==='home')renderHome();}
+
+/* ============================ SCENE ============================ */
+function applyScene(){const sc=SCENES[S.scene]||SCENES.meadow;
+  document.body.style.background=`linear-gradient(180deg,${sc.body[0]},${sc.body[1]} 55%,${sc.body[2]})`;
+  document.querySelectorAll('#bgLayer .cloud').forEach(c=>c.style.opacity=sc.cloud);}
+function sceneInner(sc){
+  const amb=Array.from({length:sc.amb.n},(_,i)=>{const r=hash(i*3+1),r2=hash(i*7+2);
+    return `<span class="amb" style="left:${(r*92+3).toFixed(1)}%;top:${(r2*62+6).toFixed(1)}%;font-size:${(9+r*9).toFixed(0)}px;color:${sc.amb.c};animation-duration:${(3+r2*4).toFixed(1)}s;animation-delay:${(-r*4).toFixed(1)}s">${sc.amb.e}</span>`;}).join('');
+  const decor=sc.decor.map(([e,l,b])=>`<span class="absolute text-lg" style="left:${l}%;bottom:${b}%">${e}</span>`).join('');
+  return `<div class="absolute top-4 left-5 w-12 h-12 rounded-full border-4 border-white/40" style="background:${sc.sun};box-shadow:0 0 26px ${sc.glow}"></div>
+    <div class="cloud w-20 h-6" style="top:16%;animation-duration:38s;opacity:${sc.cloud}"></div>
+    <div class="cloud w-14 h-4" style="top:32%;animation-duration:56s;animation-delay:-20s;opacity:${sc.cloud*.8}"></div>
+    ${amb}${decor}
+    <svg class="absolute bottom-0 w-full" viewBox="0 0 400 90" preserveAspectRatio="none" style="height:32%"><path d="M0 90 V50 Q80 12 160 45 Q240 76 320 40 Q370 24 400 46 V90Z" fill="${sc.hill[0]}"/><path d="M0 90 V66 Q100 42 200 62 Q300 82 400 58 V90Z" fill="${sc.hill[1]}"/></svg>`;}
 
 /* ============================ SCREENS ============================ */
-function renderHeader(){$('#coinTxt').textContent=S.coins;$('#hatchTxt').textContent=S.inv.hatch;$('#btnSound').textContent=S.sound?'🔊':'🔇';}
+function renderHeader(){$('#coinTxt').textContent=S.coins;$('#hatchTxt').textContent=S.inv.hatch;
+  const ic=S.sound?'🔊':'🔇';$('#btnSound').textContent=ic;const bt=$('#btnSoundTitle');if(bt)bt.textContent=ic;}
 const TABS=[{id:'home',icon:'🏠',label:'Rumah'},{id:'egg',icon:'🥚',label:'Telur'},{id:'battle',icon:'🎮',label:'Arena'},{id:'shop',icon:'🛍️',label:'Toko'},{id:'collect',icon:'🫧',label:'Koleksi'}];
 function renderNav(){const p=activePet(),eggReady=S.incubator&&S.incubator.endsAt<=Date.now();
-  $('#bottomNav').innerHTML=`<div class="grid grid-cols-5 max-w-md mx-auto px-2">${TABS.map(t=>{let badge='';if(t.id==='egg'&&eggReady)badge='<span class="nav-dot"></span>';if(t.id==='home'&&evoReady(p))badge='<span class="nav-dot gold"></span>';return `<button onclick="setTab('${t.id}')" class="relative flex flex-col items-center gap-0.5 py-1.5 ${curTab===t.id?'text-aqua':'opacity-60 hover:opacity-90'}"><span class="text-2xl leading-none">${t.icon}</span><span class="font-disp text-[11px]">${t.label}</span>${badge}${curTab===t.id?'<span class="absolute bottom-0 w-8 h-1 rounded-full bg-gold"></span>':''}</button>`;}).join('')}</div>`;}
+  $('#bottomNav').innerHTML=`<div class="grid grid-cols-5 max-w-md mx-auto px-2">${TABS.map(t=>{let badge='';
+    if(t.id==='egg'&&eggReady)badge='<span class="nav-dot"></span>';if(t.id==='home'&&evoReady(p))badge='<span class="nav-dot gold"></span>';
+    return `<button onclick="setTab('${t.id}')" class="relative flex flex-col items-center gap-0.5 py-1.5 ${curTab===t.id?'text-aqua':'opacity-60 hover:opacity-90'}"><span class="text-2xl leading-none">${t.icon}</span><span class="font-disp text-[11px]">${t.label}</span>${badge}${curTab===t.id?'<span class="absolute bottom-0 w-8 h-1 rounded-full bg-gold"></span>':''}</button>`;}).join('')}</div>`;}
 function setTab(t){
   if(curTab==='battle'&&t!=='battle'){Run.suspend();Rain.suspend();T.suspend();}
   curTab=t;syncPopups();renderNav();
@@ -920,83 +1179,219 @@ function setTab(t){
   if(t==='home')renderHome();else if(t==='egg')renderEgg();
   else if(t==='battle'){
     if(Run.phase!=='idle'){hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-rain');hideEl('arena-tactic');showEl('arena-run');Run.resize();Run.wake();}
-    else if(Rain.phase!=='idle'){hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-run');hideEl('arena-tactic');showEl('arena-rain');Rain.resize();Rain.wake();}
-    else if(T.phase!=='idle'){hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-run');hideEl('arena-rain');showEl('arena-tactic');T.resize();T.wake();}
+    else if(Rain.phase!=='idle'){hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-run');hideEl('arena-tactic');showEl('arena-rain');Rain.resize();}
+    else if(T.phase!=='idle'){hideEl('arena-hub');hideEl('arena-rps');hideEl('arena-run');hideEl('arena-rain');showEl('arena-tactic');T.resize();}
+    else if(B&&!B.over)renderDuel();
     else showArenaHub();}
   else if(t==='shop')renderShop();else if(t==='collect')renderCollect();}
 function showArenaHub(){['arena-run','arena-rain','arena-rps','arena-tactic'].forEach(hideEl);showEl('arena-hub');renderHub();}
 function meter(icon,title,id,v,grad){return `<div class="flex items-center gap-1 min-w-0" title="${title}"><span class="text-sm shrink-0">${icon}</span><div class="bar flex-1 min-w-0 !h-2.5"><div id="bar-${id}" class="!bg-gradient-to-r ${grad}" style="width:${v}%"></div></div><span id="txt-${id}" class="text-[10px] font-bold w-6 text-right shrink-0">${Math.round(v)}</span></div>`;}
-function renderHome(){const p=activePet(),wrap=$('#tab-home');
+function renderHome(){const p=activePet(),wrap=$('#tab-home'),sc=SCENES[S.scene]||SCENES.meadow;
+  const canvasBtn=`<button onclick="openStudio()" class="absolute bottom-3 right-3 z-30 panel !rounded-2xl !shadow-pops p-1.5 flex flex-col items-center gap-0.5 hover:-translate-y-1 transition-transform" title="Studio Kreatif">
+    <span class="w-9 h-9 rounded-lg border-[3px] border-ink grid place-items-center text-lg" style="background:repeating-conic-gradient(#fff9ef 0% 25%,#f0e4cf 0% 50%) 50%/10px 10px">${S.inv.canvas?'🎨':'🔒'}</span>
+    <span class="font-disp text-[9px] leading-none">KANVAS</span></button>`;
   if(!p){wrap.innerHTML=`<div class="h-full grid place-items-center p-4"><div class="panel p-6 text-center max-w-sm"><div class="egg-idle w-fit mx-auto">${eggSVG(110)}</div><h3 class="font-disp text-2xl mt-2">Belum Ada Slime</h3><p class="text-sm font-bold opacity-70 mt-1">Eramkan telur pertamamu — cuma 1 menit!</p><button onclick="setTab('egg')" class="btn bg-gold mt-4 w-full">🥚 Ke Tab Telur</button></div></div>`;return;}
-  const sleeping=p.sleepUntil&&p.sleepUntil>Date.now(),pal=petPal(p),tb=totalBonus(p);
+  const sleeping=p.sleepUntil&&p.sleepUntil>Date.now(),pal=petPal(p),ta=totAttr(p),gt=ATTR_KEYS.reduce((a,k)=>a+p.gift[k],0);
   const aura=p.evolved?`<div class="absolute left-1/2 -translate-x-1/2 bottom-6 w-52 h-24 rounded-full blur-2xl opacity-40 z-0" style="background:${pal.c2}"></div>`:'';
-  wrap.innerHTML=`<div class="h-full flex flex-col md:flex-row gap-2 p-2 overflow-hidden"><div id="scene" class="flex-1 min-h-0 relative rounded-3xl border-[3px] border-ink shadow-pop overflow-hidden bg-gradient-to-b from-[#8fd9f7] to-[#dff6ff]"><div class="absolute top-4 left-5 w-12 h-12 rounded-full bg-gold border-4 border-amber-300"></div><div class="cloud w-20 h-6" style="top:16%;animation-duration:38s"></div><span class="absolute text-lg" style="left:8%;bottom:18%">🌼</span><span class="absolute text-lg" style="right:10%;bottom:12%">🌷</span><svg class="absolute bottom-0 w-full" viewBox="0 0 400 90" preserveAspectRatio="none" style="height:32%"><path d="M0 90 V50 Q80 12 160 45 Q240 76 320 40 Q370 24 400 46 V90Z" fill="#9bd77f"/><path d="M0 90 V66 Q100 42 200 62 Q300 82 400 58 V90Z" fill="#6cbb56"/></svg>${aura}<div id="pet-holder" class="absolute left-1/2 -translate-x-1/2 bottom-8 md:bottom-12 z-20 md:scale-125 origin-bottom"><div class="${p.evolved&&p.element==='angin'?'slime-float':'slime-idle'}">${slimeSVG(p,180)}</div></div><div class="absolute left-1/2 -translate-x-1/2 bottom-6 w-32 h-4 bg-ink/20 rounded-full blur-[2px] z-10 md:scale-125"></div><div class="absolute top-3 left-3 z-30 chip !bg-cream2 !py-0.5 !px-2.5 text-xs">${p.evolved?EVOS[p.element].emoji:'🫧'} <b>${esc(p.nick)}</b> · LV.${p.level}</div><div id="mood-bubble" class="absolute top-3 right-3 z-30"></div>${S.inv.toys.map((id,i)=>{const t=TOYS.find(x=>x.id===id);return `<span class="absolute bottom-5 z-10 text-2xl" style="left:${14+i*9}%">${t.emoji}</span>`;}).join('')}${sleeping?`<div class="absolute inset-0 z-40 bg-[#0b1d3a]/80 flex flex-col items-center justify-center"><span class="text-3xl">🌙</span><p class="font-disp text-cream text-xl mt-1">Zzz… tidur nyenyak</p><div class="w-48 bar mt-2 !bg-white/20"><div id="sleep-fill" class="!bg-gold" style="width:0%"></div></div><p id="sleep-cd" class="font-disp text-cream mt-1 text-lg">--:--</p><button onclick="doWake()" class="btn bg-cream mt-2 text-sm">Bangunkan ⏰</button><span id="zzz-box"></span></div>`:''}</div><div class="shrink-0 md:w-72 lg:w-80 flex flex-col gap-2 min-h-0"><div class="panel p-2.5"><div class="flex items-center gap-2"><span class="font-disp text-lg bg-gold border-[3px] border-ink rounded-xl px-2 py-0.5 leading-none shadow-pops">LV.${p.level}</span><div class="flex-1 min-w-0"><div class="bar !h-3"><div id="exp-fill" class="!bg-gradient-to-r from-lime-400 to-green-500" style="width:${p.level>=MAX_LV?100:Math.min(100,p.exp/EXP_NEED(p.level)*100)}%"></div></div><p id="exp-txt" class="text-[10px] font-bold opacity-70 mt-0.5">${p.level>=MAX_LV?'MAX LEVEL 100':`${Math.floor(p.exp)} / ${EXP_NEED(p.level)} EXP`}</p></div></div><div class="flex items-center gap-2 mt-1.5"><span class="font-disp text-sm">⚡</span><div id="energy-pips" class="flex gap-0.5 flex-1"></div><span class="text-xs font-extrabold">${p.energy}/${ENERGY_MAX}</span></div><div class="grid grid-cols-3 gap-1.5 mt-2">${meter('🍎','Kenyang','full',p.full,'from-amber-400 to-orange-500')}${meter('🎈','Keceriaan','fun',p.fun,'from-pink-400 to-rose-500')}${meter('🫧','Kebersihan','clean',p.clean,'from-sky-400 to-cyan-500')}</div><div class="flex flex-wrap gap-1 mt-2"><span class="chip !text-[10px] !py-0 !px-2">❤️ ${maxHP(p)}</span><span class="chip !text-[10px] !py-0 !px-2">🗡️ +${tb.dmg}</span><span class="chip !text-[10px] !py-0 !px-2">🛡️ +${tb.def}</span><span class="chip !text-[10px] !py-0 !px-2">🎲 +${tb.dp}</span></div></div><div class="panel p-2"><div class="grid grid-cols-4 md:grid-cols-2 gap-1.5"><button onclick="openFoodTray()" title="−2⚡" class="btn bg-orange-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">🍎</span>Makan</button><button onclick="doPlay()" title="−2⚡" class="btn bg-pink-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">🎾</span>Main</button><button onclick="doService()" title="−2⚡" class="btn bg-sky-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">🫧</span>Servis</button>${sleeping?`<button onclick="doWake()" class="btn bg-indigo-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">⏰</span>Bangun</button>`:`<button onclick="doSleep()" class="btn bg-indigo-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">💤</span>Tidur</button>`}</div>${evoReady(p)?`<button onclick="evolve()" class="btn bg-violet text-white w-full mt-1.5 glow-pulse">🧬 EVOLUSI SEKARANG!</button>`:''}</div></div></div>`;
+  wrap.innerHTML=`<div class="h-full flex flex-col md:flex-row gap-2 p-2 overflow-hidden">
+    <div id="scene" class="flex-1 min-h-0 relative rounded-3xl border-[3px] border-ink shadow-pop overflow-hidden" style="background:linear-gradient(180deg,${sc.sky[0]},${sc.sky[1]})">
+      ${sceneInner(sc)}${aura}
+      <div id="pet-holder" class="absolute left-1/2 -translate-x-1/2 bottom-8 md:bottom-12 z-20 md:scale-125 origin-bottom"><div class="${p.evolved&&p.element==='angin'?'slime-float':'slime-idle'}">${slimeSVG(p,180)}</div></div>
+      <div class="absolute left-1/2 -translate-x-1/2 bottom-6 w-32 h-4 bg-ink/20 rounded-full blur-[2px] z-10 md:scale-125"></div>
+      <div class="absolute top-3 left-3 z-30 chip !bg-cream2 !py-0.5 !px-2.5 text-xs">${p.evolved?EVOS[p.element].emoji:'🫧'} <b>${esc(p.nick)}</b> · LV.${p.level}</div>
+      <div id="mood-bubble" class="absolute top-3 right-3 z-30"></div>
+      <span class="absolute top-12 left-3 z-30 chip !text-[10px] !py-0 !px-2 !bg-white/80">${sc.emoji} ${sc.name}</span>
+      ${S.inv.toys.map((id,i)=>{const t=TOYS.find(x=>x.id===id);return `<span class="absolute bottom-5 z-10 text-2xl" style="left:${10+i*9}%">${t.emoji}</span>`;}).join('')}
+      ${canvasBtn}
+      ${sleeping?`<div class="absolute inset-0 z-40 bg-[#0b1d3a]/80 flex flex-col items-center justify-center"><span class="text-3xl">🌙</span><p class="font-disp text-cream text-xl mt-1">Zzz… tidur nyenyak</p><div class="w-48 bar mt-2 !bg-white/20"><div id="sleep-fill" class="!bg-gold" style="width:0%"></div></div><p id="sleep-cd" class="font-disp text-cream mt-1 text-lg">--:--</p><button onclick="doWake()" class="btn bg-cream mt-2 text-sm">Bangunkan ⏰</button><span id="zzz-box"></span></div>`:''}
+    </div>
+    <div class="shrink-0 md:w-72 lg:w-80 flex flex-col gap-2 min-h-0">
+      <div class="panel p-2.5">
+        <div class="flex items-center gap-2"><span class="font-disp text-base bg-gold border-[3px] border-ink rounded-xl px-2 py-0.5 leading-none shadow-pops shrink-0">LV.${p.level}</span><div class="flex-1 min-w-0"><div class="bar !h-3"><div id="exp-fill" class="!bg-gradient-to-r from-lime-400 to-green-500" style="width:${p.level>=MAX_LV?100:Math.min(100,p.exp/EXP_NEED(p.level)*100)}%"></div></div><p id="exp-txt" class="text-[10px] font-bold opacity-70 mt-0.5">${p.level>=MAX_LV?'MAX LEVEL 100':`${Math.floor(p.exp)} / ${EXP_NEED(p.level)} EXP`}</p></div></div>
+        <div class="flex items-center gap-2 mt-1.5"><span class="font-disp text-sm">⚡</span><div id="energy-pips" class="flex gap-0.5 flex-1"></div><span class="text-xs font-extrabold">${p.energy}/${ENERGY_MAX}</span></div>
+        <div class="grid grid-cols-3 gap-1.5 mt-2">${meter('🍎','Kenyang','full',p.full,'from-amber-400 to-orange-500')}${meter('🎈','Keceriaan','fun',p.fun,'from-pink-400 to-rose-500')}${meter('🫧','Kebersihan','clean',p.clean,'from-sky-400 to-cyan-500')}</div>
+        <div class="flex flex-wrap gap-1 mt-2"><span class="chip !text-[10px] !py-0 !px-2">❤️ ${maxHP(p)}</span><span class="chip !text-[10px] !py-0 !px-2">🗡️ ${powAtk(p.level)+ta.dmg}</span><span class="chip !text-[10px] !py-0 !px-2">🛡️ ${powDef(p.level)+ta.def}</span><span class="chip !text-[10px] !py-0 !px-2">🎲 +${ta.dp}</span>${gt?`<span class="chip !text-[10px] !py-0 !px-2 !bg-violet/20">⭐ ${gt}</span>`:''}</div>
+      </div>
+      <div class="panel p-2">
+        <div class="grid grid-cols-4 md:grid-cols-2 gap-1.5">
+          <button onclick="openFoodTray()" title="−2⚡" class="btn bg-orange-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">🍎</span>Makan</button>
+          <button onclick="doPlay()" title="−2⚡" class="btn bg-pink-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">🎾</span>Main</button>
+          <button onclick="doService()" title="−2⚡" class="btn bg-sky-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">🫧</span>Servis</button>
+          ${sleeping?`<button onclick="doWake()" class="btn bg-indigo-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">⏰</span>Bangun</button>`:`<button onclick="doSleep()" class="btn bg-indigo-200 !px-1 !py-1.5 text-[11px] md:text-sm flex-col !gap-0"><span class="text-xl">💤</span>Tidur</button>`}
+        </div>
+        ${evoReady(p)?`<button onclick="evolve()" class="btn bg-violet text-white w-full mt-1.5 glow-pulse">🧬 EVOLUSI + 5 POIN!</button>`:''}
+      </div>
+    </div></div>`;
   updateTickUI(true);}
 function renderEgg(){const wrap=$('#tab-egg');
   if(S.incubator){const ready=S.incubator.endsAt<=Date.now();
-    wrap.innerHTML=`<div class="h-full flex flex-col items-center justify-center gap-3 p-4"><span class="chip">LV.0 · Telur Slime</span><div class="${ready?'pop-in':'egg-idle'}">${eggSVG(150,ready)}</div>${ready?`<button onclick="hatchNow()" class="btn bg-gold text-lg glow-pulse">🎉 TETASKAN SEKARANG!</button>`:`<p class="font-bold text-sm">Menetas dalam <b id="egg-cd" class="font-disp text-aqua text-xl ml-1">${fmtCd(S.incubator.endsAt-Date.now())}</b></p><button onclick="useInstantHatch()" class="btn bg-cream2 text-sm">⚡ Instant-Hatch (punya ${S.inv.hatch})</button>`}<p class="text-xs font-bold opacity-60 text-center max-w-xs">Menetas jadi <b>Slime Murni</b> tanpa elemen — beri nama sendiri saat menetas. Evolusi LV.10 mengungkap elemen + 5 poin atribut permanen!</p></div>`;return;}
+    wrap.innerHTML=`<div class="h-full flex flex-col items-center justify-center gap-3 p-4"><span class="chip">LV.0 · Telur Slime</span><div class="${ready?'pop-in':'egg-idle'}">${eggSVG(150,ready)}</div>${ready?`<button onclick="hatchNow()" class="btn bg-gold text-lg glow-pulse">🎉 TETASKAN SEKARANG!</button>`:`<p class="font-bold text-sm">Menetas dalam <b id="egg-cd" class="font-disp text-aqua text-xl ml-1">${fmtCd(S.incubator.endsAt-Date.now())}</b></p><button onclick="useInstantHatch()" class="btn bg-cream2 text-sm">⚡ Instant-Hatch (punya ${S.inv.hatch})</button>`}<p class="text-xs font-bold opacity-60 text-center max-w-xs">Menetas jadi <b>Slime Murni</b> — beri nama sendiri. Level maks <b>100</b>; evolusi <b>LV.10</b> membuka elemen acak + 5 poin permanen!</p></div>`;return;}
   wrap.innerHTML=`<div class="h-full flex flex-col items-center justify-center gap-3 p-4"><h3 class="font-disp text-2xl md:text-3xl text-center">🥚 TELUR SLIME</h3><div class="egg-idle">${eggSVG(150)}</div><p class="chip">⏳ Waktu tetas: ${fmtCd(nextHatchMs())}</p><button onclick="startIncubation()" class="btn bg-gold text-lg">Eramkan Telur! 🔥</button><p class="text-xs font-bold opacity-60 text-center max-w-xs">Telur pertama 1 menit, tiap slime berikutnya <b>×5</b> lebih lama. Sudah menetas: <b>${S.hatchCount}</b>.</p></div>`;}
-function renderHub(){const p=activePet(),wrap=$('#arena-hub');const prev=p?slimeSVG(p,58):eggSVG(50);const tb=p?totalBonus(p):zeroBonus();
+function renderHub(){const p=activePet(),wrap=$('#arena-hub'),prev=p?slimeSVG(p,58):eggSVG(50),ta=p?totAttr(p):zeroAttr(),lv=p?p.level:1;
   wrap.innerHTML=`<div class="p-3 max-w-3xl mx-auto pb-6"><h3 class="font-disp text-2xl md:text-3xl text-center">🎮 ARENA MINIGAME</h3><p class="text-xs font-bold opacity-70 text-center mb-3">Latih slime-mu, kumpulkan 🪙 & EXP!</p>
   <div class="panel p-4 bg-gradient-to-br from-[#eafcff] to-[#d3f0ff]"><div class="flex items-center gap-3"><div class="shrink-0" style="animation:hopPreview 1.6s ease-in-out infinite">${prev}</div><div class="flex-1 min-w-0"><h4 class="font-disp text-2xl text-aqua">🏃 SLIMEGO!</h4><p class="text-xs font-bold opacity-75">Runner survival 16:9. <b>Swipe ↑</b> di area bawah untuk lompat. Siang→malam, makin jauh makin cepat.</p></div></div><div class="flex flex-wrap gap-1.5 mt-3"><span class="chip !text-[11px]">🔁 3× lanjut</span><span class="chip !text-[11px]">💸 lanjut −20% koin</span><span class="chip !text-[11px]">⭐ EXP tiap run</span></div><div class="flex flex-wrap items-center gap-2 mt-3"><span class="chip !text-xs">🏆 ${S.bestRun} m</span><span class="chip !text-xs">🎯 ${S.runs} run</span><button onclick="Run.start()" class="btn bg-gold ml-auto text-base" ${!p?'disabled':''}>▶ MULAI (−${ACT_COST}⚡)</button></div></div>
   <div class="panel p-4 mt-3 bg-gradient-to-br from-[#fff6d8] to-[#ffe9c2]"><div class="flex items-center gap-3"><div class="shrink-0 text-5xl" style="animation:bounceK 1.4s infinite">🌧️</div><div class="flex-1 min-w-0"><h4 class="font-disp text-2xl text-gold">🍎 SLIME RAIN!</h4><p class="text-xs font-bold opacity-75">Tangkap hujan makanan. <b>Swipe ← →</b> di area bawah. <b>3 item = 1 🪙</b>, ⏰ = <b>+3 detik</b>.</p></div></div><div class="flex flex-wrap gap-1.5 mt-3"><span class="chip !text-[11px]">⏳ 15 detik</span><span class="chip !text-[11px]">⏰ +3s</span><span class="chip !text-[11px]">🎁 item acak</span></div><div class="flex flex-wrap items-center gap-2 mt-3"><span class="chip !text-xs">🏆 ${S.rainBest} item</span><span class="chip !text-xs">🎯 ${S.rainPlays}×</span><button onclick="Rain.start()" class="btn bg-gold ml-auto text-base" ${!p?'disabled':''}>▶ MULAI (−${ACT_COST}⚡)</button></div></div>
-  <div class="panel p-4 mt-3 bg-gradient-to-br from-[#e8f5c8] to-[#cfe6a0] relative overflow-hidden">
-    <div class="flex items-center gap-3"><div class="shrink-0 w-14 h-14 rounded-xl border-[3px] border-ink bg-gb3 grid place-items-center text-2xl shadow-pops">🕹️</div><div class="flex-1 min-w-0"><h4 class="font-disp text-2xl text-gb0">⚔️ SLIME TACTIC</h4><p class="text-xs font-bold opacity-75">Duel turn-base ala Game Boy. Pilih aksi → <b>roll D20</b>: &gt;10 HIT. Damage <b>1D4</b>, kritikal <b>2D4</b>. Musuh menyesuaikan levelmu.</p></div></div>
-    <div class="flex flex-wrap gap-1.5 mt-3"><span class="chip !text-[11px]">❤️ HP ${p?maxHP(p):10}</span><span class="chip !text-[11px]">🗡️ +${tb.dmg}</span><span class="chip !text-[11px]">🛡️ +${tb.def}</span><span class="chip !text-[11px]">🎲 +${tb.dp}</span><button onclick="shopTab='atribut';setTab('shop')" class="chip !text-[11px] !bg-cream2 hover:!bg-gold">🧬 Upgrade</button></div>
-    <div class="grid grid-cols-3 gap-2 mt-3">${Object.entries(DIFFS).map(([k,d])=>{const lo=p?clampLv(p.level+d.off[0]):1,hi=p?clampLv(p.level+d.off[1]):3;return `<button onclick="T.start('${k}')" class="btn !px-1 !py-2 flex-col !gap-0 text-xs" style="background:${d.color}" ${!p?'disabled':''}><span class="text-lg">${d.emoji}</span>${d.label}<span class="text-[9px] font-body font-bold opacity-70">LV.${lo}–${hi} · ×${d.mult}</span></button>`;}).join('')}</div>
-    <p class="text-[10px] font-bold opacity-60 mt-2 text-center">🏆 Menang ${S.tacWins}/${S.tacPlays} · Biaya ${ACT_COST}⚡ per tanding</p></div>
-  <div class="panel p-4 mt-3 ${!p||p.level<5?'opacity-80':''}"><div class="flex items-center gap-3"><span class="text-4xl">✌️</span><div class="flex-1"><h4 class="font-disp text-xl">Duel Gunting-Batu-Kertas ${!p||p.level<5?'🔒':''}</h4><p class="text-xs font-bold opacity-70">${!p||p.level<5?`Terbuka di LV.5 (sekarang LV.${p?p.level:0}).`:'Menang +5 EXP · Seri +3 · Kalah +0.'}</p></div>${p&&p.level>=5?`<button onclick="renderDuelPick()" class="btn bg-cream2 text-sm">Pilih Lawan</button>`:''}</div></div></div>`;}
-function renderDuelPick(){$('#arena-hub').innerHTML=`<div class="p-3 max-w-3xl mx-auto"><div class="flex items-center gap-2 mb-3"><button onclick="showArenaHub()" class="btn bg-white !px-3 !py-1 text-sm">←</button><h3 class="font-disp text-2xl">✌️ PILIH LAWAN (−${ACT_COST}⚡)</h3></div><div class="grid md:grid-cols-3 gap-3">${BOTS.map(b=>`<div class="panel p-4 text-center bg-white/70 flex flex-col items-center gap-1.5"><div class="w-16 h-16 rounded-full grid place-items-center text-4xl border-4 border-ink" style="background:${b.aura}">${b.emoji}</div><h4 class="font-disp text-lg">${b.name}</h4><p class="text-[11px] font-bold opacity-60 min-h-7">${b.taunt}</p><span class="chip !text-xs">🏆 +${b.coins} 🪙</span><button onclick="startDuel('${b.id}')" class="btn bg-gold w-full text-sm">Tantang!</button></div>`).join('')}</div></div>`;}
+  <div class="panel p-4 mt-3 bg-gradient-to-br from-[#e8f5c8] to-[#cfe6a0]"><div class="flex items-center gap-3"><div class="shrink-0 w-14 h-14 rounded-xl border-[3px] border-ink bg-gb3 grid place-items-center text-2xl shadow-pops">🕹️</div><div class="flex-1 min-w-0"><h4 class="font-disp text-2xl text-gb0">⚔️ SLIME TACTIC</h4><p class="text-xs font-bold opacity-75">Duel turn-base ala Game Boy. Aksi → <b>D20 + DP &gt; 10 = HIT</b>. Damage <b>1D4</b>, kritikal <b>2D4</b>.</p></div></div>
+    <div class="flex flex-wrap gap-1.5 mt-3"><span class="chip !text-[11px]">❤️ ${p?maxHP(p):10}</span><span class="chip !text-[11px]">🗡️ ${powAtk(lv)+ta.dmg}</span><span class="chip !text-[11px]">🛡️ ${powDef(lv)+ta.def}</span><span class="chip !text-[11px]">🎲 +${ta.dp}</span><button onclick="shopTab='atribut';setTab('shop')" class="chip !text-[11px] !bg-cream2 hover:!bg-gold">🧬 Upgrade</button></div>
+    <div class="grid grid-cols-3 gap-2 mt-3">${Object.entries(DIFFS).map(([k,d])=>`<button onclick="T.start('${k}')" class="btn !px-1 !py-2 flex-col !gap-0 text-xs" style="background:${d.color}" ${!p?'disabled':''}><span class="text-lg">${d.emoji}</span>${d.label}<span class="text-[9px] font-body font-bold opacity-75">LV ${d.off[0]>=0?'+':''}${d.off[0]}~+${d.off[1]}</span><span class="text-[9px] font-body font-extrabold">hadiah ×${d.mult}</span></button>`).join('')}</div>
+    <p class="text-[10px] font-bold opacity-60 mt-2 text-center">Level musuh mengikuti levelmu (${lv}) · 🏆 ${S.tacWins}/${S.tacPlays} · biaya ${ACT_COST}⚡</p></div>
+  <div class="panel p-4 mt-3 ${!p||p.level<5?'opacity-80':''}"><div class="flex items-center gap-3"><span class="text-4xl">✌️</span><div class="flex-1"><h4 class="font-disp text-xl">Gunting-Batu-Kertas ${!p||p.level<5?'🔒':''}</h4><p class="text-xs font-bold opacity-70">${!p||p.level<5?`Terbuka di LV.5 (sekarang LV.${lv}).`:'Menang +EXP & koin · Seri setengah · Kalah hiburan.'}</p></div>${p&&p.level>=5?`<button onclick="renderDuelPick()" class="btn bg-cream2 text-sm">Pilih Lawan</button>`:''}</div></div></div>`;}
+function renderDuelPick(){showEl('arena-hub');$('#arena-hub').innerHTML=`<div class="p-3 max-w-3xl mx-auto"><div class="flex items-center gap-2 mb-3"><button onclick="showArenaHub()" class="btn bg-white !px-3 !py-1 text-sm">←</button><h3 class="font-disp text-2xl">✌️ PILIH LAWAN (−${ACT_COST}⚡)</h3></div><div class="grid md:grid-cols-3 gap-3">${BOTS.map(b=>`<div class="panel p-4 text-center bg-white/70 flex flex-col items-center gap-1.5"><div class="w-16 h-16 rounded-full grid place-items-center text-4xl border-4 border-ink" style="background:${b.aura}">${b.emoji}</div><h4 class="font-disp text-lg">${b.name}</h4><p class="text-[11px] font-bold opacity-60 min-h-7">${b.taunt}</p><span class="chip !text-xs">🏆 +${b.coins} 🪙</span><button onclick="startDuel('${b.id}')" class="btn bg-gold w-full text-sm">Tantang!</button></div>`).join('')}</div></div>`;}
 let shopTab='makanan';
 function attrPips(n){return Array.from({length:ATTR_MAX},(_,i)=>`<span class="inline-block w-2.5 h-2.5 rounded-full border-2 border-ink ${i<n?'bg-gold':'bg-ink/10'}"></span>`).join('');}
 function renderShop(){const wrap=$('#tab-shop'),p=activePet();
-  const sub=[['makanan','🍎 Makanan'],['atribut','🧬 Atribut'],['item','⚡ Item'],['mainan','🧸 Mainan'],['penampilan','👒 Penampilan'],['tas','🎒 Tas']];let body='';
+  const sub=[['makanan','🍎 Makanan'],['suasana','🏞️ Suasana'],['kreativitas','🎨 Kreativitas'],['atribut','🧬 Atribut'],['item','⚡ Item'],['mainan','🧸 Mainan'],['penampilan','👒 Penampilan'],['tas','🎒 Tas']];
+  let body='';
   if(shopTab==='makanan')body=FOODS.map(f=>`<div class="itemcard items-center">${iconSVG(f.id,46)}<b class="text-center text-sm">${f.name}</b><p class="text-xs font-bold opacity-60 text-center flex-1">+${f.energy}⚡ · +${f.full} kenyang</p><p class="text-center text-xs font-bold">Punya: ${S.inv.foods[f.id]||0}</p><button onclick="buyFood('${f.id}')" class="btn bg-gold text-xs w-full" ${S.coins<f.price?'disabled':''}>Beli · ${f.price} 🪙</button></div>`).join('');
-  if(shopTab==='atribut'){const b=p?p.bonus:zeroBonus(),tb=p?totalBonus(p):zeroBonus();
-    body=`<div class="itemcard col-span-2 md:col-span-4 !flex-row items-center gap-3 flex-wrap"><div class="shrink-0">${p?slimeSVG(p,54):eggSVG(46)}</div><div class="flex-1 min-w-40"><b>${p?esc(p.nick):'Belum ada slime'}</b><p class="text-[11px] font-bold opacity-65">Beli maks <b>+5</b>/atribut · Evolusi memberi <b>+5 permanen</b> tambahan</p></div><div class="flex gap-1.5 flex-wrap"><span class="chip !text-xs">❤️ HP ${p?maxHP(p):10}</span><span class="chip !text-xs">🗡️ +${tb.dmg}</span><span class="chip !text-xs">🛡️ +${tb.def}</span><span class="chip !text-xs">🎲 +${tb.dp}</span></div></div>`
-      +ATTR.map(a=>{const n=b[a.k]||0,price=a.base+n*ATTR_MAX,maxed=n>=ATTR_MAX,evo=p?(p.evoBonus[a.k]||0):0;
-        return `<div class="itemcard items-center"><span class="text-4xl">${a.emoji}</span><b class="text-sm text-center">${a.name}</b><p class="text-[11px] font-bold opacity-60 text-center flex-1">${a.desc}</p><div class="flex gap-1 justify-center">${attrPips(n)}</div><p class="text-xs font-bold">Beli +${n}/${ATTR_MAX}${evo?` · <span class="text-violet">Evo +${evo}</span>`:''}</p>${maxed?'<span class="btn bg-lime-200 w-full text-xs cursor-default">✔️ MAKSIMAL</span>':`<button onclick="buyAttr('${a.k}')" class="btn bg-gold text-xs w-full" ${!p||S.coins<price?'disabled':''}>Beli · ${price} 🪙</button>`}</div>`;}).join('');}
+  if(shopTab==='suasana')body=Object.entries(SCENES).map(([k,s])=>{const owned=S.scenes.includes(k),act=S.scene===k;
+    return `<div class="itemcard ${act?'ring-4 ring-gold':''}"><div class="h-16 rounded-xl border-[3px] border-ink relative overflow-hidden" style="background:linear-gradient(180deg,${s.sky[0]},${s.sky[1]})"><span class="absolute top-1 left-1.5 w-5 h-5 rounded-full" style="background:${s.sun}"></span><span class="absolute bottom-0 left-0 right-0 h-5" style="background:${s.hill[1]}"></span><span class="absolute bottom-1 right-1.5 text-lg">${s.emoji}</span></div>
+      <b class="text-sm text-center">${s.emoji} ${s.name}</b><p class="text-[11px] font-bold opacity-60 text-center flex-1">${s.desc}</p>
+      ${!owned?`<button onclick="buyScene('${k}')" class="btn bg-gold text-xs w-full" ${S.coins<s.price?'disabled':''}>Beli · ${s.price} 🪙</button>`:act?'<span class="btn bg-lime-200 w-full text-xs cursor-default">✔️ Dipakai</span>':`<button onclick="useScene('${k}')" class="btn bg-cream2 text-xs w-full">Pakai Suasana</button>`}</div>`;}).join('');
+  if(shopTab==='kreativitas'){
+    body=`<div class="itemcard col-span-2 md:col-span-4 !flex-row items-center gap-3 flex-wrap bg-gradient-to-br from-[#f3e8ff] to-[#ffe9f4]">
+      <span class="text-4xl">🎨</span><div class="flex-1 min-w-40"><b>Alur Kreativitas</b><p class="text-[11px] font-bold opacity-70">1) Beli <b>Kanvas Ajaib</b> → 2) Beli <b>Pola</b> sesuai slot → 3) Buka kanvas di kandang → 4) Gambar & tukar jadi kostum!</p></div>
+      ${S.inv.canvas?`<button onclick="openStudio()" class="btn bg-violet text-white text-sm">🎨 Buka Studio</button>`:''}</div>
+      <div class="itemcard items-center"><span class="text-4xl">🖼️</span><b class="text-sm text-center">Kanvas Ajaib</b><p class="text-[11px] font-bold opacity-60 text-center flex-1">Item utama pembuka Studio Kreatif. Sekali beli, selamanya. <b>Bonus 1 Pola Kepala!</b></p>
+      ${S.inv.canvas?'<span class="btn bg-lime-200 w-full text-xs cursor-default">✔️ Dimiliki</span>':`<button onclick="buyCanvas()" class="btn bg-gold text-xs w-full" ${S.coins<CANVAS_PRICE?'disabled':''}>Beli · ${CANVAS_PRICE} 🪙</button>`}</div>`
+      +Object.entries(SLOTS).map(([k,s])=>`<div class="itemcard items-center"><span class="text-4xl">${s.emoji}</span><b class="text-sm text-center">Pola ${s.label}</b><p class="text-[11px] font-bold opacity-60 text-center flex-1">Bahan 1× pakai untuk menukar desain ${s.label.toLowerCase()} jadi kostum.</p><p class="text-xs font-bold">Punya: ${S.inv.blanks[k]||0}</p><button onclick="buyBlank('${k}')" class="btn bg-gold text-xs w-full" ${S.coins<s.price?'disabled':''}>Beli · ${s.price} 🪙</button></div>`).join('')
+      +`<div class="itemcard col-span-2 md:col-span-4"><b>🧵 Kostum Buatanmu (${S.designs.length})</b><div class="flex flex-wrap gap-2">${S.designs.length?S.designs.map(d=>`<span class="chip !text-xs">${designThumb(d,20)} ${esc(d.name)} <b class="text-violet">${SLOTS[d.slot].emoji}</b></span>`).join(''):'<span class="text-xs font-bold opacity-60">Belum ada — ayo menggambar!</span>'}</div></div>`;
+  }
+  if(shopTab==='atribut'){const b=p?p.bonus:zeroAttr(),g=p?p.gift:zeroAttr(),ta=p?totAttr(p):zeroAttr(),lv=p?p.level:1;
+    body=`<div class="itemcard col-span-2 md:col-span-4 !flex-row items-center gap-3 flex-wrap"><div class="shrink-0">${p?slimeSVG(p,54):eggSVG(46)}</div><div class="flex-1 min-w-40"><b>${p?esc(p.nick):'Belum ada slime'}</b><p class="text-[11px] font-bold opacity-65">Atribut toko maks <b>+5</b>/jenis · warisan evolusi permanen · DMG & DEF juga tumbuh tiap level</p></div><div class="flex gap-1.5 flex-wrap"><span class="chip !text-xs">❤️ ${p?maxHP(p):10}</span><span class="chip !text-xs">🗡️ ${powAtk(lv)+ta.dmg}</span><span class="chip !text-xs">🛡️ ${powDef(lv)+ta.def}</span><span class="chip !text-xs">🎲 +${ta.dp}</span></div></div>`
+      +ATTR.map(a=>{const n=b[a.k]||0,gf=g[a.k]||0,price=a.base+n*ATTR_MAX,maxed=n>=ATTR_MAX;
+        return `<div class="itemcard items-center"><span class="text-4xl">${a.emoji}</span><b class="text-sm text-center">${a.name}</b><p class="text-[11px] font-bold opacity-60 text-center flex-1">${a.desc}</p><div class="flex gap-1 justify-center">${attrPips(n)}</div><p class="text-xs font-bold text-center">Toko +${n}/${ATTR_MAX}${gf?` · <span class="text-violet">Warisan +${gf}</span>`:''}</p>${maxed?'<span class="btn bg-lime-200 w-full text-xs cursor-default">✔️ MAKSIMAL</span>':`<button onclick="buyAttr('${a.k}')" class="btn bg-gold text-xs w-full" ${!p||S.coins<price?'disabled':''}>Beli · ${price} 🪙</button>`}</div>`;}).join('');}
   if(shopTab==='item')body=`<div class="itemcard items-center"><span class="text-4xl">⚡🥚</span><b class="text-sm text-center">Instant-Hatch</b><p class="text-xs font-bold opacity-60 text-center flex-1">Tetaskan telur seketika.</p><p class="text-xs font-bold">Punya: ${S.inv.hatch}</p><button onclick="buyHatch()" class="btn bg-gold text-xs w-full" ${S.coins<30?'disabled':''}>Beli · 30 🪙</button></div><div class="itemcard items-center"><span class="text-4xl">🛏️</span><b class="text-sm text-center">Bantal Empuk</b><p class="text-xs font-bold opacity-60 text-center flex-1">Tidur jadi <b>30 detik</b>.</p>${S.inv.pillow?'<span class="btn bg-lime-200 w-full text-xs cursor-default">✔️ Dimiliki</span>':`<button onclick="buyPillow()" class="btn bg-gold text-xs w-full" ${S.coins<60?'disabled':''}>Beli · 60 🪙</button>`}</div>`;
   if(shopTab==='mainan')body=TOYS.map(t=>{const owned=S.inv.toys.includes(t.id);return `<div class="itemcard items-center"><span class="text-4xl">${t.emoji}</span><b class="text-sm text-center">${t.name}</b><p class="text-xs font-bold opacity-60 text-center flex-1">+${t.bonus} EXP saat Main</p>${owned?'<span class="btn bg-lime-200 w-full text-xs cursor-default">✔️ Dimiliki</span>':`<button onclick="buyToy('${t.id}')" class="btn bg-gold text-xs w-full" ${S.coins<t.price?'disabled':''}>Beli · ${t.price} 🪙</button>`}</div>`;}).join('');
-  if(shopTab==='penampilan'){const skinBtn=(id,name,emoji,price)=>{const owned=id==='default'||S.wardrobe.skins.includes(id),eq=p&&p.skin===id;return `<div class="itemcard items-center"><span class="text-4xl">${emoji}</span><b class="text-sm text-center">${name}</b><p class="text-xs font-bold opacity-60 text-center flex-1">Warnai slime aktif</p>${!owned?`<button onclick="buySkin('${id}')" class="btn bg-gold text-xs w-full" ${S.coins<price?'disabled':''}>Beli · ${price} 🪙</button>`:!p?'<span class="text-xs font-bold opacity-50">Butuh slime</span>':`<button onclick="equipSkin('${id}')" class="btn ${eq?'bg-lime-200':'bg-cream2'} text-xs w-full">${eq?'✔️ Dipakai':'Pakai'}</button>`}</div>`;};
-    body=`<p class="font-disp text-sm col-span-full">🎨 SKIN</p>${skinBtn('default','Skin Asli','🫧',0)}${Object.entries(SKINS).map(([id,s])=>skinBtn(id,s.name,s.emoji,s.price)).join('')}<p class="font-disp text-sm col-span-full mt-1">👒 AKSESORIS</p>${WEAR.map(w=>{const owned=S.wardrobe.wear.includes(w.id),eq=p&&p[w.slot]===w.id;return `<div class="itemcard items-center"><span class="text-4xl">${w.emoji}</span><b class="text-sm text-center">${w.name}</b><p class="text-xs font-bold opacity-60 text-center flex-1">Slot: ${w.slot==='head'?'Kepala':w.slot==='face'?'Wajah':'Leher'}</p>${!owned?`<button onclick="buyWear('${w.id}')" class="btn bg-gold text-xs w-full" ${S.coins<w.price?'disabled':''}>Beli · ${w.price} 🪙</button>`:!p?'<span class="text-xs font-bold opacity-50">Butuh slime</span>':`<button onclick="equipWear('${w.id}')" class="btn ${eq?'bg-lime-200':'bg-cream2'} text-xs w-full">${eq?'✔️ Dipakai':'Pakai/Lepas'}</button>`}</div>`;}).join('')}`;}
-  if(shopTab==='tas'){const owned=FOODS.filter(f=>S.inv.foods[f.id]>0);body=`<div class="itemcard col-span-2 md:col-span-4"><b>🍎 Makanan ${p?'· klik untuk memberi makan':''}</b><div class="flex flex-wrap gap-2">${owned.length?owned.map(f=>`<button onclick="doFeed('${f.id}')" class="chip !text-xs hover:bg-cream2 cursor-pointer">${iconSVG(f.id,20)} ${f.name} <b class="text-aqua">×${S.inv.foods[f.id]}</b></button>`).join(''):'<span class="text-xs font-bold opacity-60">Kosong</span>'}</div></div><div class="itemcard col-span-1 md:col-span-2"><b>⚡ Item</b><span class="chip !text-xs">⚡🥚 ×${S.inv.hatch}</span>${S.inv.pillow?'<span class="chip !text-xs">🛏️ Bantal</span>':''}</div><div class="itemcard col-span-1 md:col-span-2"><b>🧸 Mainan</b><div class="flex flex-wrap gap-2">${S.inv.toys.map(id=>{const t=TOYS.find(x=>x.id===id);return `<span class="chip !text-xs">${t.emoji} ${t.name}</span>`;}).join('')||'<span class="text-xs font-bold opacity-60">Belum ada</span>'}</div></div>`;}
+  if(shopTab==='penampilan'){
+    const skinBtn=(id,name,emoji,price)=>{const owned=id==='default'||S.wardrobe.skins.includes(id),eq=p&&p.skin===id;
+      return `<div class="itemcard items-center"><span class="text-4xl">${emoji}</span><b class="text-sm text-center">${name}</b><p class="text-xs font-bold opacity-60 text-center flex-1">Warnai slime aktif</p>${!owned?`<button onclick="buySkin('${id}')" class="btn bg-gold text-xs w-full" ${S.coins<price?'disabled':''}>Beli · ${price} 🪙</button>`:!p?'<span class="text-xs font-bold opacity-50">Butuh slime</span>':`<button onclick="equipSkin('${id}')" class="btn ${eq?'bg-lime-200':'bg-cream2'} text-xs w-full">${eq?'✔️ Dipakai':'Pakai'}</button>`}</div>`;};
+    const wearBtn=(id,slot,name,thumb,custom)=>{const eq=p&&p[slot]===id;
+      return `<div class="itemcard items-center">${thumb}<b class="text-sm text-center">${esc(name)}</b><p class="text-[11px] font-bold opacity-60 text-center flex-1">Slot ${SLOTS[slot].label}${custom?' · <span class="text-violet">buatanmu</span>':''}</p>
+      ${!p?'<span class="text-xs font-bold opacity-50">Butuh slime</span>':`<button onclick="equipItem('${slot}','${id}')" class="btn ${eq?'bg-lime-200':'bg-cream2'} text-xs w-full">${eq?'✔️ Dipakai':'Pakai'}</button>`}
+      ${custom?`<button onclick="askDeleteDesign('${id}')" class="btn bg-red-200 text-[10px] w-full !py-1">🗑️ Hapus</button>`:''}</div>`;};
+    body=`<p class="font-disp text-sm col-span-full">🎨 SKIN</p>${skinBtn('default','Skin Asli','🫧',0)}${Object.entries(SKINS).map(([id,s])=>skinBtn(id,s.name,s.emoji,s.price)).join('')}
+      <p class="font-disp text-sm col-span-full mt-1">🧵 KOSTUM BUATANMU (${S.designs.length})</p>
+      ${S.designs.length?S.designs.map(d=>wearBtn(d.id,d.slot,d.name,designThumb(d,46),true)).join(''):'<p class="text-xs font-bold opacity-60 col-span-full">Belum ada. Beli Kanvas Ajaib di tab Kreativitas lalu menggambar!</p>'}
+      <p class="font-disp text-sm col-span-full mt-1">👒 AKSESORIS TOKO</p>
+      ${WEAR.map(w=>{const owned=S.wardrobe.wear.includes(w.id);
+        return owned?wearBtn(w.id,w.slot,w.name,`<span class="text-4xl">${w.emoji}</span>`,false)
+        :`<div class="itemcard items-center"><span class="text-4xl">${w.emoji}</span><b class="text-sm text-center">${w.name}</b><p class="text-[11px] font-bold opacity-60 text-center flex-1">Slot ${SLOTS[w.slot].label}</p><button onclick="buyWear('${w.id}')" class="btn bg-gold text-xs w-full" ${S.coins<w.price?'disabled':''}>Beli · ${w.price} 🪙</button></div>`;}).join('')}`;}
+  if(shopTab==='tas'){const owned=FOODS.filter(f=>S.inv.foods[f.id]>0);
+    body=`<div class="itemcard col-span-2 md:col-span-4"><b>🍎 Makanan ${p?'· klik untuk memberi makan':''}</b><div class="flex flex-wrap gap-2">${owned.length?owned.map(f=>`<button onclick="doFeed('${f.id}')" class="chip !text-xs hover:bg-cream2 cursor-pointer">${iconSVG(f.id,20)} ${f.name} <b class="text-aqua">×${S.inv.foods[f.id]}</b></button>`).join(''):'<span class="text-xs font-bold opacity-60">Kosong</span>'}</div></div>
+      <div class="itemcard col-span-1 md:col-span-2"><b>⚡ Item</b><span class="chip !text-xs">⚡🥚 ×${S.inv.hatch}</span>${S.inv.pillow?'<span class="chip !text-xs">🛏️ Bantal</span>':''}${S.inv.canvas?'<span class="chip !text-xs">🖼️ Kanvas</span>':''}</div>
+      <div class="itemcard col-span-1 md:col-span-2"><b>🧵 Pola & Mainan</b><div class="flex flex-wrap gap-1.5">${Object.entries(SLOTS).map(([k,s])=>`<span class="chip !text-xs">${s.emoji} ×${S.inv.blanks[k]||0}</span>`).join('')}${S.inv.toys.map(id=>{const t=TOYS.find(x=>x.id===id);return `<span class="chip !text-xs">${t.emoji}</span>`;}).join('')}</div></div>`;}
   wrap.innerHTML=`<div class="p-3 pb-6"><div class="flex flex-wrap items-center gap-2 mb-3"><h3 class="font-disp text-2xl mr-1">🛍️ TOKO</h3>${sub.map(([id,l])=>`<button onclick="shopTab='${id}';renderShop()" class="tabbtn ${shopTab===id?'active':''}">${l}</button>`).join('')}<span class="chip ml-auto !py-0.5">🪙 ${S.coins}</span></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3">${body}</div></div>`;}
-function buyAttr(k){const p=activePet();if(!p)return toast('🥚','Butuh slime aktif!');const a=ATTR.find(x=>x.k===k);const n=p.bonus[k]||0;
-  if(n>=ATTR_MAX)return toast('🔝','Atribut beli sudah maksimal +5!');const price=a.base+n*ATTR_MAX;
+function buyCanvas(){if(S.inv.canvas)return;if(S.coins<CANVAS_PRICE)return toast('🪙','Koin tidak cukup!');
+  S.coins-=CANVAS_PRICE;S.inv.canvas=true;S.inv.blanks.head++;sfx('craft');save();renderShop();renderHeader();
+  showModal(`<div class="panel p-6 text-center"><p class="font-disp text-3xl text-violet">🖼️ KANVAS AJAIB!</p><div class="text-6xl my-3">🎨</div><p class="text-sm font-bold opacity-75">Studio Kreatif terbuka! Bonus <b>1 Pola Kepala</b> sudah masuk tas. Tombol <b>KANVAS</b> kini ada di kandang slime-mu.</p><div class="flex flex-col gap-2 mt-4"><button onclick="closeModal();openStudio()" class="btn bg-gold text-lg">🎨 Mulai Menggambar</button><button onclick="closeModal()" class="btn bg-white text-sm">Nanti saja</button></div></div>`);}
+function buyBlank(k){const s=SLOTS[k];if(S.coins<s.price)return toast('🪙','Koin tidak cukup!');
+  S.coins-=s.price;S.inv.blanks[k]=(S.inv.blanks[k]||0)+1;sfx('coin');toast(s.emoji,`Pola ${s.label} dibeli!`);save();renderShop();renderHeader();if(STU.open)stuSyncUI();}
+function buyScene(k){const s=SCENES[k];if(!s||S.scenes.includes(k))return;if(S.coins<s.price)return toast('🪙','Koin tidak cukup!');
+  S.coins-=s.price;S.scenes.push(k);S.scene=k;SPR.key='';applyScene();sfx('level');toast(s.emoji,`Suasana ${s.name} dipasang!`);save();renderShop();renderHeader();renderHome();}
+function useScene(k){if(!S.scenes.includes(k))return;S.scene=k;applyScene();sfx('pop');toast(SCENES[k].emoji,`Suasana: ${SCENES[k].name}`);save();renderShop();renderHome();}
+function buyAttr(k){const p=activePet();if(!p)return toast('🥚','Butuh slime aktif!');const a=ATTR.find(x=>x.k===k),n=p.bonus[k]||0;
+  if(n>=ATTR_MAX)return toast('🔝','Atribut toko sudah maksimal +5!');const price=a.base+n*ATTR_MAX;
   if(S.coins<price)return toast('🪙','Koin tidak cukup!');
   S.coins-=price;p.bonus[k]=n+1;sfx('level');toast(a.emoji,`${p.nick}: ${a.name} +${n+1}!`);save();renderShop();renderHeader();renderHome();}
 function buyFood(id){const f=FOODS.find(x=>x.id===id);if(S.coins<f.price)return;S.coins-=f.price;S.inv.foods[id]=(S.inv.foods[id]||0)+1;sfx('coin');toast('🛍️',`${f.name} dibeli!`);save();renderShop();renderHeader();}
 function buyHatch(){if(S.coins<30)return;S.coins-=30;S.inv.hatch++;sfx('coin');toast('⚡','Instant-Hatch dibeli!');save();renderShop();renderHeader();}
 function buyPillow(){if(S.coins<60||S.inv.pillow)return;S.coins-=60;S.inv.pillow=true;sfx('coin');toast('🛏️','Tidur kini 30 detik!');save();renderShop();renderHeader();}
-function buyToy(id){const t=TOYS.find(x=>x.id===id);if(S.coins<t.price||S.inv.toys.includes(id))return;S.coins-=t.price;S.inv.toys.push(id);sfx('coin');toast(t.emoji,`${t.name} menghiasi taman!`);save();renderShop();renderHeader();}
+function buyToy(id){const t=TOYS.find(x=>x.id===id);if(S.coins<t.price||S.inv.toys.includes(id))return;S.coins-=t.price;S.inv.toys.push(id);sfx('coin');toast(t.emoji,`${t.name} menghiasi taman!`);save();renderShop();renderHeader();renderHome();}
 function buySkin(id){const s=SKINS[id];if(S.coins<s.price||S.wardrobe.skins.includes(id))return;S.coins-=s.price;S.wardrobe.skins.push(id);sfx('coin');toast(s.emoji,`${s.name} dibeli!`);save();renderShop();renderHeader();}
 function buyWear(id){const w=WEAR.find(x=>x.id===id);if(S.coins<w.price||S.wardrobe.wear.includes(id))return;S.coins-=w.price;S.wardrobe.wear.push(id);sfx('coin');toast(w.emoji,`${w.name} dibeli!`);save();renderShop();renderHeader();}
 function equipSkin(id){const p=activePet();if(!p)return;p.skin=id;SPR.key='';sfx('pop');save();renderShop();renderHome();}
-function equipWear(id){const p=activePet();if(!p)return;const w=WEAR.find(x=>x.id===id);p[w.slot]=p[w.slot]===id?null:id;SPR.key='';sfx('pop');save();renderShop();renderHome();}
+function equipItem(slot,id){const p=activePet();if(!p)return;p[slot]=p[slot]===id?null:id;SPR.key='';sfx('pop');save();renderShop();renderHome();}
+function askDeleteDesign(id){const d=S.designs.find(x=>x.id===id);if(!d)return;
+  showModal(`<div class="panel p-6 text-center"><p class="font-disp text-2xl text-coral">HAPUS KOSTUM?</p><div class="flex justify-center my-3">${designThumb(d,64)}</div><b>${esc(d.name)}</b><p class="text-xs font-bold opacity-70 mt-2">Desain akan hilang permanen dan dilepas dari semua slime.</p><div class="flex flex-col gap-2 mt-4"><button onclick="doDeleteDesign('${id}')" class="btn bg-red-300">🗑️ Ya, Hapus</button><button onclick="closeModal()" class="btn bg-white">Batal</button></div></div>`);}
+function doDeleteDesign(id){S.designs=S.designs.filter(x=>x.id!==id);S.pets.forEach(p=>{['head','face','neck'].forEach(s=>{if(p[s]===id)p[s]=null;});});
+  SPR.key='';save();closeModal();sfx('pop');toast('🗑️','Kostum dihapus.');renderShop();renderHome();}
 function renderCollect(){const wrap=$('#tab-collect');
-  wrap.innerHTML=`<div class="p-3 pb-6"><div class="flex flex-wrap items-center gap-2 mb-2"><h3 class="font-disp text-2xl">🫧 KOLEKSI SLIME</h3>${!S.incubator?`<button onclick="setTab('egg')" class="btn bg-gold text-xs ml-auto">+ Telur Baru (${fmtCd(nextHatchMs())})</button>`:''}</div><div class="panel p-2.5 mb-3"><p class="font-disp text-xs mb-1.5">🧬 DEX EVOLUSI — ${S.dex.length}/10</p><div class="flex flex-wrap gap-1.5">${EVO_KEYS.map(k=>{const got=S.dex.includes(k),E=EVOS[k];return `<span class="chip !text-[10px] !py-0.5 !px-2 ${got?'':'opacity-40 grayscale'}">${E.emoji} ${got?E.label:'???'}</span>`;}).join('')}</div></div><div class="grid grid-cols-2 md:grid-cols-3 gap-3">${S.pets.map(p=>{const act=p.id===S.activeId,E=p.evolved?EVOS[p.element]:null,tb=totalBonus(p);return `<div class="panel p-3 text-center ${act?'!bg-cream2 ring-4 ring-gold':''}"><div class="mx-auto w-fit ${p.evolved&&p.element==='angin'?'slime-float':'slime-idle'}">${slimeSVG(p,96)}</div><h4 class="font-disp text-lg">${esc(p.nick)}</h4><div class="flex justify-center gap-1 flex-wrap my-1"><span class="chip !text-[10px] !py-0.5 !px-2">LV.${p.level}${p.level>=MAX_LV?' MAX':''}</span><span class="chip !text-[10px] !py-0.5 !px-2">${E?E.emoji+' '+E.label:'🫧 Murni'}</span></div><p class="text-[10px] font-bold opacity-60">⚡${p.energy} · 🍎${Math.round(p.full)} · 🎈${Math.round(p.fun)} · 🫧${Math.round(p.clean)}</p><p class="text-[10px] font-bold opacity-60 mt-0.5">❤️${maxHP(p)} · 🗡️+${tb.dmg} · 🛡️+${tb.def} · 🎲+${tb.dp}</p>${act?'<span class="btn bg-lime-200 w-full mt-1.5 text-xs cursor-default">✔️ Aktif</span>':`<button onclick="switchPet('${p.id}')" class="btn bg-cream2 w-full mt-1.5 text-xs">Jadikan Aktif</button>`}</div>`;}).join('')||'<p class="font-bold opacity-60 col-span-full">Belum ada slime.</p>'}</div></div>`;}
-function switchPet(id){if(gameBusy())return toast('🎮','Selesaikan minigame dulu!');S.activeId=id;SPR.key='';save();renderCollect();renderNav();toast('🫧',`${activePet().nick} jadi slime aktif!`);}
+  wrap.innerHTML=`<div class="p-3 pb-6"><div class="flex flex-wrap items-center gap-2 mb-2"><h3 class="font-disp text-2xl">🫧 KOLEKSI SLIME</h3>${!S.incubator?`<button onclick="setTab('egg')" class="btn bg-gold text-xs ml-auto">+ Telur Baru (${fmtCd(nextHatchMs())})</button>`:''}</div>
+  <div class="panel p-2.5 mb-3"><p class="font-disp text-xs mb-1.5">🧬 DEX EVOLUSI — ${S.dex.length}/10 · 🧵 Kostum buatan: ${S.designs.length}</p><div class="flex flex-wrap gap-1.5">${EVO_KEYS.map(k=>{const got=S.dex.includes(k),E=EVOS[k];return `<span class="chip !text-[10px] !py-0.5 !px-2 ${got?'':'opacity-40 grayscale'}">${E.emoji} ${got?E.label:'???'}</span>`;}).join('')}</div></div>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3">${S.pets.map(p=>{const act=p.id===S.activeId,E=p.evolved?EVOS[p.element]:null,ta=totAttr(p),gt=ATTR_KEYS.reduce((a,k)=>a+p.gift[k],0);
+    return `<div class="panel p-3 text-center ${act?'!bg-cream2 ring-4 ring-gold':''}"><div class="mx-auto w-fit ${p.evolved&&p.element==='angin'?'slime-float':'slime-idle'}">${slimeSVG(p,96)}</div><h4 class="font-disp text-lg">${esc(p.nick)}</h4><div class="flex justify-center gap-1 flex-wrap my-1"><span class="chip !text-[10px] !py-0.5 !px-2">LV.${p.level}${p.level>=MAX_LV?' MAX':''}</span><span class="chip !text-[10px] !py-0.5 !px-2">${E?E.emoji+' '+E.label:'🫧 Murni'}</span></div><p class="text-[10px] font-bold opacity-60">⚡${p.energy} · 🍎${Math.round(p.full)} · 🎈${Math.round(p.fun)} · 🫧${Math.round(p.clean)}</p><p class="text-[10px] font-bold opacity-60 mt-0.5">❤️${maxHP(p)} · 🗡️${powAtk(p.level)+ta.dmg} · 🛡️${powDef(p.level)+ta.def} · 🎲+${ta.dp}${gt?` · ⭐${gt}`:''}</p>${act?'<span class="btn bg-lime-200 w-full mt-1.5 text-xs cursor-default">✔️ Aktif</span>':`<button onclick="switchPet('${p.id}')" class="btn bg-cream2 w-full mt-1.5 text-xs">Jadikan Aktif</button>`}</div>`;}).join('')||'<p class="font-bold opacity-60 col-span-full">Belum ada slime.</p>'}</div></div>`;}
+function switchPet(id){if(gameBusy())return toast('🎮','Selesaikan permainan dulu!');S.activeId=id;SPR.key='';save();renderCollect();renderNav();renderHome();toast('🫧',`${activePet().nick} jadi slime aktif!`);}
 
-/* ============================ RESET ============================ */
-function openReset(){showModal(`<div class="panel p-6 text-center"><p class="font-disp text-3xl text-coral">↺ MULAI ULANG?</p><p class="text-sm font-bold opacity-75 mt-2">Semua slime, koin, atribut & rekor akan dihapus permanen. Progres tersimpan juga dibersihkan.</p><div class="flex flex-col gap-2 mt-4"><button onclick="closeModal()" class="btn bg-white text-lg">Batal</button><button onclick="doReset()" class="btn bg-red-200">🗑️ Ya, Reset Semua</button></div></div>`);}
-function doReset(){
-  Run.teardown();Rain.teardown();T.teardown();closeMenu();closeResult();closeModal();musicStop();
-  try{localStorage.removeItem(KEY);setCookie(CKEY,'',0);}catch(e){}
-  S=defaultState();HATCH_PENDING=null;EVO_BUSY=false;B=null;SPR={key:'',img:null};shopTab='makanan';
-  save();renderHeader();renderNav();setTab('egg');toast('🔄','Permainan direset. Mulai dari telur baru!');
-}
+/* ============================ SHARE & CREDIT ============================ */
+function shareData(){const p=activePet();
+  const url=(location.href||'').split('#')[0];
+  const text=p?`Aku merawat ${p.nick} LV.${p.level} di SlimeGochi! 🫧 Rawat, latih, evolusi & gambar kostum slime-mu sendiri:`:'SlimeGochi 🫧 — rawat slime, main minigame, evolusi & gambar kostum sendiri! Coba juga:';
+  return{url,text};}
+function openShare(){const {url,text}=shareData(),e=encodeURIComponent;
+  const links=[
+    ['WhatsApp','#25D366','💬',`https://wa.me/?text=${e(text+' '+url)}`],
+    ['X / Twitter','#14324f','🐦',`https://twitter.com/intent/tweet?text=${e(text)}&url=${e(url)}`],
+    ['Facebook','#1877F2','📘',`https://www.facebook.com/sharer/sharer.php?u=${e(url)}`],
+    ['Telegram','#2AABEE','✈️',`https://t.me/share/url?url=${e(url)}&text=${e(text)}`]
+  ];
+  showModal(`<div class="panel p-5"><div class="text-center"><p class="font-disp text-3xl text-aqua">📤 BAGIKAN GAME</p><p class="text-xs font-bold opacity-70 mt-1">Ajak temanmu ternak slime juga!</p></div>
+    <div class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 mt-3 text-xs font-bold break-all">${esc(url)}</div>
+    <div class="grid grid-cols-2 gap-2 mt-3">${links.map(([n,c,i,u])=>`<a href="${u}" target="_blank" rel="noopener" class="btn text-white text-sm" style="background:${c}">${i} ${n}</a>`).join('')}</div>
+    <div class="flex flex-col gap-2 mt-2">
+      ${navigator.share?`<button onclick="nativeShare()" class="btn bg-violet text-white">📱 Bagikan via Aplikasi…</button>`:''}
+      <button onclick="copyLink()" class="btn bg-gold">🔗 Salin Tautan</button>
+      <button onclick="closeModal()" class="btn bg-white text-sm">Tutup</button></div></div>`);}
+function nativeShare(){const d=shareData();try{navigator.share({title:'SlimeGochi',text:d.text,url:d.url}).then(()=>toast('📤','Terima kasih sudah membagikan!')).catch(()=>{});}catch(e){toast('⚠️','Perangkat tidak mendukung.');}}
+function copyLink(){const d=shareData(),txt=d.text+' '+d.url;
+  const done=()=>{sfx('coin');toast('🔗','Tautan disalin!');};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(()=>fallbackCopy(txt,done));}
+  else fallbackCopy(txt,done);}
+function fallbackCopy(txt,done){try{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();done();}catch(e){toast('⚠️','Salin manual dari kotak tautan.');}}
+function openCredit(){showModal(`<div class="panel p-5 text-center">
+  <p class="font-disp text-3xl text-violet">⭐ CREDIT</p>
+  <div class="flex justify-center my-2"><div class="slime-idle">${eggSVG(72)}</div></div>
+  <h3 class="font-disp text-2xl">SlimeGochi <span class="text-aqua">v2.0</span></h3>
+  <p class="text-xs font-bold opacity-70">Ternak · Latih · Evolusi · Kreasi</p>
+  <div class="mt-3 space-y-2 text-left">
+    <div class="rounded-2xl border-[3px] border-ink bg-gold/25 p-3"><p class="font-disp text-lg">👤 Hisefas</p><p class="text-xs font-bold opacity-75">Pencipta, perancang konsep & arah permainan. Pemilik ide dunia SlimeGochi.</p></div>
+    <div class="rounded-2xl border-[3px] border-ink bg-aqua/20 p-3"><p class="font-disp text-lg">🤖 Qwen Studio (AI)</p><p class="text-xs font-bold opacity-75">Pengembangan kode, ilustrasi vektor prosedural, animasi, efek suara, dan perancangan sistem permainan.</p></div>
+    <div class="rounded-2xl border-[3px] border-ink/15 bg-white/70 p-3 text-xs font-bold space-y-1">
+      <p>🎨 <b>Seni:</b> seluruh slime, telur, ikon, dan latar digambar dengan SVG & Canvas — tanpa gambar eksternal.</p>
+      <p>🔊 <b>Audio:</b> disintesis langsung lewat Web Audio API.</p>
+      <p>🧩 <b>Teknologi:</b> HTML · Tailwind CSS · Canvas 2D · Web Audio · LocalStorage & Cookie.</p>
+      <p>🔤 <b>Font:</b> Luckiest Guy · Nunito · Press Start 2P (Google Fonts).</p>
+      <p>💾 <b>Data:</b> progres disimpan di perangkatmu sendiri, tidak dikirim ke server mana pun.</p></div>
+  </div>
+  <p class="text-[11px] font-bold opacity-60 mt-3">© 2026 Hisefas · dibuat bersama Qwen Studio (AI). Terima kasih sudah bermain! 🫧</p>
+  <button onclick="closeModal()" class="btn bg-gold w-full mt-3">Tutup</button></div>`);}
+
+/* ============================ BOOT / TITLE ============================ */
+function setBoot(txt,pct){const b=$('#bootBar'),t=$('#bootTxt'),p=$('#bootPct');if(b)b.style.width=pct+'%';if(t)t.textContent=txt;if(p)p.textContent=Math.round(pct)+'%';}
+function renderTitle(){const p=activePet();
+  $('#titleMascot').innerHTML=p?`<div class="slime-idle">${slimeSVG(p,148,'excite')}</div>`:`<div class="egg-idle">${eggSVG(132)}</div>`;
+  $('#titleSave').innerHTML=p?`<div class="panel p-2.5 flex items-center gap-2"><div class="shrink-0">${slimeSVG(p,40)}</div><div class="flex-1 min-w-0 text-left"><p class="font-disp text-sm truncate">${esc(p.nick)} · LV.${p.level}</p><p class="text-[10px] font-bold opacity-65">🪙 ${S.coins} · 🫧 ${S.pets.length} slime · 🧵 ${S.designs.length} kostum</p></div><span class="chip !text-[10px] !py-0">LANJUT</span></div>`
+    :`<div class="panel p-2.5 text-center"><p class="font-disp text-sm">Petualangan baru!</p><p class="text-[10px] font-bold opacity-65">Telur pertamamu sudah menunggu 🥚</p></div>`;
+  renderHeader();}
+function enterGame(){if(!gameStarted){gameStarted=true;initGame();}
+  hideEl('title');showEl('shell');applyScene();renderHeader();renderNav();setTab(curTab||'home');
+  if(Run.phase!=='idle')Run.resize();if(Rain.phase!=='idle')Rain.resize();if(T.phase!=='idle')T.resize();
+  sfx('select');save();}
+function goTitle(){Run.suspend();Rain.suspend();T.suspend();closeStudio();save();renderTitle();hideEl('shell');showEl('title');sfx('click');}
+async function boot(){
+  const steps=[['Menyiapkan dunia slime…',16],['Menggambar sprite…',40],['Menata kandang…',64],['Menyalakan suara…',86],['Siap!',100]];
+  const imgs=[IMG.coin,IMG.star,IMG.clock,...Object.values(IMG.food)];
+  const imgReady=Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=i.onerror=r;})));
+  const fonts=(document.fonts&&document.fonts.ready)?document.fonts.ready:Promise.resolve();
+  for(const [txt,pct] of steps){setBoot(txt,pct);await wait(230+Math.random()*150);}
+  await Promise.race([Promise.all([imgReady,fonts]),wait(2200)]);
+  setBoot('Siap!',100);await wait(260);
+  renderTitle();applyScene();
+  const b=$('#boot');b.style.transition='opacity .45s ease';b.style.opacity='0';
+  setTimeout(()=>{b.classList.add('hide');showEl('title');},450);}
 
 /* ============================ TICK ============================ */
 let lastTick=Date.now(),decayAcc=0,zzzAcc=0;
-setInterval(()=>{const now=Date.now(),dt=(now-lastTick)/1000;lastTick=now;const p=activePet();
+setInterval(()=>{const now=Date.now(),dt=(now-lastTick)/1000;lastTick=now;if(!gameStarted)return;const p=activePet();
   if(p&&!(p.sleepUntil&&p.sleepUntil>now)){decayAcc+=dt;if(decayAcc>=1){const st=decayAcc;decayAcc=0;p.full=Math.max(0,p.full-st/15);p.fun=Math.max(0,p.fun-st/18);p.clean=Math.max(0,p.clean-st/22);}}
   if(p&&p.sleepUntil&&now>=p.sleepUntil){p.sleepUntil=null;p.energy=ENERGY_MAX;setTempMood(p,'excite');sfx('level');toast('☀️','Bangun segar! Energi penuh.');save();if(curTab==='home')renderHome();}
   updateTickUI();},500);
 function updateTickUI(force=false){const p=activePet(),now=Date.now();
-  if(S.incubator){const ready=S.incubator.endsAt<=now,c=$('#egg-cd');if(c)c.textContent=fmtCd(S.incubator.endsAt-now);if(ready&&!S.incubator.notified){S.incubator.notified=true;sfx('hatch');toast('🥚','Telur siap menetas!');renderNav();if(curTab==='egg')renderEgg();}}
+  if(S.incubator){const ready=S.incubator.endsAt<=now,c=$('#egg-cd');if(c)c.textContent=fmtCd(S.incubator.endsAt-now);
+    if(ready&&!S.incubator.notified){S.incubator.notified=true;sfx('hatch');toast('🥚','Telur siap menetas!');renderNav();if(curTab==='egg')renderEgg();}}
   if(!p)return;
-  if(p.sleepUntil&&p.sleepUntil>now){const dur=sleepDur(),left=p.sleepUntil-now;const sf=$('#sleep-fill');if(sf)sf.style.width=((dur-left)/dur*100)+'%';const sc=$('#sleep-cd');if(sc)sc.textContent=fmtCd(left);zzzAcc++;if(zzzAcc%6===0){const box=$('#zzz-box')||$('#scene');if(box){const z=document.createElement('span');z.className='zzz text-2xl';z.textContent='Z';z.style.left=(45+Math.random()*15)+'%';z.style.top='35%';box.appendChild(z);setTimeout(()=>z.remove(),2300);}}}
+  if(p.sleepUntil&&p.sleepUntil>now){const dur=sleepDur(),left=p.sleepUntil-now,sf=$('#sleep-fill');if(sf)sf.style.width=((dur-left)/dur*100)+'%';
+    const sc=$('#sleep-cd');if(sc)sc.textContent=fmtCd(left);zzzAcc++;
+    if(zzzAcc%6===0){const box=$('#zzz-box')||$('#scene');if(box){const z=document.createElement('span');z.className='zzz text-2xl';z.textContent='Z';z.style.left=(45+Math.random()*15)+'%';z.style.top='35%';box.appendChild(z);setTimeout(()=>z.remove(),2300);}}}
   const set=(id,fn)=>{const e=$(id);if(e)fn(e);};
   set('#exp-fill',e=>e.style.width=(p.level>=MAX_LV?100:Math.min(100,p.exp/EXP_NEED(p.level)*100))+'%');
   set('#exp-txt',e=>e.textContent=p.level>=MAX_LV?'MAX LEVEL 100':`${Math.floor(p.exp)} / ${EXP_NEED(p.level)} EXP`);
@@ -1004,14 +1399,37 @@ function updateTickUI(force=false){const p=activePet(),now=Date.now();
   set('#bar-fun',e=>e.style.width=p.fun+'%');set('#txt-fun',e=>e.textContent=Math.round(p.fun));
   set('#bar-clean',e=>e.style.width=p.clean+'%');set('#txt-clean',e=>e.textContent=Math.round(p.clean));
   const pips=$('#energy-pips');if(pips&&(force||+pips.dataset.v!==p.energy)){pips.dataset.v=p.energy;pips.innerHTML=Array.from({length:ENERGY_MAX},(_,i)=>`<div class="pip ${i<p.energy?'on':''}"></div>`).join('');}
-  const mb=$('#mood-bubble');if(mb){let need='';if(p.full<30)need='🍎❗';else if(p.clean<30)need='🫧❗';else if(p.fun<30)need='🎾❗';else if(p.energy<ACT_COST)need='⚡❗';const face={happy:'😊',excite:'🤩',neutral:'😐',sad:'😢',tired:'🥱',sleep:'😴'}[moodOf(p)];mb.innerHTML=`<span class="chip !bg-white/90 !py-0.5 !px-2.5 text-base">${face}${need?` <span style="animation:bounceK 1s infinite" class="inline-block">${need}</span>`:''}</span>`;}}
+  const mb=$('#mood-bubble');if(mb){let need='';if(p.full<30)need='🍎❗';else if(p.clean<30)need='🫧❗';else if(p.fun<30)need='🎾❗';else if(p.energy<ACT_COST)need='⚡❗';
+    const face={happy:'😊',excite:'🤩',neutral:'😐',sad:'😢',tired:'🥱',sleep:'😴'}[moodOf(p)];
+    mb.innerHTML=`<span class="chip !bg-white/90 !py-0.5 !px-2.5 text-base">${face}${need?` <span style="animation:bounceK 1s infinite" class="inline-block">${need}</span>`:''}</span>`;}}
 
-/* ============================ EVENTS & INIT ============================ */
-$('#btnSound').onclick=()=>{S.sound=!S.sound;if(!S.sound)musicStop();else if(Run.phase==='play'||Rain.phase==='play'||T.active())musicStart();save();renderHeader();if(S.sound)sfx('pop');};
-$('#btnReset').onclick=openReset;
-$('#btnHelp').onclick=()=>{showModal(`<div class="panel p-5 text-sm font-bold space-y-2"><h3 class="font-disp text-2xl">📜 CARA MAIN · v1.0.1</h3><p>🥚 <b>LV.0 = Telur.</b> Eramkan (1 menit, ×5 tiap slime berikutnya, atau ⚡ Instant-Hatch). Saat menetas, <b>beri nama sendiri</b> atau pakai default 🎲.</p><p>🫧 Rawat: Makan / Main / Servis = EXP (−2⚡ per aksi, maks 10⚡). Isi energi lewat makan atau tidur.</p><p>🧬 <b>LV.10 → EVOLUSI</b> acak 1 dari 10 elemen + <b>5 poin atribut permanen</b>. Level maks <b>100</b>.</p><p>🏃 <b>SlimeGo!</b> swipe ↑ di area bawah untuk lompat. 3× lanjut, tiap lanjut −20% koin.</p><p>🍎 <b>Slime Rain!</b> swipe ← →. 3 item = 1 🪙, ⏰ +3 detik, durasi 15 detik.</p><p>⚔️ <b>Slime Tactic</b>: pilih aksi → <b>D20 + DP &gt; 10 = HIT</b>. Damage <b>1D4</b>, kritikal <b>2D4</b>. HP = 10 + 2/level. Kesulitan relatif levelmu: <b>Mudah</b> (−1~+2, ×1), <b>Sulit</b> (−1~+3, ×2), <b>Neraka</b> (+0~+5, ×5). Keyboard 1–4 untuk aksi.</p><p>🧬 Beli <b>Atribut</b> di Toko: +1 DMG/HP/DEF/DP, maks +5 beli; evolusi menambah permanen.</p><p>💾 Progres tersimpan otomatis (indikator di footer).</p><button onclick="closeModal()" class="btn bg-gold w-full">Siap! 🚀</button></div>`);};
-window.addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')return;
-  if(curTab!=='battle')return;
+/* ============================ EVENTS ============================ */
+function toggleSound(){S.sound=!S.sound;if(!S.sound)musicStop();else if(Run.phase==='play'||Rain.phase==='play'||T.active())musicStart();save();renderHeader();if(S.sound)sfx('pop');}
+$('#btnSound').onclick=toggleSound;$('#btnSoundTitle').onclick=toggleSound;
+$('#saveDot').onclick=()=>{save();sfx('click');toast('💾','Progres disimpan ke cache & cookie browser.');};
+$('#btnReset').onclick=()=>{showModal(`<div class="panel p-6 text-center"><p class="font-disp text-3xl text-coral">RESET TOTAL?</p><p class="text-sm font-bold opacity-75 mt-2">Semua slime, koin, kostum buatan, suasana, dan rekor akan dihapus permanen.</p><div class="flex flex-col gap-2 mt-4"><button onclick="doReset()" class="btn bg-red-300 text-lg">🗑️ Ya, Hapus Semua</button><button onclick="closeModal()" class="btn bg-white">Batal</button></div></div>`);};
+function doReset(){musicStop();Run.teardown();Rain.teardown();T.teardown();closeStudio();closeModal();
+  try{localStorage.removeItem(KEY);localStorage.removeItem(OLDKEY);}catch(e){}setCookie(CKEY,'',0);
+  S=defaultState();B=null;SPR.key='';STU.drafts={head:new Array(GRID*GRID).fill(0),face:new Array(GRID*GRID).fill(0),neck:new Array(GRID*GRID).fill(0)};STU.undo=[];STU.redo=[];
+  applyScene();save();renderHeader();renderNav();setTab('egg');toast('↺','Permainan direset. Telur baru menantimu!');}
+$('#btnHelp').onclick=()=>{showModal(`<div class="panel p-5 text-sm font-bold space-y-2"><h3 class="font-disp text-2xl">📜 PANDUAN v2.0</h3>
+  <p>🥚 <b>LV.0 = Telur.</b> Eramkan (1 menit, ×5 tiap slime berikutnya, atau ⚡ Instant-Hatch). Saat menetas, beri nama sendiri atau pakai default 🎲.</p>
+  <p>🫧 Rawat: Makan / Main / Servis = EXP (−2⚡ per aksi, maks 10⚡). Isi energi lewat makan atau tidur. Level maks <b>100</b>.</p>
+  <p>🧬 <b>LV.10 → EVOLUSI</b>: elemen acak 1 dari 10 + <b>5 poin atribut permanen</b>.</p>
+  <p>🎨 <b>KREATIVITAS:</b> beli <b>Kanvas Ajaib</b> (Toko → Kreativitas) + <b>Pola</b> sesuai slot (Kepala / Wajah / Leher). Lalu klik gambar <b>KANVAS</b> di kandang → menggambar dengan box warna → <b>Tukar Desain</b> menjadi kostum yang langsung bisa dipakai slime-mu!</p>
+  <p>🏞️ <b>SUASANA:</b> beli latar baru di Toko → Suasana untuk mengganti suasana kandang & seluruh dunia game.</p>
+  <p>🏃 <b>SlimeGo!</b> swipe ↑ di area bawah untuk lompat. 🔁 3× lanjut, tiap lanjut −20% koin.</p>
+  <p>🍎 <b>Slime Rain!</b> swipe ← →. 3 item = 1 🪙, ⏰ +3 detik, durasi 15 detik.</p>
+  <p>⚔️ <b>Slime Tactic</b>: aksi → D20 + DP &gt; 10 = HIT, damage 1D4, kritikal 2D4. Mudah ×1 · Sulit ×2 · Neraka ×5 hadiah.</p>
+  <p>💾 Progres tersimpan otomatis. Klik logo <b>SlimeGochi</b> di kiri atas untuk kembali ke layar judul.</p>
+  <div class="flex flex-col gap-2 pt-1"><button onclick="closeModal();openShare()" class="btn bg-aqua2">📤 Bagikan Game</button><button onclick="closeModal();openCredit()" class="btn bg-cream">⭐ Credit</button><button onclick="closeModal();goTitle()" class="btn bg-white">🏠 Layar Judul</button><button onclick="closeModal()" class="btn bg-gold">Tutup</button></div></div>`);};
+window.addEventListener('keydown',e=>{
+  if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
+  if(STU.open){const m={Digit1:'brush',Digit2:'erase',Digit3:'fill'};
+    if(m[e.code]){e.preventDefault();stuTool(m[e.code]);}
+    if(e.code==='KeyZ'&&(e.ctrlKey||e.metaKey)){e.preventDefault();stuUndo();}
+    if(e.code==='Escape'){e.preventDefault();closeStudio();}return;}
+  if(!gameStarted||curTab!=='battle')return;
   if(['Space','ArrowUp','KeyW'].includes(e.code)&&Run.phase==='play'){e.preventDefault();if(!e.repeat)Run.jump();}
   if(e.code==='ArrowLeft'&&Rain.phase==='play'){e.preventDefault();Rain.keys.left=true;}
   if(e.code==='ArrowRight'&&Rain.phase==='play'){e.preventDefault();Rain.keys.right=true;}
@@ -1021,14 +1439,35 @@ window.addEventListener('keydown',e=>{if(e.target&&e.target.tagName==='INPUT')re
     else if(Rain.phase==='play'||Rain.phase==='countdown')Rain.openMenu('pause');else if(Rain.phase==='menu')Rain.resume();
     else if(T.phase==='player')T.openMenu('pause');else if(T.phase==='menu')T.resume();}});
 window.addEventListener('keyup',e=>{if(e.code==='ArrowLeft')Rain.keys.left=false;if(e.code==='ArrowRight')Rain.keys.right=false;});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){save();Run.suspend();Rain.suspend();T.suspend();}else if(curTab==='battle'){Run.wake();Rain.wake();T.wake();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(gameStarted)save();Run.suspend();Rain.suspend();T.suspend();}else if(curTab==='battle')Run.wake();});
 window.addEventListener('blur',()=>{Run.suspend();Rain.suspend();T.suspend();});
-window.addEventListener('pagehide',save);
-window.addEventListener('resize',()=>{if(curTab!=='battle')return;if(Run.phase!=='idle')Run.resize();if(Rain.phase!=='idle')Rain.resize();if(T.phase!=='idle')T.resize();});
+window.addEventListener('pagehide',()=>{if(gameStarted)save();});
+window.addEventListener('resize',()=>{if(STU.open)stuResize();if(curTab!=='battle')return;if(Run.phase!=='idle')Run.resize();if(Rain.phase!=='idle')Rain.resize();if(T.phase!=='idle')T.resize();});
+
+/* studio listeners */
+(function studioInit(){
+  const c=$('#stu-canvas');
+  new ResizeObserver(()=>{if(STU.open)stuResize();}).observe($('#stu-area'));
+  c.addEventListener('pointerdown',e=>{e.preventDefault();const [x,y]=stuPos(e);stuSnapshot();
+    if(STU.tool==='fill')stuFill(x,y);else{stuPaint(x,y);STU.last=[x,y];}
+    STU.drawing=true;stuDraw();sfx('draw');try{c.setPointerCapture(e.pointerId);}catch(_){}});
+  c.addEventListener('pointermove',e=>{if(!STU.drawing||STU.tool==='fill')return;const [x,y]=stuPos(e);
+    if(STU.last)stuLine(STU.last[0],STU.last[1],x,y);else stuPaint(x,y);STU.last=[x,y];stuDraw();});
+  const up=()=>{if(!STU.drawing)return;STU.drawing=false;STU.last=null;stuPreview();stuSyncUI();};
+  c.addEventListener('pointerup',up);c.addEventListener('pointercancel',up);c.addEventListener('pointerleave',up);
+  c.addEventListener('contextmenu',e=>e.preventDefault());
+  $('#stuSize').addEventListener('input',e=>{STU.size=+e.target.value;stuSyncUI();});
+  $('#stuCustom').addEventListener('input',e=>{STU.pal[STU.color-1]=e.target.value;stuDraw();stuPreview();stuSyncUI();});
+  $('#stuName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();stuCraft();}});
+})();
+
+/* ============================ INIT ============================ */
 Run.init();Rain.init();T.init();
-(function init(){const p=activePet();if(p&&S.lastSeen){const gone=Math.min(1800,(Date.now()-S.lastSeen)/1000);p.full=Math.max(10,p.full-gone/15);p.fun=Math.max(10,p.fun-gone/18);p.clean=Math.max(10,p.clean-gone/18);}
+function initGame(){const p=activePet();
+  if(p&&S.lastSeen){const gone=Math.min(1800,(Date.now()-S.lastSeen)/1000);p.full=Math.max(10,p.full-gone/15);p.fun=Math.max(10,p.fun-gone/18);p.clean=Math.max(10,p.clean-gone/18);}
   if(S.incubator&&S.incubator.endsAt<=Date.now())S.incubator.notified=true;
-  renderHeader();renderNav();setTab(S.pets.length===0&&!S.incubator?'egg':'home');save();})();
+  curTab=(S.pets.length===0&&!S.incubator)?'egg':'home';}
+applyScene();renderHeader();boot();
 </script>
 </body>
 </html>
